@@ -3,23 +3,24 @@ version: '3'
 services:
   
   zookeeper-1:
-    image: zookeeper:3.4.9
+    image: confluentinc/cp-zookeeper:5.5.0
     hostname: zookeeper-1
     environment:
-        ZOO_MY_ID: 1
-        ZOO_PORT: 2181
-        ZOO_SERVERS: server.1=zookeeper-1:2888:3888
-        # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO
+      # ZOOKEEPER_LOG4J_LOGGERS: "INFO,CONSOLE,ROLLINGFILE" -- No Include
     ports:
       - "2181:2181"
     volumes:
-      - ./zk-single-kafka-single/zookeeper-1/conf:/conf
+      - ./zk-single-kafka-single/zookeeper-1/conf:/etc/kafka/
       - ./zk-single-kafka-single/zookeeper-1/logs:/logs
-      - ./zk-single-kafka-single/zookeeper-1/data:/data
-      - ./zk-single-kafka-single/zookeeper-1/datalog:/datalog
+      - ./zk-single-kafka-single/zookeeper-1/data:/var/lib/zookeeper/data
+      - ./zk-single-kafka-single/zookeeper-1/datalog:/var/lib/zookeeper/log/
   
   kafka-1:
-    image: confluentinc/cp-kafka:5.4.0
+    image: confluentinc/cp-kafka:5.5.0
     hostname: kafka-1
     environment:
       KAFKA_BROKER_ID: 1

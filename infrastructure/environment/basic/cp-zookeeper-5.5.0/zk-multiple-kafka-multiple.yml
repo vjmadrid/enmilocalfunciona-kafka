@@ -3,52 +3,55 @@ version: '3'
 services:
   
   zookeeper-1:
-    image: zookeeper:3.4.9
+    image: confluentinc/cp-zookeeper:5.5.0
     hostname: zookeeper-1
     environment:
-      ZOO_MY_ID: 1
-      ZOO_PORT: 2181
-      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2888:3888 server.3=zookeeper-3:2888:3888
-      # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO
+      # ZOOKEEPER_LOG4J_LOGGERS: "INFO,CONSOLE,ROLLINGFILE" -- No Include
     ports:
       - "2181:2181"
     volumes:
-      - ./zk-multiple-kafka-multiple/zookeeper-1/conf:/conf
+      - ./zk-multiple-kafka-multiple/zookeeper-1/conf:/etc/kafka/
       - ./zk-multiple-kafka-multiple/zookeeper-1/logs:/logs
-      - ./zk-multiple-kafka-multiple/zookeeper-1/data:/data
-      - ./zk-multiple-kafka-multiple/zookeeper-1/datalog:/datalog
+      - ./zk-multiple-kafka-multiple/zookeeper-1/data:/var/lib/zookeeper/data
+      - ./zk-multiple-kafka-multiple/zookeeper-1/datalog:/var/lib/zookeeper/log/
   
   zookeeper-2:
-    image: zookeeper:3.4.9
+    image: confluentinc/cp-zookeeper:5.5.0
     hostname: zookeeper-2
     environment:
-      ZOO_MY_ID: 2
-      ZOO_PORT: 2182
-      ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2888:3888 server.3=zookeeper-3:2888:3888
-      # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO
+      # ZOOKEEPER_LOG4J_LOGGERS: "INFO,CONSOLE,ROLLINGFILE" -- No Include
     ports:
       - "2182:2182"
     volumes:
-      - ./zk-multiple-kafka-multiple/zookeeper-2/conf:/conf
+      - ./zk-multiple-kafka-multiple/zookeeper-2/conf:/etc/kafka/
       - ./zk-multiple-kafka-multiple/zookeeper-2/logs:/logs
-      - ./zk-multiple-kafka-multiple/zookeeper-2/data:/data
-      - ./zk-multiple-kafka-multiple/zookeeper-2/datalog:/datalog
+      - ./zk-multiple-kafka-multiple/zookeeper-2/data:/var/lib/zookeeper/data
+      - ./zk-multiple-kafka-multiple/zookeeper-2/datalog:/var/lib/zookeeper/log/
   
   zookeeper-3:
-    image: zookeeper:3.4.9
+    image: confluentinc/cp-zookeeper:5.5.0
     hostname: zookeeper-3
     ports:
       - "2183:2183"
     environment:
-        ZOO_MY_ID: 3
-        ZOO_PORT: 2183
-        ZOO_SERVERS: server.1=zookeeper-1:2888:3888 server.2=zookeeper-2:2888:3888 server.3=zookeeper-3:2888:3888
-    # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 2183
+      ZOOKEEPER_SERVERS: zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888
+      ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO
+      # ZOOKEEPER_LOG4J_LOGGERS: "INFO,CONSOLE,ROLLINGFILE" -- No Include
     volumes:
-      - ./zk-multiple-kafka-multiple/zookeeper-3/conf:/conf
+      - ./zk-multiple-kafka-multiple/zookeeper-3/conf:/etc/kafka/
       - ./zk-multiple-kafka-multiple/zookeeper-3/logs:/logs
-      - ./zk-multiple-kafka-multiple/zookeeper-3/data:/data
-      - ./zk-multiple-kafka-multiple/zookeeper-3/datalog:/datalog
+      - ./zk-multiple-kafka-multiple/zookeeper-3/data:/var/lib/zookeeper/data
+      - ./zk-multiple-kafka-multiple/zookeeper-3/datalog:/var/lib/zookeeper/log/
 
   kafka-1:
     image: confluentinc/cp-kafka:5.4.0
@@ -59,6 +62,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-1:29092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
       # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
@@ -81,6 +85,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-2:29093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
       # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
@@ -103,6 +108,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-3:29094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
       # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:

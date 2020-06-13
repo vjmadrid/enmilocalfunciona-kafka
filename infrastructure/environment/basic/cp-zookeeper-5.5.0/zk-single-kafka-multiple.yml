@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:5.5.0
+    hostname: zookeeper-1
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: INFO
+      # ZOOKEEPER_LOG4J_LOGGERS: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+    ports:
+      - "2181:2181"
+    volumes:
+      - ./zk-single-kafka-multiple/zookeeper-1/conf:/etc/kafka/
+      - ./zk-single-kafka-multiple/zookeeper-1/logs:/logs
+      - ./zk-single-kafka-multiple/zookeeper-1/data:/var/lib/zookeeper/data
+      - ./zk-single-kafka-multiple/zookeeper-1/datalog:/var/lib/zookeeper/log/
+  
+  kafka-1:
+    image: confluentinc/cp-kafka:5.5.0
+    hostname: kafka-1
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181"
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-1:29092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
+      # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    volumes:
+      - ./zk-single-kafka-multiple/kafka-1/logs:/var/log/kafka
+      - ./zk-single-kafka-multiple/kafka-1/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper-1
+
+  kafka-2:
+    image: confluentinc/cp-kafka:5.5.0
+    hostname: kafka-2
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181"
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-2:29093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
+      # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9093:9093"
+      - "29093:29093"
+    volumes:
+      - ./zk-single-kafka-multiple/kafka-2/logs:/var/log/kafka
+      - ./zk-single-kafka-multiple/kafka-2/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper-1
+
+  kafka-3:
+    image: confluentinc/cp-kafka:5.5.0
+    hostname: kafka-3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-1:2181"
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka-3:29094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
+      # KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9094:9094"
+      - "29094:29094"
+    volumes:
+      - ./zk-single-kafka-multiple/kafka-3/logs:/var/log/kafka
+      - ./zk-single-kafka-multiple/kafka-3/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper-1
