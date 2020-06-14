@@ -122,7 +122,7 @@ Se han habilitado dos scripts para ayudar a entender y probar los entornos Kafka
 Los scripts se ubican en el [repositorio](https://github.com/vjmadrid/enmilocalfunciona-kafka/tree/master/infrastructure/environment/basic/scripts)
 
 
-### info-kafka-infrastructure-v1
+### info-kafka-infrastructure-v1
 
 Script informativo utilizado para :
 
@@ -148,7 +148,7 @@ sh info-kafka-infrastructure-v1.sh ../zookeeper-3.4.9/zk-single-kafka-single.yml
 ![Ejemplo de INFO del escenario zk-single-kafka-single](https://github.com/vjmadrid/enmilocalfunciona-kafka/blob/master/infrastructure/environment/basic/images/zk-single-kafka-single-info.png)
 
 
-### test-kafka-infrastructure-v1
+### test-kafka-infrastructure-v1
 
 Script de testing de la infraestructura utilizado para :
 
