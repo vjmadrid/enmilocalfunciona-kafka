@@ -74,6 +74,12 @@ Cada cada una de ellas se han implementado diferentes escenarios de uso mediante
 * **zk-multiple-kafka-multiple :** 3 Zookeepers y 3 Brokers Kafka 
 
 
+### environment/custom
+
+Se definen otras implementaciones que cubren otras casuísticas a nivel de implementación y de escenarios
+
+
+
 
 
 
