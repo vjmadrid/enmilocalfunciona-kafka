@@ -6,10 +6,10 @@ services:
     image: zookeeper:3.4.9
     hostname: zookeeper-1
     environment:
-        ZOO_MY_ID: 1
-        ZOO_PORT: 2181
-        ZOO_SERVERS: server.1=zookeeper-1:2888:3888
-        # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper-1:2888:3888
+      # ZOO_LOG4J_PROP: "INFO,CONSOLE,ROLLINGFILE" -- No Include
     ports:
       - "2181:2181"
     volumes:

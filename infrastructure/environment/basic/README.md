@@ -1,50 +1,31 @@
 # basic
 
-Contenedor Docker para el uso de la base de datos  **MySQL**
+Este área representa la funcionalidad que permite montar la infraestructura a utilizar basada en una instalación básica y standalone de un entorno **Apache Kafka** básico con contenedores **Docker** y gestionados por un fichero "docker-compose"
 
-Representa una instalación básica y standalone de un entorno **Apache Kafka** básico con conetenedores **Docker** y gestionados por un fichero "docker-compose"
+Se han definido diferentes implementaciones de su uso basñadas en la incorporación de un tipo de Zookeeper concreto
 
-Se cubren diferentes instalaciones / configuraciones :
+* zookeeper-3.4.9
+* cp-zookeeper-5.5.0
 
-* zk-single-kafka-single : Una instancia de Zookeeper y una instancia de un Broker Kafka
-* zk-single-kafka-multiples : Una instancia de Zookeeper y varias instancias (3) de un Broker Kafka
-* zk-multiple-kafka-single : Varias instancias (3) de Zookeeper y una instancia de un Broker Kafka
-* zk-multiple-kafka-multiple : Varias instancias (3) de Zookeeper y varias instancias (3) de un Broker Kafka
+Cada cada una de ellas se han implementado diferentes escenarios de uso mediante ficheros "docker-compose-yaml" (cubren diferentes instalaciones / configuraciones)
 
-https://docs.confluent.io/current/installation/docker/installation/index.html
-
-
-https://hub.docker.com/r/confluentinc/cp-kafka
-
-https://github.com/confluentinc
-https://github.com/confluentinc/examples
-https://github.com/confluentinc/cp-all-in-one
-
-https://docs.confluent.io/current/installation/docker/config-reference.html
-https://docs.confluent.io/current/installation/docker/operations/logging.html
-
-docker-compose -f docker-compose-zookeeper.yaml up -d
-
-# 移除所有Zookeeper服务
-docker-compose -f docker-compose-zookeeper.yaml rm -sf
-
-echo stat | nc 127.0.0.1 2181
+* **zk-single-kafka-single :** 1 Zookeeper y 1 Broker Kafka
+* **zk-single-kafka-multiple :** 1 Zookeeper y 3 Brokers Kafka 
+* **zk-multiple-kafka-single :** 3 Zookeepers y 1 Broker Kafka 
+* **zk-multiple-kafka-multiple :** 3 Zookeepers y 3 Brokers Kafka 
 
 
 
-# Verificar que procesos estan disponibles
-docker-compose -f zk-single-kafka-single.yml ps
-
-# Verificar el numero de elementos
-docker-compose -f $1 ps | grep Up | wc -l
 
 
 
 ## Stack Tecnológico
 
-* [Docker](https://www.docker.com/) - Technología de Contenedores/Containers
+* Java 8
+* [Docker](https://www.docker.com/) - Tecnología de Contenedores/Containers
 * [Docker Hub](https://hub.docker.com/) - Repositorio de Docker Publico
-* [MySQL](https://www.mysql.com/) - Base de Datos relacional (Version 5.7)
+* [Zookeeper](https://zookeeper.apache.org/) - Gestor centralizado para componentes distribuidos
+* [Kafka](https://kafka.apache.org/) - Plataforma de Streaming distribuida
 
 Dependencias con Proyectos de Arquitectura
 
@@ -70,49 +51,60 @@ Define que elementos son necesarios para instalar el software
 
 ## Instalación
 
-### Docker Compose
 
 
+### Variables de entorno
 
-#### zk-single-kafka-single
-
-Esta es la configuración más básica y permite hacer pruebas rápidas de comunicaciones, configuraciones, etc.
-
-Configuración del fichero "docker-compose.yaml"
+Para la configuración centralizada de los ficheros de docker-compose utilizados se ha establecido una variable de entorno 
 
 ```bash
+# General (Es el valor por defecto y por lo tanto en muchos casos NO hace falta ni añadirla)
+export DOCKER_HOST_IP=127.0.0.1
+
+# PAra algunas versiones de Docker para MAC o para Docker Toolbox for Windows su valor cambia
+export DOCKER_HOST_IP=192.168.99.100
 ```
 
-* Proporciona 1 Zookeeper en la úbicación : $DOCKER_HOST_IP:2181
-* Proporciona 1 nodo de Kafka en la ubicación : $DOCKER_HOST_IP:9092
 
 
+### Docker Compose
 
-En este fichero se establece el constructor de la imágen que se utilizará, se establecerán una serie de variables de entorno necesarias para su ejecución, se definirán una serie de volúmenes y se publicará por el puerto específico de la aplicación
+Cada escenario dispone de un fichero "docker-compose.yml"
+
 
 Pasos a seguir
 
 
-1. Localizar el directorio principal del proyecto : <PROJECT_PATH> (infrastructure/environment/basic)
+1. Localizar el directorio de la imeplmentación a utilizar : <PROJECT_PATH> (infrastructure/environment/basic/xxx)
 
 2. Ejecutar el siguiente comando
 
 ```bash
-docker-compose up --build
+docker-compose -f <ESCENARIO> up
 
 ó
 
-docker-compose up --build -d
+docker-compose -f <ESCENARIO> up -d
 ```
 
-3. Comprobar que la imágen ha sido creada
+Donde "ESCENARIO" es la referencia al fichero a utilizar y el parámetro "-d" define si se quieres establecer en modo background
 
-Verificar que parece como imágen Docker el nombre "mysql_test"
 
-4. Comprobar que la aplicación ha sido desplegada correctamente
+![]()
 
-Verificar mediante un cliente de base datos que la conexión se puede realizar
+3. Comprobar que las imágenes utilizadas han sido creadas
 
+4. Comprobar que los contenedores han sido creados
+
+```bash
+# Si NO existen más contenedores
+docker ps
+
+ó
+
+# Si SOLO se quieren mostrar los contenedores creados
+docker-compose -f <ESCENARIO> ps
+```
 
 
 

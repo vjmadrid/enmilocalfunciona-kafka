@@ -6,6 +6,7 @@ Este repositorio se encarga de servir como estructura de recursos utilizados par
 * [Documentación](https://kafka.apache.org/documentation/)
 * [Repositiorio de código Github](https://github.com/apache/kafka)
 * [Repositorio de contenedores Docker Hub Zookeeper](https://hub.docker.com/_/zookeeper)
+* [Repositorio de contenedores Docker Hub Apache Kakfa Zookeeper](https://hub.docker.com/r/confluentinc/cp-zookeeper)
 * [Repositorio de contenedores Docker Hub Apache Kakfa](https://hub.docker.com/r/confluentinc/cp-kafka)
 
 
@@ -14,7 +15,7 @@ Este repositorio se encarga de servir como estructura de recursos utilizados par
 ## Stack Tecnológico
 
 * Java 8
-* [Docker](https://www.docker.com/) - Technología de Contenedores/Containers
+* [Docker](https://www.docker.com/) - Tecnología de Contenedores/Containers
 * [Docker Hub](https://hub.docker.com/) - Repositorio de Docker Publico
 * [Zookeeper](https://zookeeper.apache.org/) - Gestor centralizado para componentes distribuidos
 * [Kafka](https://kafka.apache.org/) - Plataforma de Streaming distribuida
@@ -50,15 +51,28 @@ Se encuentra organizado en áreas :
 
 
 
-## infraestructure
+## infrastructure
 
-Directorio encargado de almacenar los ficheros "docker-compose-yaml" que permiten montar cada uno de los entornos kafka que se utilizarán
+Directorio encargado de almacenar todos aquellos aspectos que puedan ayudar a la hora de realizar la instalación y/o uso de una infraestructura de Apache Kakfa
 
-Lo entornos (environment) utilizados son :
+Actualmente sólo dispone de un área : "environment/basic"
 
-* basic : incorpora las piezas de Zookeeper y un Nodo Kafka con diferentes configuraciones
 
-IMPORTANTE : Seguir en detalle el fichero explicativo de cada caso.
+### environment/basic
+
+Se definen las implementaciones utilizadas así como herramientas de soporte/ayuda
+
+
+* zookeeper-3.4.9
+* cp-zookeeper-5.5.0
+
+Cada cada una de ellas se han implementado diferentes escenarios de uso mediante ficheros "docker-compose-yaml"
+
+* **zk-single-kafka-single :** 1 Zookeeper y 1 Broker Kafka
+* **zk-single-kafka-multiple :** 1 Zookeeper y 3 Brokers Kafka 
+* **zk-multiple-kafka-single :** 3 Zookeepers y 1 Broker Kafka 
+* **zk-multiple-kafka-multiple :** 3 Zookeepers y 3 Brokers Kafka 
+
 
 
 
