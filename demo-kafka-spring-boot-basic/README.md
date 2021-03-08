@@ -1,8 +1,8 @@
 # demo-kafka-spring-boot-basic
 
-Este proyecto representa un ejemplo básico de trabajo con **Kafka**
+Este proyecto representa un ejemplo básico de trabajo con **Kafka** y **Spring + Spring Boot**
 
-Enviará un mensaje : "Hello World! "+new Date() 
+Enviará un mensaje tipo "Hello World!"
 
 Este proyecto destaca por propocionar :
 
@@ -31,7 +31,7 @@ Dependencias de terceros
 
 * **spring-boot-starter-parent** [2.3.4.RELEASE] : Spring Boot + Spring Framework 
 * **spring-boot-starter-test** [Boot 2.3.4.RELEASE] : Starter del Framework de Spring para realizar testing
-* **spring-kafka** [Boot 2.3.4.RELEASE] : Spring - Kafka Integration
+* **spring-kafka** [Boot 2.3.4.RELEASE] : Integración de Spring - Kafka
 * **spring-kafka-test** [Boot 2.3.4.RELEASE] : Soporte para testing de Kafka con Spring
 
 
@@ -54,7 +54,7 @@ Define que elementos son necesarios para instalar el software
 * Java 8 instalado (1.5+ version requerida)
 * Maven installed  (3+)
 * Docker installed (19+)
-* Infraestructura Kafka + Topics
+* Infraestructura Kafka + Topics (Adhoc o mediante contenedores)
 
 
 
@@ -155,11 +155,11 @@ Uso como librería custom
 
 ## Configuración Apache Kafka 
 
-* Requiere tener una instalación / configuración de Apache Kafka
+* Requiere tener una instalación / configuración de Apache Kafka (adhoc o mediante comparadores)
 
 * Requiere utilizar las utilidades de Kafka
 
-* Crear los siguientes topics (que se encuentran referenciados en el fichero de configuración de spring "application.yml" :
+* Crear el siguiente topic (que se encuentran referenciados como constantes en cada una de las clases) :
 
 
 **topic-1**
@@ -174,17 +174,6 @@ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partit
 sh kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic topic-1
 ```
 
-**topic-2**
-
-Según cada caso de instalación utilizar alguno de los métodos
-
-```bash
-# Metodo 1
-kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic topic-2
-
-# Metodo 2
-sh kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic topic-2
-```
 
 
 
