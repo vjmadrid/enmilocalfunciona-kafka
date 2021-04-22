@@ -1,4 +1,4 @@
-# demo-kafka-spring-boot-basic
+# demo-kafka-spring-boot-basic-with-config
 
 Este proyecto representa un ejemplo básico de uso con **Kafka** con **Spring + Spring Boot** y su soporte
 
@@ -144,7 +144,7 @@ Opcional : Usar perfiles / profile
 Ejecutar
 
 ```bash
-java -jar target/demo-kafka-spring-boot-basic-0.0.1-SNAPSHOT.jar
+java -jar target/demo-kafka-spring-boot-basic-with-config-0.0.1-SNAPSHOT.jar
 ```
 
 

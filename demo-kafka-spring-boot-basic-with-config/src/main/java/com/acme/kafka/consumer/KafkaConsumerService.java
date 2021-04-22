@@ -10,23 +10,24 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import com.acme.kafka.constant.KafkaConfigConstant;
+
 @Service
 public class KafkaConsumerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumerService.class);
 
-    private CountDownLatch latchTest = new CountDownLatch(1);
+	private CountDownLatch latchTest = new CountDownLatch(KafkaConfigConstant.RECEIVER_COUNTDOWNLATCH);
 
     //Use in testing for received a message -> No production environment
     public CountDownLatch getLatchTest() {
       return latchTest;
     }
-    
     private void showMessageHeaders(MessageHeaders headers) {
 		if (headers != null) {
 			headers.keySet().forEach(key -> 
-        	LOG.info("\t{}: {}", key, headers.get(key))
-        );
+        		LOG.info("\t{}: {}", key, headers.get(key))
+			);
 		}
 	}
     
@@ -37,7 +38,7 @@ public class KafkaConsumerService {
      * 		@KafkaListener(id = "basic-listener", topics = "${app.topic.example1}")
      */
     
-    @KafkaListener(topics = "${app.topic.example1}")
+    @KafkaListener(id = "basic-listener", topics = "${app.topic.example1}")
     public void receive(@Payload String message, @Headers MessageHeaders headers) {
         LOG.info("[KafkaConsumerService] received message='{}'", message);
         
