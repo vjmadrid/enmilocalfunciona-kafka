@@ -1,4 +1,4 @@
-package com.acme.kafka.constant;
+package com.acme.kafka.consumer.constant;
 
 public final class KafkaConfigConstant {
 

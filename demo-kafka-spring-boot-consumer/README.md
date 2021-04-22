@@ -1,8 +1,8 @@
-# demo-kafka-spring-boot-producer
+# demo-kafka-spring-boot-consumer
 
-Este proyecto representa un ejemplo de uso de un productor con **Kafka** con **Spring + Spring Boot** y su soporte
+Este proyecto representa un ejemplo de uso de un consumer con **Kafka** con **Spring + Spring Boot** y su soporte
 
-Este proyecto se compone de un productor 
+Este proyecto se compone de un consumer 
 
 * SpringKafkaApplication : Dispara una ejecución de mensaje planificada cada 2 segundos
 * SpringKafkaLimitApplication : Dispara un nº limitado de mensajes cada 2 segundoss
@@ -18,15 +18,13 @@ Este proyecto destaca por propocionar :
 * **Varios ejecutores del Productor** (Diferentes clases Application)
 * **Dockerfile** Fichero de dockerización de la aplicación
 
-
 En el fichero de **application.yaml** se configuran algunas cosas :
 
-* **bootstrap-servers :** Listado de brokers a los que apunta este productor (En este caso sólo se establece uno "localhost:9092")
+* **bootstrap-servers :** Listado de brokers a los que apunta este consumidor (En este caso se establecen varios "localhost:9092, localhost:9093 y localhost:9094")
 * **app.topic.example1 :** Nombre del topic utilizado en el ejemplo (En este caso "example1" )
-* **group-id :** Identifica el grupo al que pertece este consumidor
-* **auto-offset-reset :** Propiedad que permite indicar característas de consumo (En este caso se usa earliest que indica que se consumira desde el inicio)
 
 El resto de configuración se realiza mediante su fichero de configuración Java
+
 
 
 
@@ -155,7 +153,7 @@ Opcional : Usar perfiles / profile
 Ejecutar
 
 ```bash
-java -jar target/demo-kafka-spring-boot-producer-0.0.1-SNAPSHOT.jar
+java -jar target/demo-kafka-spring-boot-consumer-0.0.1-SNAPSHOT.jar
 ```
 
 
@@ -194,6 +192,7 @@ sh kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --
 
 
 
+
 ## Dockerización
 
 Dockerizar (Spring Boot + Docker)
@@ -212,7 +211,7 @@ mvn clean install
 Crea la imagen en Docker a partir de su fichero Dockerfile
 
 ```bash
-docker build -t acme/demo-kafka-spring-boot-producer .
+docker build -t acme/demo-kafka-spring-boot-consumer .
 ```
 
 4. Verificar que la imagen ha sido creada
