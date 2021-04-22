@@ -11,12 +11,6 @@ public final class KafkaConstant {
 	
 	public static final String DEFAULT_KAFKA_BROKERS = DEFAULT_KAFKA_SERVER_URL+":"+DEFAULT_KAFKA_SERVER_PORT;
 	
-	public static final String BOOTSTRAP_SERVERS = "localhost:9092";
+	public static final String BOOTSTRAP_SERVERS = DEFAULT_KAFKA_BROKERS;
 	
-	public static final Integer DEFAULT_MESSAGE_COUNT = 1000;
-	
-	public static final String DEFAULT_CLIENT_ID = "defaultClient";
-	
-	public static final String TOPIC_NAME = "defaultTopic";
-
 }

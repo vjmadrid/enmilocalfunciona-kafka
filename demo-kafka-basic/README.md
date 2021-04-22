@@ -1,14 +1,16 @@
 # demo-kafka-basic
 
-Este proyecto representa un ejemplo básico de trabajo con **Kafka**
+Este proyecto representa un ejemplo básico de uso con **Kafka** con la condición de usar el soporte proporcionado por Spring-Spring Boot para Kafka.
 
-Enviará un mensaje tipo "Hello World!"
+Este proyecto se compone de un productor y consumidor con soporte de Spring.
+
+Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
 
 Este proyecto destaca por propocionar :
 
-* **Clase básica de productor / emisor**
-* **Clase básica de consumidor / receptor**
-* **Configuración de Spring** para el uso con Kafka 
+* **Clases básicas del tipo productor / emisor**
+* **Clases básicas del tipo consumidor / receptor**
+* **Configuración Nativa** para el uso con Kafka en cada una de las clases tipo 
 
 
 
@@ -36,7 +38,7 @@ Dependencias de terceros
 
 Importante :
 
-* Requiere alinear el cliente con el Kafka broker para poder conectarlo
+* Requiere alinear la versión del cliente con el Kafka broker para poder conectarlo
 
 
 
@@ -66,7 +68,7 @@ N/A
 
 ## Testing
 
-Este proyecto dispone de tests  : Unit + Integration
+Este proyecto NO dispone de tests  : Unit + Integration
 
 
 
@@ -80,11 +82,10 @@ N/A
 
 
 
-
-
 ## Uso
 
 Se ejecutarán las clases Java de forma individual segun cada uno de los casos
+
 
 Cada caso busca objetivos diferentes
 

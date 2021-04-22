@@ -3,6 +3,7 @@ package com.acme.kafka.consumer;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -14,11 +15,23 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 
-public class BasicConsumer {
+public class BasicConsumerWithRuntime {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BasicConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithRuntime.class);
+    
+    private static final AtomicBoolean closed = new AtomicBoolean(false); // Close Process
     
     public static void main(String[] args) {
+    	
+    	LOG.info("[BasicConsumerWithRuntime] *** Init ***");
+    	
+    	Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+                System.out.println("Shutting down");
+                closed.set(true);
+            }
+        });
     	
     	// Create consumer properties
         Properties consumerProperties = new Properties();
@@ -37,9 +50,12 @@ public class BasicConsumer {
         // Receive data asynchronous
         consumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
-        while(true){
+        int readedMessages=0;
+        
+        while (!closed.get()) {
         	// Create consumer records
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(2000));
+            LOG.info("Check records -> Count {}", records.count());
 
             for (ConsumerRecord<String, String> record : records){          	
             	LOG.info("Received record \n" +
@@ -51,8 +67,18 @@ public class BasicConsumer {
                         "Timestamp: {}" , 
                         record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
             }
+            
+            readedMessages++;
+            
+            LOG.info("Readed message='{}'", readedMessages);
+            
+            if (readedMessages>=DemoConstant.NUM_MESSAGES) {break;}
         }
-      
+        
+        // Close consumer
+        consumer.close();
+        
+        LOG.info("[BasicConsumerWithRuntime] *** End ***");
     }
     
 

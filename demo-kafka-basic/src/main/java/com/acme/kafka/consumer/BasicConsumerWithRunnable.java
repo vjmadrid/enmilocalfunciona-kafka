@@ -5,22 +5,21 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.consumer.runnable.BasicConsumerRunnable;
 
 public class BasicConsumerWithRunnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithRunnable.class);
 
-	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-	private static final String TOPIC = "topic-1";
-	private static final String GROUP_ID = "my-group";
-
 	private static CountDownLatch countDownLatch = new CountDownLatch(1);
+	
 	private static Runnable basicConsumerRunnable = null;
 
 	public static void main(String[] args) {
-		LOG.info("Creating consumer runnable");
-		basicConsumerRunnable = new BasicConsumerRunnable(BOOTSTRAP_SERVERS, GROUP_ID, TOPIC, countDownLatch);
+		LOG.info("[BasicConsumerWithRunnable] *** Init ***");
+		
+		basicConsumerRunnable = new BasicConsumerRunnable(DemoConstant.BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
 		
 		new BasicConsumerWithRunnable().run();
 	}

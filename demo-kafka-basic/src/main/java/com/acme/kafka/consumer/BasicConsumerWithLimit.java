@@ -14,11 +14,13 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 
-public class BasicConsumer {
+public class BasicConsumerWithLimit {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BasicConsumer.class);
-    
+    private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithLimit.class);
+
     public static void main(String[] args) {
+    	
+    	LOG.info("[BasicConsumerWithLimit] *** Init ***");
     	
     	// Create consumer properties
         Properties consumerProperties = new Properties();
@@ -37,11 +39,14 @@ public class BasicConsumer {
         // Receive data asynchronous
         consumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
+        int readedMessages=0;
+        
         while(true){
         	// Create consumer records
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(2000));
+            LOG.info("Check records -> Count {}", records.count());
 
-            for (ConsumerRecord<String, String> record : records){          	
+            for (ConsumerRecord<String, String> record : records){
             	LOG.info("Received record \n" +
             			"Key: {} \n" +
             			"Value: {} \n" +
@@ -51,8 +56,18 @@ public class BasicConsumer {
                         "Timestamp: {}" , 
                         record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
             }
+            
+            readedMessages++;
+            
+            LOG.info("Readed message='{}'", readedMessages);
+            
+            if (readedMessages>=DemoConstant.NUM_MESSAGES) {break;}
         }
-      
+        
+        // Close consumer
+        consumer.close();
+        
+        LOG.info("[BasicConsumerWithLimit] *** End ***");
     }
     
 
