@@ -5,7 +5,7 @@ Este proyecto representa un ejemplo básico de uso con **Kafka** con **Spring + 
 
 
 
-Este proyecto se compone de un productor y un consumidor cuyas configuraciones son facilitadas mediante el fichero application.yaml
+Este proyecto se compone de un productor y un consumidor cuyas configuraciones son facilitadas mediante clases Java de Configuración
 
 Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
 
@@ -14,7 +14,7 @@ Este proyecto destaca por propocionar :
 
 * **Clase básica de productor / emisor** basada en Spring
 * **Clase básica de consumidor / receptor** basada en Spring
-* **Configuración de Spring** para el uso con Kafka
+* **Configuración de Spring** para el uso con Kafka mediante clases de configuración
 
 
 

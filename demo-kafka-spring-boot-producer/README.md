@@ -1,11 +1,12 @@
-# demo-kafka-spring-boot-basic
+# demo-kafka-spring-boot-producer
 
-Este proyecto representa un ejemplo básico de uso con **Kafka** con **Spring + Spring Boot** y su soporte
+Este proyecto representa un ejemplo de uso de un productor con **Kafka** con **Spring + Spring Boot** y su soporte
 
+Este proyecto se compone de un productor 
 
+* SpringKafkaApplication : Dispara una ejecución de mensaje planificada cada 2 segundos
+* SpringKafkaLimitApplication : Dispara un nº limitado de mensajes cada 2 segundoss
 
-
-Este proyecto se compone de un productor y un consumidor cuyas configuraciones son facilitadas mediante el fichero application.yaml
 
 Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
 
@@ -13,8 +14,9 @@ Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <
 Este proyecto destaca por propocionar :
 
 * **Clase básica de productor / emisor** basada en Spring
-* **Clase básica de consumidor / receptor** basada en Spring
-* **Configuración de Spring** para el uso con Kafka mediante fichero
+* **Configuración de Spring** para el uso con Kafka
+* **Varios ejecutores del Productor** (Diferentes clases Application)
+* **Dockerfile** Fichero de dockerización de la aplicación
 
 
 
@@ -144,7 +146,7 @@ Opcional : Usar perfiles / profile
 Ejecutar
 
 ```bash
-java -jar target/demo-kafka-spring-boot-basic-0.0.1-SNAPSHOT.jar
+java -jar target/demo-kafka-spring-boot-producer-0.0.1-SNAPSHOT.jar
 ```
 
 
