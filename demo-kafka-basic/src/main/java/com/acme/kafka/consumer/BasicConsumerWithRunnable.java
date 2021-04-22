@@ -8,6 +8,21 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.consumer.runnable.BasicConsumerRunnable;
 
+/**
+ * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
+ * 
+ * 	No message limit
+ * 
+ *  Creates a Thread in charge of consumption
+ * 
+ *  Uses a runnable case
+ *  
+ *  Different producers can be used
+ *   - Java producer with appropriate configuration
+ *   - kafka-console-producer.sh --broker-list localhost:9092 --topic topic-1
+ * 
+ */
+
 public class BasicConsumerWithRunnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithRunnable.class);
@@ -25,12 +40,14 @@ public class BasicConsumerWithRunnable {
 	}
 
 	private void run() {
-		LOG.info("Creating consumer thread");
+		LOG.info("[BasicConsumerWithRunnable] *** Run ***");
+		
+		LOG.info("[BasicConsumerWithRunnable] Creating consumer thread");
 		new Thread(basicConsumerRunnable).start();
 
 		// Add shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				LOG.info("Capture shutdown hook");
+				LOG.info("[BasicConsumerWithRunnable] Capture shutdown hook");
 				
 				((BasicConsumerRunnable) basicConsumerRunnable).shutdown();
 				
@@ -40,7 +57,7 @@ public class BasicConsumerWithRunnable {
 					e.printStackTrace();
 				}
 				
-				LOG.info("Application has exited");
+				LOG.info("[BasicConsumerWithRunnable] Application has exited");
 			}
 		));
 
@@ -49,7 +66,7 @@ public class BasicConsumerWithRunnable {
 		} catch (InterruptedException e) {
 			LOG.error("Application got interrupted", e);
 		} finally {
-			LOG.info("Application is closing");
+			LOG.info("[BasicConsumerWithRunnable] *** Close ***");
 		}
 	}
 

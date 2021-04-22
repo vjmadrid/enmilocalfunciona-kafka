@@ -14,11 +14,24 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 
+/**
+ * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
+ * 
+ * 	No message limit
+ *  
+ *  Different producers can be used
+ *   - Java producer with appropriate configuration
+ *   - kafka-console-producer.sh --broker-list localhost:9092 --topic topic-1
+ * 
+ */
+
 public class BasicConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicConsumer.class);
     
     public static void main(String[] args) {
+    	
+    	LOG.info("[BasicConsumer] *** Init ***");
     	
     	// Create consumer properties
         Properties consumerProperties = new Properties();
@@ -35,14 +48,17 @@ public class BasicConsumer {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProperties);
         
         // Receive data asynchronous
+        LOG.info("[BasicConsumer] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
         consumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
+        LOG.info("[BasicConsumer] Preparing to receive menssages");
         while(true){
         	// Create consumer records
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(2000));
+            LOG.info("Check records -> Count {}", records.count());
 
             for (ConsumerRecord<String, String> record : records){          	
-            	LOG.info("Received record \n" +
+            	LOG.info("[*] Received record \n" +
             			"Key: {} \n" +
             			"Value: {} \n" +
                         "Topic: {} \n" +

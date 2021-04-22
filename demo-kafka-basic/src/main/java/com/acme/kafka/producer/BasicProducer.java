@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 
 /**
- * 	HELP
+ * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
  *  
  *  Different consumers can be used
  *   - Java consumer with appropriate configuration
@@ -38,7 +38,8 @@ public class BasicProducer {
 
         // Create producer
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProperties);
-
+        
+        LOG.info("[BasicProducer] Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
         for (int i=1; i<=DemoConstant.NUM_MESSAGES; i++ ) {
         	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
         	

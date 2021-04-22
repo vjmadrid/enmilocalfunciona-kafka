@@ -16,7 +16,9 @@ import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.producer.callback.CustomProducerCallback;
 
 /**
- * 	Help
+ * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
+ *  
+ *  Retrieves meta information about the message being sent from a Callback class
  *  
  *  Different consumers can be used
  *   - Java consumer with appropriate configuration
@@ -41,6 +43,7 @@ public class BasicProducerWithCallbackClass {
         // Create producer
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(producerProperties);
 
+        LOG.info("[BasicProducerWithCallbackClass] Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
         for (int i=1; i<=DemoConstant.NUM_MESSAGES; i++ ) {
         	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
         	

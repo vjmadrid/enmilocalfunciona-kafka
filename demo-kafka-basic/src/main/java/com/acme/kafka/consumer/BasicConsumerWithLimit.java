@@ -14,6 +14,17 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 
+/**
+ * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
+ * 
+ * 	With message limit (10)
+ *  
+ *  Different producers can be used
+ *   - Java producer with appropriate configuration
+ *   - kafka-console-producer.sh --broker-list localhost:9092 --topic topic-1
+ * 
+ */
+
 public class BasicConsumerWithLimit {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithLimit.class);
@@ -37,17 +48,19 @@ public class BasicConsumerWithLimit {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProperties);
         
         // Receive data asynchronous
+        LOG.info("[BasicConsumerWithLimit] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
         consumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
         int readedMessages=0;
         
+        LOG.info("[BasicConsumerWithLimit] Preparing to receive {} menssages", DemoConstant.NUM_MESSAGES);
         while(true){
         	// Create consumer records
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(2000));
             LOG.info("Check records -> Count {}", records.count());
 
             for (ConsumerRecord<String, String> record : records){
-            	LOG.info("Received record \n" +
+            	LOG.info("[*] Received record \n" +
             			"Key: {} \n" +
             			"Value: {} \n" +
                         "Topic: {} \n" +
@@ -59,8 +72,7 @@ public class BasicConsumerWithLimit {
             
             readedMessages++;
             
-            LOG.info("Readed message='{}'", readedMessages);
-            
+            LOG.info("[*] Readed message number '{}'", readedMessages);
             if (readedMessages>=DemoConstant.NUM_MESSAGES) {break;}
         }
         
