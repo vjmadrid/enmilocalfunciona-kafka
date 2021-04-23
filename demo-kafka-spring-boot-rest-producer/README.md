@@ -1,11 +1,10 @@
-# demo-kafka-spring-boot-producer
+# demo-kafka-spring-boot-rest-producer
 
 Este proyecto representa un ejemplo de uso de un productor con **Kafka** con **Spring + Spring Boot** y su soporte
 
 Este proyecto se compone de un productor 
 
-* SpringKafkaApplication : Dispara una ejecución de mensaje planificada cada 2 segundos
-* SpringKafkaLimitApplication : Dispara un nº limitado de mensajes cada 2 segundoss
+http://localhost:9000/kafka/publish?message=ACME
 
 
 Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
@@ -156,7 +155,7 @@ Opcional : Usar perfiles / profile
 Ejecutar
 
 ```bash
-java -jar target/demo-kafka-spring-boot-producer-0.0.1-SNAPSHOT.jar
+java -jar target/demo-kafka-spring-boot-rest-producer-0.0.1-SNAPSHOT.jar
 ```
 
 
@@ -213,7 +212,7 @@ mvn clean install
 Crea la imagen en Docker a partir de su fichero Dockerfile
 
 ```bash
-docker build -t acme/demo-kafka-spring-boot-producer .
+docker build -t acme/demo-kafka-spring-boot-rest-producer .
 ```
 
 4. Verificar que la imagen ha sido creada

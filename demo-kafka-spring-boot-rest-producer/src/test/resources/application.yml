@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: kafka-1:29092
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
     consumer:
       group-id: example-group
 app:

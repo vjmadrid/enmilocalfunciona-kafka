@@ -102,3 +102,12 @@ services:
       - ./zk-single-kafka-multiple-4/kafka-4/data:/var/lib/kafka/data
     depends_on:
       - zookeeper-1
+
+  manager:
+    image: sheepkiller/kafka-manager
+    ports:
+      - "9000:9000"
+    environment:
+      ZK_HOSTS: zookeeper-1:2181
+    depends_on:
+      - zookeeper-1

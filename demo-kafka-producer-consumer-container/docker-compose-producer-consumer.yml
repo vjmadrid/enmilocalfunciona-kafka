@@ -1,15 +1,14 @@
 version: '3'
 
 services:
+
     producer:
         image: acme/demo-kafka-spring-boot-producer
         environment:
-            - BROKER=kafka-1:29092
+          BROKER: kafka1:19091
+
     consumer:
         image: acme/demo-kafka-spring-boot-consumer
         environment:
-            - BROKER=kafka-2:29093
-            - MESSAGE_PROCESSING_TIME=2000
-
-networks:
-    kafka-net:
+          BROKER: kafka2:19092
+          MESSAGE_PROCESSING_TIME: 2000
