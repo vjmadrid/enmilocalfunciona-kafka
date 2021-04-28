@@ -38,7 +38,7 @@ public class KafkaConsumerService {
      * 		@KafkaListener(id = "basic-listener", topics = "${app.topic.example1}")
      */
     
-    @KafkaListener(id = "basic-listener", topics = "${app.topic.example1}")
+    @KafkaListener(id = "basic-listener", topics = "${app.topic.example1}", groupId = "${spring.kafka.consumer.group-id}")
     public void receive(@Payload String message, @Headers MessageHeaders headers) {
         LOG.info("[KafkaConsumerService] received message='{}'", message);
         
