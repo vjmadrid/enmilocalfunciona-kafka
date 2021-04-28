@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.acme.kafka</groupId>
-    <artifactId>demo-kafka-spring-boot-basic</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.acme.kafka.testing</groupId>
+	<artifactId>demo-kafka-spring-boot-testing</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>demo-kafka-spring-boot-basic</name>
+	<name>demo-kafka-spring-boot-testing</name>
 	<description></description>
 
 	<parent>
@@ -29,17 +29,15 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Spring Boot Properties -->
-		<start-class>com.acme.kafka.SpringKafkaApplication</start-class>
+		<start-class>com.acme.kafka.testing.SpringKafkaApplication</start-class>
 
 		<!-- Dependency Versions -->
 		
 
 		<!-- Testing -->
 		<!-- * Default value -> use profile -->
-		<!-- 
-		<skip.unit.tests>false</skip.unit.tests>
-		-->
-    	
+		<!-- <skip.unit.tests>false</skip.unit.tests> -->
+
 		<!-- Plugins -->
 
 	</properties>
@@ -51,23 +49,23 @@
 
 		<!-- *** Architecture libraries *** -->
 
-        <!-- *** Spring Boot Starters *** -->
-        
+		<!-- *** Spring Boot Starters *** -->
+
 		<!-- spring-boot-starter : Core Starter for Spring Framework-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
 		
 		<!-- spring-boot-starter-test : Testing for Spring Framework
 				- Set of libraries for testing : Junit, Mockito, Hamcrest, AssertJ, JSONassert and JsonPath
 		-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            
-            <!-- Exclude Support JUnit4 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			
+			<!-- Exclude Support JUnit4 -->
 
 			<exclusions>
 				<exclusion>
@@ -76,37 +74,54 @@
 				</exclusion>
 			</exclusions>
 			
-        </dependency>
+		</dependency>
 		
-        <!-- *** Third Party Libraries *** -->
-        
-        <!-- spring-kafka : Spring Kafka Support-->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        
-        <!-- spring-kafka-test : Spring Kafka Test Support-->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <!-- lombok : Java Tool for automatic generation of getters, setters, equals, hashCode, toString, more -->
+		<!-- *** Third Party Libraries *** -->
+
+		<!-- spring-kafka : Spring Kafka Support-->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+
+		<!-- spring-kafka-test : Spring Kafka Test Support-->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- lombok : Java Tool for automatic generation of getters, setters, equals, hashCode, toString, more -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
 
+		<!-- kafka-junit : JUnit rule to spin-up a Kafka broker during tests 
+		<dependency>
+			<groupId>com.github.charithe</groupId>
+			<artifactId>kafka-junit</artifactId>
+			<version>4.1.8</version>
+			<scope>test</scope>
+		</dependency>
+		-->
+		
+		<!-- kafka : Isolated container management for Java code testing -->
+		<dependency>
+		    <groupId>org.testcontainers</groupId>
+		    <artifactId>kafka</artifactId>
+		    <version>1.15.3</version>
+		    <scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
-		<finalName>demo-kafka-spring-boot-basic</finalName>
+		<finalName>demo-kafka-spring-boot-testing</finalName>
 
-        <plugins>
+		<plugins>
 
-            <!-- spring-boot-maven-plugin : Plugin used to work with Spring Boot application -->
+			<!-- spring-boot-maven-plugin : Plugin used to work with Spring Boot application -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -155,7 +170,7 @@
 					</properties>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 
