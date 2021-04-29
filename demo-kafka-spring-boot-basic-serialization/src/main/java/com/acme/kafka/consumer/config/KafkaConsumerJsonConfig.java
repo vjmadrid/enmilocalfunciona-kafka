@@ -14,6 +14,8 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import com.acme.kafka.entity.CustomMessage;
+
 @Configuration
 public class KafkaConsumerJsonConfig {
 
@@ -34,23 +36,44 @@ public class KafkaConsumerJsonConfig {
 	@Bean
 	public ConsumerFactory<String, Object> consumerFactoryJson() {
 		//Option 1
+		//spring.kafka.consumer.properties.spring.json.trusted.packages=*
+		
+		//Option 2
 //		final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
 //		jsonDeserializer.addTrustedPackages("*");
 //		
 //		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(), new StringDeserializer(),
 //				jsonDeserializer);
 		
-		//Option 2
+		//Option 3
 		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(),
                 new StringDeserializer(),
                 new JsonDeserializer<>().trustedPackages("*"));
 	}
-
+	
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactoryJson() {
 		
 		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		
 		factory.setConsumerFactory(consumerFactoryJson());
+
+		return factory;
+	}
+	
+	@Bean
+	public ConsumerFactory<String, CustomMessage> customMessageConsumerFactoryJson() {
+		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(),
+                new StringDeserializer(),
+                new JsonDeserializer<>(CustomMessage.class).trustedPackages("*"));
+	}
+	
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, CustomMessage> kafkaListenerContainerFactoryCustomMessageJson() {
+		
+		ConcurrentKafkaListenerContainerFactory<String, CustomMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		
+		factory.setConsumerFactory(customMessageConsumerFactoryJson());
 
 		return factory;
 	}

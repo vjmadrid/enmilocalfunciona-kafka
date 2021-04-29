@@ -7,8 +7,9 @@ spring:
 
 app:
   topic:
-    example1: topic-1
-    example2: topic-2
+    example-string: topic-string
+    example-json: topic-json
+    example-bytearray: topic-bytearray
 
 logging:
   level:

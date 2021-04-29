@@ -24,7 +24,7 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.consumer.service.KafkaConsumerService;
+import com.acme.kafka.consumer.service.KafkaConsumerStringService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -41,7 +41,7 @@ public class BasicConsumerTest {
 	public static EmbeddedKafkaRule embeddedKafkaRule = new EmbeddedKafkaRule(NUM_BROKERS_START, true, EXAMPLE_TOPIC);
 	
 	@Autowired
-	private KafkaConsumerService basicConsumer;
+	private KafkaConsumerStringService basicConsumer;
 
 	private KafkaTemplate<String, String> kafkaTemplate;
 

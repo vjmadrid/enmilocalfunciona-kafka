@@ -15,8 +15,8 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.consumer.service.KafkaConsumerService;
-import com.acme.kafka.producer.service.KafkaProducerService;
+import com.acme.kafka.consumer.service.KafkaConsumerStringService;
+import com.acme.kafka.producer.service.KafkaProducerStringService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -33,10 +33,10 @@ public class BasicSenderReceiverTest {
 	private String messageTest;
 	
 	@Autowired
-	private KafkaProducerService basicSender;
+	private KafkaProducerStringService basicSender;
 	
 	@Autowired
-	private KafkaConsumerService basicReceiver;
+	private KafkaConsumerStringService basicReceiver;
 	
 	@BeforeEach
 	public void init() throws Exception {

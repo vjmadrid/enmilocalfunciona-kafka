@@ -2,9 +2,10 @@ package com.acme.kafka.util;
 
 import java.util.stream.StreamSupport;
 
+import org.apache.kafka.common.header.Headers;
 import org.slf4j.Logger;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.handler.annotation.Headers;
+
 
 public class KafkaUtil {
 	
@@ -18,10 +19,10 @@ public class KafkaUtil {
 		}
 	}
 	
-//	public String typeIdHeader(Headers headers) {
-//        return StreamSupport.stream(headers.spliterator(), false)
-//                .filter(header -> header.key().equals("__TypeId__"))
-//                .findFirst().map(header -> new String(header.value())).orElse("N/A");
-//    }
+	public static String typeIdHeader(Headers headers) {
+        return StreamSupport.stream(headers.spliterator(), false)
+                .filter(header -> header.key().equals("__TypeId__"))
+                .findFirst().map(header -> new String(header.value())).orElse("N/A");
+    }
 
 }

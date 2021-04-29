@@ -27,7 +27,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Spring Boot Properties -->
-		<start-class>com.acme.kafka.SpringKafkaApplication</start-class>
+		<start-class>com.acme.kafka.SpringKafkaStringApplication</start-class>
 
 		<!-- Dependency Versions -->
 		

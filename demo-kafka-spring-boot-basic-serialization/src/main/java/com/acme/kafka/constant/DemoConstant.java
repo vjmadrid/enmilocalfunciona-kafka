@@ -6,8 +6,11 @@ public final class DemoConstant {
 	}
 
 	public static final String BOOTSTRAP_SERVERS = "localhost:9092";
-	public static final String TOPIC = "topic-1";
-    
+	
+	public static final String TOPIC_STRING = "topic-string";
+	public static final String TOPIC_JSON = "topic-json";
+	public static final String TOPIC_BYTEARRAY = "topic-bytearray";
+   
     public static final int NUM_MESSAGES = 10;
     public static final String MESSAGE_TEMPLATE = "Hello World! %s - %s";
     public static final int NUM_SECONDS_DELAY_MESSAGE = 2;

@@ -38,7 +38,7 @@ public class KafkaConsumerByteArrayConfig {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, byte[]> kafkaListenerContainerFactoryBytes() {
+	public ConcurrentKafkaListenerContainerFactory<String, byte[]> kafkaListenerContainerFactoryBytesArray() {
 		
 		ConcurrentKafkaListenerContainerFactory<String, byte[]> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactoryByteArray());

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
+import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -27,18 +27,18 @@ public class KafkaProducerByteArrayConfig {
 		Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties());
 		
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArrayDeserializer.class);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
 
 		return props;
 	}
 
 	@Bean
-	public ProducerFactory<String, String> producerFactoryByteArray() {
+	public ProducerFactory<String, byte[]> producerFactoryByteArray() {
 		return new DefaultKafkaProducerFactory<>(producerConfigsByteArray());
 	}
 
 	@Bean
-	public KafkaTemplate<String, String> kafkaTemplateByteArray() {
+	public KafkaTemplate<String,  byte[]> kafkaTemplateByteArray() {
 		return new KafkaTemplate<>(producerFactoryByteArray());
 	}
 

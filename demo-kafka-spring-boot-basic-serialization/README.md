@@ -17,6 +17,11 @@ Este proyecto destaca por propocionar :
 * **Configuración de Spring** para el uso con Kafka mediante clases de configuración
 
 
+Para la serialización JSON
+
+* Existe una propiedad (**spring.kafka.consumer.properties.spring.json.trusted.packages**) para definir la lista de prametros de patrones que permiten deserializacion -> '*' significa todos los paquetes
+
+
 
 
 

@@ -30,7 +30,7 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.producer.service.KafkaProducerService;
+import com.acme.kafka.producer.service.KafkaProducerStringService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -47,7 +47,7 @@ public class BasicProducerTest {
 	public static EmbeddedKafkaRule embeddedKafkaRule = new EmbeddedKafkaRule(NUM_BROKERS_START, true, EXAMPLE_TOPIC);
 
 	@Autowired
-	private KafkaProducerService basicProducer;
+	private KafkaProducerStringService basicProducer;
 
 	private KafkaMessageListenerContainer<String, String> container;
 
