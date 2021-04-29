@@ -33,13 +33,14 @@ public class KafkaConsumerJsonConfig {
 
 	@Bean
 	public ConsumerFactory<String, Object> consumerFactoryJson() {
-		
+		//Option 1
 //		final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
 //		jsonDeserializer.addTrustedPackages("*");
 //		
 //		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(), new StringDeserializer(),
 //				jsonDeserializer);
 		
+		//Option 2
 		return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(),
                 new StringDeserializer(),
                 new JsonDeserializer<>().trustedPackages("*"));
