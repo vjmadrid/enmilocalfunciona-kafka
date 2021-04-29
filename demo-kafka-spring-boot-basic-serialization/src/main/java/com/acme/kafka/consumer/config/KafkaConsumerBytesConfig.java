@@ -1,4 +1,4 @@
-package com.acme.kafka.config;
+package com.acme.kafka.consumer.config;
 
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;

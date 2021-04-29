@@ -1,4 +1,4 @@
-package com.acme.kafka.config;
+package com.acme.kafka.producer.config;
 
 import java.util.HashMap;
 import java.util.Map;
