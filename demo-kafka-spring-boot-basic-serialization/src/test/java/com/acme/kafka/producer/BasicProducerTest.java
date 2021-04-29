@@ -30,8 +30,6 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.producer.service.KafkaProducerService;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext

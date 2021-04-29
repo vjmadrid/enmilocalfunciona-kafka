@@ -24,8 +24,6 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.consumer.service.KafkaConsumerService;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DirtiesContext

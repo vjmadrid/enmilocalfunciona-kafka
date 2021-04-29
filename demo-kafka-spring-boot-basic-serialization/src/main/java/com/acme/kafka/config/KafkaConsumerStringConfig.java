@@ -17,8 +17,8 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 @Configuration
 @EnableKafka
-public class KafkaConsumerConfig {
-
+public class KafkaConsumerStringConfig {
+	
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 	
@@ -38,6 +38,14 @@ public class KafkaConsumerConfig {
 		
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
+		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+		
+//		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "15000");
+//		props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "50000");
+//		props.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, "60000");
+//		props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, "50000");
+//		props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG,200);
+//		props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,10485760);
 		
 		return props;
 	}
@@ -54,6 +62,13 @@ public class KafkaConsumerConfig {
 		factory.setConsumerFactory(consumerFactoryString());
 
 		return factory;
+	}
+	
+	@Bean
+	public DefaultKafkaConsumerFactory defaultKafkaConsumerFactory() {
+		DefaultKafkaConsumerFactory<Integer, String> cf = new DefaultKafkaConsumerFactory<Integer, String>(
+				consumerConfigsString());
+		return cf;
 	}
 	
 }

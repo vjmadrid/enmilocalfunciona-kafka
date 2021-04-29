@@ -1,16 +1,14 @@
-server:
-  port: 9000
-
 spring:
   kafka:
-    producer:
-      bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9092
+    consumer:
+       group-id: example-group
+       auto-offset-reset: earliest
 
 app:
   topic:
     example1: topic-1
     example2: topic-2
-    messages-per-request: 10
 
 logging:
   level:

@@ -1,5 +1,8 @@
 package com.acme.kafka.producer.service;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,25 +16,40 @@ import com.acme.kafka.producer.entity.CustomMessage;
 @Service
 public class KafkaProducerService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerService.class);
 
-    @Value("${app.topic.example1}")
-    private String topic;
-    
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-    
-    @Autowired
-    private KafkaTemplate<String, CustomMessage> customMessageKafkaTemplate;
+	@Value("${app.topic.example1}")
+	private String topic;
 
-    public void send(String message){
-        LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
-        kafkaTemplate.send(topic, message);
-    }
-    
-    public void send(CustomMessage message){
-        LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
-        customMessageKafkaTemplate.send(topic, message);
-    }
-    
+	@Value("${app.topic.messages-per-request}")
+	private int messagesPerRequest;
+
+	private CountDownLatch latch;
+
+	@Autowired
+	private KafkaTemplate<String, String> kafkaTemplate;
+
+	@Autowired
+	private KafkaTemplate<String, CustomMessage> customMessageKafkaTemplate;
+
+	public void send(String message) {
+		LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
+		kafkaTemplate.send(topic, message);
+	}
+
+	public void send(CustomMessage message) {
+		LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
+		customMessageKafkaTemplate.send(topic, message);
+	}
+
+	public void sendWithLatch(String message) throws InterruptedException {
+		latch = new CountDownLatch(messagesPerRequest);
+		IntStream.range(0, messagesPerRequest).forEach(i -> {
+			this.kafkaTemplate.send(topic, String.valueOf(i), message);
+			LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
+		});
+		latch.await(60, TimeUnit.SECONDS);
+		LOG.info("All {} messages received", messagesPerRequest);
+	}
+
 }
