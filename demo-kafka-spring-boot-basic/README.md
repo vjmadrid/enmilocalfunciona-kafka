@@ -5,18 +5,46 @@ Este proyecto representa un ejemplo básico de uso con **Kafka** con **Spring + 
 
 
 
-Este proyecto se compone de un productor y un consumidor cuyas configuraciones son facilitadas mediante el fichero application.yaml
+Este proyecto se compone de un productor y un consumidor cuyas configuraciones son facilitadas mediante el **fichero application.yaml**
+
+* Se harán uso para la configuración del nombre de las propiedades establecido por defecto
+* La serialización / deserialización de los mensajes se realizará mediante String
+
+```bash
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+```
 
 Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
 
 
 Este proyecto destaca por propocionar :
 
-* **Clase básica de productor / emisor** basada en Spring
-* **Clase básica de consumidor / receptor** basada en Spring
-* **Configuración de Spring** para el uso con Kafka mediante fichero
+* **Clase básica de servicio de un productor / emisor** basada en Spring
+* **Clase básica de servicio de un consumidor / receptor** basada en Spring
+* **Configuración de Spring** para el uso con Kafka mediante fichero **fichero application.yaml**
 
 
+
+Para el productor 
+
+* Se hará uso de **KafkaTemplate** para enviar mensajes
+
+
+
+Para el consumidor 
+
+* Se hará uso de **@KafkaListener** para recibir mensajes
 
 
 

@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import com.acme.kafka.util.KafkaUtil;
+
 @Service
 public class KafkaConsumerService {
 
@@ -21,14 +23,6 @@ public class KafkaConsumerService {
     public CountDownLatch getLatchTest() {
       return latchTest;
     }
-    
-    private void showMessageHeaders(MessageHeaders headers) {
-		if (headers != null) {
-			headers.keySet().forEach(key -> 
-        	LOG.info("\t{}: {}", key, headers.get(key))
-        );
-		}
-	}
     
     /** Create @KafkaListener -> Depends application properties
      * 
@@ -42,7 +36,7 @@ public class KafkaConsumerService {
         LOG.info("[KafkaConsumerService] received message='{}'", message);
         
         LOG.info("[KafkaConsumerService] Show details...");
-        showMessageHeaders(headers);
+        KafkaUtil.showMessageHeaders(headers, LOG);
         
         LOG.info("[KafkaConsumerService] latch.countDown()...");
         latchTest.countDown();
