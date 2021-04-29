@@ -48,7 +48,13 @@ public class KafkaProducerStringConfig {
 
 	@Bean
 	public ProducerFactory<String, String> producerFactoryString() {
+		// Option 1
 		return new DefaultKafkaProducerFactory<>(producerConfigsString());
+		
+//        // Option 2
+//		return new DefaultKafkaProducerFactory<>(producerConfigsString(),
+//              new StringSerializer(),
+//              new StringSerializer());
 	}
 
 	@Bean
