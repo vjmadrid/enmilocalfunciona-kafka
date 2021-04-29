@@ -12,7 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.producer.KafkaProducerService;
+import com.acme.kafka.producer.service.KafkaProducerService;
 
 @SpringBootApplication
 public class SpringKafkaApplication implements CommandLineRunner {

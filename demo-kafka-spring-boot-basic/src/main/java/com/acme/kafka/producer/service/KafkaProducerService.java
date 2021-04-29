@@ -1,4 +1,4 @@
-package com.acme.kafka.producer;
+package com.acme.kafka.producer.service;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;

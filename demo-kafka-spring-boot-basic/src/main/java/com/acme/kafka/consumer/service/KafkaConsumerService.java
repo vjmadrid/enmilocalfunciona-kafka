@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer;
+package com.acme.kafka.consumer.service;
 
 import java.util.concurrent.CountDownLatch;
 

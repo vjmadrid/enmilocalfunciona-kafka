@@ -1,4 +1,4 @@
-package com.acme.kafka.producer;
+package com.acme.kafka.producer.service;
 
 import java.util.concurrent.ExecutionException;
 

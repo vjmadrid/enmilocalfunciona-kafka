@@ -15,8 +15,8 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.acme.kafka.consumer.KafkaConsumerService;
-import com.acme.kafka.producer.KafkaProducerService;
+import com.acme.kafka.consumer.service.KafkaConsumerService;
+import com.acme.kafka.producer.service.KafkaProducerService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
