@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,13 +32,7 @@ public class KafkaProducerJsonConfig {
 	
 	@Bean
     public ProducerFactory<String, Object> producerFactoryJson() {
-        // Option 1
 		return new DefaultKafkaProducerFactory<>(producerConfigsJson());
-        
-        // Option 2
-//        return new DefaultKafkaProducerFactory<>(producerConfigsJson(),
-//                new StringSerializer(),
-//                new JsonSerializer<>());
     }
 
     @Bean
