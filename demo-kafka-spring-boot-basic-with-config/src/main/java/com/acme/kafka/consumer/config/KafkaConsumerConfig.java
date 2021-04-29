@@ -15,6 +15,14 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
+/**
+ *	Consumer configuration class
+ * 
+ * 	Gets the configuration of ad-hoc values and access to very specific properties 
+ * 	from the application.properties file.
+ *   
+ */
+
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
