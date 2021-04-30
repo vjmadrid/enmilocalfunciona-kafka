@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.acme.kafka.producer.entity.CustomMessage;
-
 @Service
 public class KafkaProducerService {
 
@@ -29,17 +27,9 @@ public class KafkaProducerService {
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
-	@Autowired
-	private KafkaTemplate<String, CustomMessage> customMessageKafkaTemplate;
-
 	public void send(String message) {
 		LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
 		kafkaTemplate.send(topic, message);
-	}
-
-	public void send(CustomMessage message) {
-		LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
-		customMessageKafkaTemplate.send(topic, message);
 	}
 
 	public void sendWithLatch(String message) throws InterruptedException {

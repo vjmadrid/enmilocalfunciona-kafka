@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +23,8 @@ public class SpringKafkaStringApplication implements CommandLineRunner {
     @Autowired
     private KafkaProducerStringService kafkaProducerStringService;
     
-    private String topic = DemoConstant.TOPIC_STRING;
+    @Value("${app.topic.example-string}")
+    private String topic;
     
     public static void main(String[] args) {
     	LOG.info("[SpringKafkaStringApplication] *** Init ***");
