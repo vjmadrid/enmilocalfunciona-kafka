@@ -36,6 +36,7 @@ public class KafkaProducerKafkaPropertiesConfig {
 	@Bean
 	public Map<String, Object> producerConfigsString() {
 		Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties());
+		
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		

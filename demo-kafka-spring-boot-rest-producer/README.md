@@ -21,10 +21,10 @@ Este proyecto destaca por propocionar :
 
 En el fichero de **application.yaml** se configuran algunas cosas :
 
-* **bootstrap-servers :** Listado de brokers a los que apunta este productor (En este caso sólo se establece uno "localhost:9092")
+* **bootstrap-servers :** Listado de brokers a los que apunta este productor (En este caso sólo se establece uno "localhost:9092" -> Modo single-node configuration) 
 * **app.topic.example1 :** Nombre del topic utilizado en el ejemplo (En este caso "example1" )
 * **group-id :** Identifica el grupo al que pertece este consumidor
-* **auto-offset-reset :** Propiedad que permite indicar característas de consumo (En este caso se usa earliest que indica que se consumira desde el inicio)
+* **auto-offset-reset :** Propiedad que permite indicar característas de consumo (En este caso se usa "earliest" que indica que se consumira desde el inicio)
 
 El resto de configuración se realiza mediante su fichero de configuración Java
 

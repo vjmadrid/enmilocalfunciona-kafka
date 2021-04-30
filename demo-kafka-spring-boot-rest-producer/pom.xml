@@ -29,9 +29,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Spring Boot Properties -->
-		<start-class>com.acme.kafka.SpringKafkaRestProducerApplication</start-class>
+		<start-class>com.acme.kafka.producer.SpringKafkaRestProducerApplication</start-class>
 
 		<!-- Dependency Versions -->
+		<swagger.version>2.9.2</swagger.version>
 		
 
 		<!-- Testing -->
@@ -99,10 +100,31 @@
             <scope>test</scope>
         </dependency>
         
+        <!-- To reload the code when changes made -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>runtime</scope>
+		</dependency>
+        
          <!-- lombok : Java Tool for automatic generation of getters, setters, equals, hashCode, toString, more -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+		
+		<!-- springfox-swagger : API Rest documentation -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${swagger.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${swagger.version}</version>
 		</dependency>
 
 	</dependencies>

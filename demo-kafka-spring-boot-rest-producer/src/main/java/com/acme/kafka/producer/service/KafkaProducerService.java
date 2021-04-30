@@ -9,7 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+
+import com.acme.kafka.producer.callback.CustomListenableFutureCallback;
 
 @Service
 public class KafkaProducerService {
@@ -29,15 +33,21 @@ public class KafkaProducerService {
 
 	public void send(String message) {
 		LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
-		kafkaTemplate.send(topic, message);
+
+		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, message);
+		future.addCallback(new CustomListenableFutureCallback());
 	}
 
 	public void sendWithLatch(String message) throws InterruptedException {
 		latch = new CountDownLatch(messagesPerRequest);
+
 		IntStream.range(0, messagesPerRequest).forEach(i -> {
-			this.kafkaTemplate.send(topic, String.valueOf(i), message);
 			LOG.info("[KafkaProducerService] sending message='{}' to topic='{}'", message, topic);
+			
+			ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(topic, String.valueOf(i), message);
+			future.addCallback(new CustomListenableFutureCallback());
 		});
+
 		latch.await(60, TimeUnit.SECONDS);
 		LOG.info("All {} messages received", messagesPerRequest);
 	}
