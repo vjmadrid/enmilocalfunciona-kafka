@@ -2,7 +2,6 @@ package com.acme.kafka.producer;
 
 import java.util.Date;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -16,7 +15,7 @@ import com.acme.kafka.producer.config.KafkaProducerConfig;
 /**
  * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
  *  
- *  Retrieves meta information about the message being sent from a Callback class
+ *  Message Template : Hello World! CUSTOM_ID - SEND_DATE
  *  
  *  Incorporates the use of a key 
  *  
@@ -30,7 +29,7 @@ public class BasicProducerWithKey {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(BasicProducerWithKey.class);
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("[BasicProducerWithKey] *** Init ***");
 
@@ -44,6 +43,8 @@ public class BasicProducerWithKey {
         for (int i=1; i<=DemoConstant.NUM_MESSAGES; i++ ) {
         	// Prepare message
         	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
+        	
+        	// Prepare key
         	String key = String.format(DemoConstant.KEY_TEMPLATE, i);
         	
         	// Create producer record

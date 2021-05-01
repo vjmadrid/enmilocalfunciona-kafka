@@ -4,7 +4,7 @@ Este proyecto representa un ejemplo básico de uso de **Kafka** con la condició
 
 Este proyecto se compone de diferentes productores y consumidores que hacen uso de elementos de esa librería tratados como clases main independientes.
 
-Se trabajará con un nº estipulado de mensajes del tipo : Hello World! <ID> - <FECHA>
+Se trabajará con un nº estipulado de mensajes del tipo : Hello World! ID_PROPIO - FECHA_ENVIO
 
 Este proyecto destaca por propocionar :
 
@@ -84,7 +84,7 @@ N/A
 
 Se ejecutarán las clases Java de forma individual segun cada uno de los casos
 
-En muchos casos requiere montar o utilizar alguno de sus componentes origen o destino de datos
+En muchos casos requiere montar o utilizar alguno de sus componentes de origen o destino de datos
 
 
 Cada caso busca objetivos diferentes

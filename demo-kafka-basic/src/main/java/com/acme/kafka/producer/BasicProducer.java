@@ -14,6 +14,8 @@ import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
  * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
+ * 
+ * 	Message Template : Hello World! CUSTOM_ID - SEND_DATE
  *  
  *  Different consumers can be used
  *   - Java consumer with appropriate configuration
