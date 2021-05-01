@@ -20,7 +20,6 @@ Este proyecto destaca por propocionar :
 
 * Java 8
 * [Maven 3](https://maven.apache.org/) - Gestión de Dependencias
-* [Docker](https://www.docker.com/) - Tecnología de contenedores
 * [Apache Kafka ](https://kafka.apache.org/)
 
 Dependencias de arquitectura
@@ -50,7 +49,6 @@ Define que elementos son necesarios para instalar el software
 
 * Java 8 instalado (1.5+ version requerida)
 * Maven installed  (3+)
-* Docker installed (19+)
 * Infraestructura Kafka + Topics (Adhoc o mediante contenedores)
 
 

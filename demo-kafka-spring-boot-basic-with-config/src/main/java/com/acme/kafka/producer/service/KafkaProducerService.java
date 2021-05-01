@@ -1,6 +1,7 @@
 package com.acme.kafka.producer.service;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -50,6 +51,18 @@ public class KafkaProducerService {
     public void send(String topic, ProducerRecord<String, String> record){
     	LOG.info("[KafkaProducerService] sending message='{}' to topic param='{}'",record.value(),topic);
     	kafkaTemplateString.send(record);
+    }
+    
+    public void sendWithException(String topic, ProducerRecord<String, String> record){
+    	LOG.info("[KafkaProducerService] sending message='{}' to topic param='{}'",record.value(),topic);
+    	try {
+				kafkaTemplateString.send(record).get(10, TimeUnit.SECONDS);
+    	}catch (ExecutionException e) {
+    		LOG.error("ExecutionException");
+    		e.printStackTrace();
+        }catch (java.util.concurrent.TimeoutException | InterruptedException e) {
+        	LOG.error("TimeoutException | InterruptedException");
+        }
     }
     
     public void sendWithCallbackAdhoc(String topic, ProducerRecord<String, String> record){

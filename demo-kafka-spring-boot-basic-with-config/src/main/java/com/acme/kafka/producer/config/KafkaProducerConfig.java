@@ -47,6 +47,8 @@ public class KafkaProducerConfig {
 //		props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 6000);
 //		//props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, properties.getBufferSize());
 //		props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 1000000000);
+		
+		// See https://kafka.apache.org/documentation/#producerconfigs for more properties
 
 		return props;
 	}

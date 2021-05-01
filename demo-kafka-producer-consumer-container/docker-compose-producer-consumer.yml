@@ -5,10 +5,15 @@ services:
     producer:
         image: acme/demo-kafka-spring-boot-producer
         environment:
-          BROKER: kafka1:19091
+          BROKER: localhost:9092
+        network_mode: host
+
 
     consumer:
         image: acme/demo-kafka-spring-boot-consumer
         environment:
-          BROKER: kafka2:19092
+          BROKER: localhost:9092
           MESSAGE_PROCESSING_TIME: 2000
+        network_mode: host
+
+

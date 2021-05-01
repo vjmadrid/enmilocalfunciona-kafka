@@ -55,6 +55,8 @@ public class KafkaConsumerConfig {
 //		props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG,200);
 //		props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,10485760);
 		
+		// See https://kafka.apache.org/documentation/#consumerconfigs for more properties
+		
 		return props;
 	}
 
