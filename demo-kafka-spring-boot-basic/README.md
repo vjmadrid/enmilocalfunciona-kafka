@@ -52,7 +52,6 @@ Para el consumidor
 
 * Java 8
 * [Maven 3](https://maven.apache.org/) - Gestión de Dependencias
-* [Docker](https://www.docker.com/) - Tecnología de contenedores
 * [Apache Kafka ](https://kafka.apache.org/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Spring](https://spring.io)

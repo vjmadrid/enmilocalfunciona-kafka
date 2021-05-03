@@ -16,47 +16,48 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 /**
- *	Consumer configuration class
+ * Consumer configuration class
  * 
- * 	Gets the configuration of ad-hoc values and access to very specific properties 
- * 	from the application.properties file.
- *   
+ * Gets the configuration of ad-hoc values and access to very specific
+ * properties from the application.properties file.
+ * 
  */
 
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
-	
+
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
-	
+
 	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
-	
+
 	@Value("${spring.kafka.consumer.auto-offset-reset}")
 	private String autoOffsetReset;
 
 	@Bean
 	public Map<String, Object> consumerConfigsString() {
 		Map<String, Object> props = new HashMap<>();
-		
+
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		
+
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
 		props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
-		
+
 //		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "15000");
 //		props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "50000");
 //		props.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, "60000");
 //		props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, "50000");
 //		props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG,200);
 //		props.put(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,10485760);
-		
-		// See https://kafka.apache.org/documentation/#consumerconfigs for more properties
-		
+
+		// See https://kafka.apache.org/documentation/#consumerconfigs for more
+		// properties
+
 		return props;
 	}
 
@@ -67,18 +68,29 @@ public class KafkaConsumerConfig {
 
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-		
+
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactoryString());
 
 		return factory;
 	}
-	
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, String> multiThreadedKafkaListenerContainerFactory() {
+
+		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		
+		factory.setConsumerFactory(consumerFactoryString());
+		factory.setConcurrency(3);
+		
+		return factory;
+	}
+
 	@Bean
 	public DefaultKafkaConsumerFactory defaultKafkaConsumerFactory() {
 		DefaultKafkaConsumerFactory<Integer, String> cf = new DefaultKafkaConsumerFactory<Integer, String>(
 				consumerConfigsString());
 		return cf;
 	}
-	
+
 }
