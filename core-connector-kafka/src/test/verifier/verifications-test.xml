@@ -1,0 +1,26 @@
+<verifications
+  xmlns="http://maven.apache.org/verifications/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/verifications/1.0.0
+  http://maven.apache.org/xsd/verifications-1.0.0.xsd">
+    <files>
+        <file>
+            <location>README.md</location>
+        </file>
+        <file>
+            <location>src/main/resources/application.yml</location>
+        </file>
+        <file>
+            <location>src/main/resources/application-dev.yml</location>
+        </file>
+        <file>
+            <location>src/main/resources/custom-banner.txt</location>
+        </file>
+        <file>
+            <location>src/main/resources/logback.xml</location>
+        </file>
+        <file>
+            <location>src/test/resources/logback-test.xml</location>
+        </file>
+    </files>
+</verifications>

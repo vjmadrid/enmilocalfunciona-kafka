@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.acme.core.architecture.connector</groupId>
+	<artifactId>core-connector-kafka</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>core-connector-kafka</name>
+	<description></description>
+
+	<properties>
+		<!-- *** Important : Include properties in ~/.m2/settings.xml -->
+
+		<!-- Compiler & Resources -->
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- *** Architecture Libraries *** -->
+
+		<!-- Dependency Versions -->
+		<spring-boot-starter-parent.version>2.3.4.RELEASE</spring-boot-starter-parent.version>
+		<spring.version>5.2.9.RELEASE</spring.version>
+		<spring-kafka.version>2.5.6.RELEASE</spring-kafka.version>
+		
+		<lombok.version>1.18.12</lombok.version>
+
+
+		<!-- Plugins -->
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
+		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+
+	</properties>
+
+	<!-- <profiles> They are found definitively in in ~/.m2/settings.xml -->
+
+	<dependencies>
+
+		<!-- *** Architecture Libraries *** -->
+
+		<!-- *** Modules *** -->
+		
+		<!-- *** Spring Boot Starters *** -->
+		
+		<!-- spring-boot-starter-test : Testing for Spring Framework
+				- Set of libraries for testing : Junit, Mockito, Hamcrest, AssertJ, JSONassert and JsonPath
+		-->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-starter-parent.version}</version>
+            <scope>test</scope>
+            
+            <!-- Exclude Support JUnit4 -->
+
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+			
+        </dependency>
+		
+		<!-- *** Third Party Libraries *** -->
+
+		<!-- spring-kafka : Spring Kafka Support-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
+        </dependency>
+        
+        <!-- spring-kafka-test : Spring Kafka Test Support-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <version>${spring-kafka.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- spring-boot-autoconfigure : Spring Boot AutoConfigure -->
+        <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-autoconfigure</artifactId>
+		    <version>${spring-boot-starter-parent.version}</version>
+		</dependency>
+
+		<!-- spring-boot-starter-web : Starter for building web, RESTful, Spring MVC -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+		    <version>${spring-boot-starter-parent.version}</version>
+		</dependency>        
+       
+
+        
+	</dependencies>
+
+	<build>
+		<finalName>core-connector-kafka</finalName>
+		<plugins>
+
+			<!-- maven-compiler-plugin : Plugin used to compile the project source -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- maven-resources-plugin : Plugin used to handle the project resources -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- maven-surefire-plugin : Plugin used to run unit tests - Generate 
+				reports in the directory target/surefire-reports -->
+
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<skipTests>${skip.unit.tests}</skipTests>
+					<testFailureIgnore>false</testFailureIgnore>
+					<properties>
+						<configurationParameters>
+							junit.jupiter.execution.parallel.enabled=true
+							junit.jupiter.execution.parallel.config.dynamic.factor=2
+							junit.platform.output.capture.stdout=true
+							junit.platform.output.capture.stderr=true
+						</configurationParameters>
+					</properties>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

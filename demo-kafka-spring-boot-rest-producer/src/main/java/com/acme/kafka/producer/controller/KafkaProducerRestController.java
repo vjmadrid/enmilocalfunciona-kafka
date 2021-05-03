@@ -36,7 +36,8 @@ public class KafkaProducerRestController {
 	}
 	
 	@PostMapping(value = KafkaProducerRestControllerConstant.BASE_SEND_MESSAGE_URL)
-	public ResponseEntity<Void> sendMessageToKafkaTopic(@RequestParam(KafkaProducerRestControllerConstant.MESSAGE_VARIABLE_PARAM) String message) {
+	public ResponseEntity<Void> sendMessageToKafkaTopic(
+			@RequestParam(KafkaProducerRestControllerConstant.MESSAGE_VARIABLE_PARAM) String message) {
 		
 		Objects.requireNonNull(message);
 		
