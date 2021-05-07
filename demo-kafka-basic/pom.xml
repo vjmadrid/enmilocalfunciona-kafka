@@ -88,6 +88,13 @@
 			<version>${logback.version}</version>
 		</dependency>
 		
+		<!-- lombok : automatic generation of getters, setters, equals, hashCode, toString, etc -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.20</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

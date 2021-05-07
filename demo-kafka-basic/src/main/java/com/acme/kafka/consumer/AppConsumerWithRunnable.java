@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.consumer.runnable.BasicConsumerRunnable;
+import com.acme.kafka.consumer.runnable.ConsumerRunnable;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -23,33 +23,33 @@ import com.acme.kafka.consumer.runnable.BasicConsumerRunnable;
  * 
  */
 
-public class BasicConsumerWithRunnable {
+public class AppConsumerWithRunnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithRunnable.class);
 
 	private static CountDownLatch countDownLatch = new CountDownLatch(1);
 	
 	private static Runnable basicConsumerRunnable = null;
 
 	public static void main(String[] args) {
-		LOG.info("[BasicConsumerWithRunnable] *** Init ***");
+		LOG.info("[AppConsumerWithRunnable] *** Init ***");
 		
-		basicConsumerRunnable = new BasicConsumerRunnable(DemoConstant.BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
+		basicConsumerRunnable = new ConsumerRunnable(DemoConstant.BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
 		
-		new BasicConsumerWithRunnable().run();
+		new AppConsumerWithRunnable().run();
 	}
 
 	private void run() {
-		LOG.info("[BasicConsumerWithRunnable] *** Run ***");
+		LOG.info("[AppConsumerWithRunnable] *** Run ***");
 		
-		LOG.info("[BasicConsumerWithRunnable] Creating consumer thread");
+		LOG.info("Creating consumer thread");
 		new Thread(basicConsumerRunnable).start();
 
 		// Add shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				LOG.info("[BasicConsumerWithRunnable] Capture shutdown hook");
+				LOG.info("Capture shutdown hook");
 				
-				((BasicConsumerRunnable) basicConsumerRunnable).shutdown();
+				((ConsumerRunnable) basicConsumerRunnable).shutdown();
 				
 				try {
 					countDownLatch.await();
@@ -57,7 +57,7 @@ public class BasicConsumerWithRunnable {
 					e.printStackTrace();
 				}
 				
-				LOG.info("[BasicConsumerWithRunnable] Application has exited");
+				LOG.info("Application has exited");
 			}
 		));
 
@@ -66,7 +66,7 @@ public class BasicConsumerWithRunnable {
 		} catch (InterruptedException e) {
 			LOG.error("Application got interrupted", e);
 		} finally {
-			LOG.info("[BasicConsumerWithRunnable] *** Close ***");
+			LOG.info("*** Close ***");
 		}
 	}
 

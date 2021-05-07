@@ -16,15 +16,15 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 
-public class BasicConsumerRunnable implements Runnable {
+public class ConsumerRunnable implements Runnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRunnable.class);
 
 	private CountDownLatch latch;
 
 	private KafkaConsumer<String, String> consumer;
 
-	public BasicConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch latch) {
+	public ConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch latch) {
 		LOG.info("[BasicConsumerRunnable] *** Init ***");
 		
 		this.latch = latch;
@@ -40,7 +40,7 @@ public class BasicConsumerRunnable implements Runnable {
 		consumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
 		// Create consumer
-		consumer = new KafkaConsumer<String, String>(consumerProperties);
+		consumer = new KafkaConsumer<>(consumerProperties);
 
 		// Receive data asynchronous
 		LOG.info("[BasicConsumerRunnable] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));

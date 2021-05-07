@@ -28,8 +28,10 @@ public  class KafkaConsumerConfig {
 		kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, DemoConstant.GROUP_ID);
 		kafkaConsumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         
-        //kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        //kafkaConsumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
+//        kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+//        kafkaConsumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
+//		kafkaConsumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+//		kafkaConsumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500);
 		
 		return kafkaConsumerProperties;
 	}

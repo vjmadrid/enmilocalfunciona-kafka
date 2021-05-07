@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.acme.kafka.testing.constant.TestingConstant;
 import com.acme.kafka.testing.consumer.util.KafkaContainerPropertiesUtil;
 import com.acme.kafka.testing.consumer.util.KafkaContainerUtil;
-import com.acme.kafka.testing.producer.util.KafkaProducerPropertiesUtil;
+import com.acme.kafka.testing.producer.dummy.DummyKafkaProducerPropertiesUtil;
 import com.acme.kafka.testing.producer.util.KafkaProducerTemplateUtil;
 
 @ExtendWith(SpringExtension.class)
@@ -61,7 +61,7 @@ public class BasicTest {
 	    
 	    Thread.sleep(1000); // wait a bit for the container to start
 	    
-	    kafkaTemplateProducer = KafkaProducerTemplateUtil.generateKafkaTemplateProducer(KafkaProducerPropertiesUtil.generateKafkaProducerProperties());
+	    kafkaTemplateProducer = KafkaProducerTemplateUtil.generateKafkaTemplateProducer(DummyKafkaProducerPropertiesUtil.defaultGenerateKafkaProducerStringProperties());
 	    kafkaTemplateProducer.setDefaultTopic(topic);
 	    
 	    kafkaTemplateProducer.sendDefault(0, "example-1");

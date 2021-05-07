@@ -2,12 +2,14 @@ package com.acme.kafka.testing.producer.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.Serializer;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.testcontainers.shaded.com.google.common.collect.Maps;
 
 public class KafkaProducerPropertiesUtil {
 
@@ -16,6 +18,7 @@ public class KafkaProducerPropertiesUtil {
 	}
 	
 	public static Map<String, Object> generateKafkaProducerProperties(EmbeddedKafkaBroker embeddedKafkaBroker){
+		Objects.requireNonNull(embeddedKafkaBroker);
 		
 		Map<String, Object> kafkaProducerProperties = KafkaTestUtils.producerProps(
 				embeddedKafkaBroker
@@ -24,20 +27,31 @@ public class KafkaProducerPropertiesUtil {
 		return kafkaProducerProperties;
 	}
 	
-	public static Map<String, Object> generateKafkaProducerProperties() {
-	    Map<String, Object> props = new HashMap<>();
-	    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+	public static Map<String, Object> generateKafkaProducerStringProperties(String brokerListString, Serializer keySerializer, Serializer valueSerializer) {
+		Objects.requireNonNull(brokerListString);
+		Objects.requireNonNull(keySerializer);
+		Objects.requireNonNull(valueSerializer);
+		
+		Map<String, Object> kafkaProducerProperties = new HashMap<>();
+	    kafkaProducerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerListString);
 	    
-	    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
-	    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+	    kafkaProducerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
+	    kafkaProducerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
 	    
-	    props.put(ProducerConfig.RETRIES_CONFIG, 0);
-	    props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-	    props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+	    return kafkaProducerProperties;
+	}
+	
+	public static Map<String, String> generateKafkaProducerStringProperties(Properties producerProperties, Serializer keySerializer, Serializer valueSerializer) {
+		Objects.requireNonNull(producerProperties);
+		Objects.requireNonNull(keySerializer);
+		Objects.requireNonNull(valueSerializer);
+		
+		Map<String, String> kafkaProducerProperties = Maps.fromProperties(producerProperties);
+		
+		kafkaProducerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer.toString());
+		kafkaProducerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer.toString());
 	    
-	    props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-	    
-	    return props;
+	    return kafkaProducerProperties;
 	}
 	
 }

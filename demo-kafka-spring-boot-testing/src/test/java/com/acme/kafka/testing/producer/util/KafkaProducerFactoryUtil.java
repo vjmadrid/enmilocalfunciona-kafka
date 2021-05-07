@@ -1,6 +1,7 @@
 package com.acme.kafka.testing.producer.util;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -12,9 +13,11 @@ public class KafkaProducerFactoryUtil {
 		throw new IllegalStateException("KafkaProducerFactoryUtil");
 	}
 	
-	public static ProducerFactory<String, String> generateKafkaProducerFactory(Map<String, Object> kafkaProducerProperties){
+	public static ProducerFactory<String, String> generateKafkaProducerFactory(Map<String, Object> kafkaProducerPropertiesMap){
+		Objects.requireNonNull(kafkaProducerPropertiesMap);
+		
 		ProducerFactory<String, String> kafkaProducerFactory = new DefaultKafkaProducerFactory<String, String>(
-				kafkaProducerProperties,
+				kafkaProducerPropertiesMap,
 				new StringSerializer(), 
 				new StringSerializer()
 		);

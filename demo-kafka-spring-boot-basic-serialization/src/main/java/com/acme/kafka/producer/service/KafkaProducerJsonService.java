@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.acme.kafka.entity.CustomMessage;
+import com.acme.kafka.custom.message.entity.CustomMessage;
 
 @Service
 public class KafkaProducerJsonService {

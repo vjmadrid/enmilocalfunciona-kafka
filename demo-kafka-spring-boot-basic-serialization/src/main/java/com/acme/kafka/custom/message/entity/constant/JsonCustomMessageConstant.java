@@ -1,4 +1,4 @@
-package com.acme.kafka.entity.constant;
+package com.acme.kafka.custom.message.entity.constant;
 
 public class JsonCustomMessageConstant {
 	
@@ -8,5 +8,6 @@ public class JsonCustomMessageConstant {
 	
 	public static final String FIELD_CUSTOM_MESSAGE_ID = "identifier";
 	public static final String FIELD_CUSTOM_MESSAGE_MESSAGE = "message";
+	public static final String FIELD_CUSTOM_MESSAGE_CREATED_DATE = "createdDate";
 
 }

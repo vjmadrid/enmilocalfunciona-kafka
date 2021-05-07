@@ -12,7 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.entity.CustomMessage;
+import com.acme.kafka.custom.message.entity.CustomMessage;
 import com.acme.kafka.producer.service.KafkaProducerJsonService;
 
 @SpringBootApplication

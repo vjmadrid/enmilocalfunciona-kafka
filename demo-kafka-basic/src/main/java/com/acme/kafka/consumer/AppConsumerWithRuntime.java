@@ -3,10 +3,13 @@ package com.acme.kafka.consumer;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +27,23 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
  * 
  */
 
-public class BasicConsumerWithLimit {
+public class AppConsumerWithRuntime {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BasicConsumerWithLimit.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithRuntime.class);
+    
+    private static final AtomicBoolean closed = new AtomicBoolean(false); // Close Process
+    
     public static void main(String[] args) {
     	
-    	LOG.info("[BasicConsumerWithLimit] *** Init ***");
+    	LOG.info("[BasicConsumerWithRuntime] *** Init ***");
+    	
+    	Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run() {
+            	LOG.info("[BasicConsumerWithRuntime] Shutting down");
+                closed.set(true);
+            }
+        });
     	
     	// Create consumer properties
     	Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsString();
@@ -39,18 +52,18 @@ public class BasicConsumerWithLimit {
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
         // Receive data asynchronous
-        LOG.info("[BasicConsumerWithLimit] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
+        LOG.info("[BasicConsumerWithRuntime] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
         kafkaConsumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
         int readedMessages=0;
         
-        LOG.info("[BasicConsumerWithLimit] Preparing to receive {} menssages", DemoConstant.NUM_MESSAGES);
-        while(true){
+        LOG.info("[BasicConsumerWithRuntime] Preparing to receive {} menssages", DemoConstant.NUM_MESSAGES);
+        while (!closed.get()) {
         	// Create consumer records
             ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(2000));
             LOG.info("Check records -> Count {}", records.count());
 
-            for (ConsumerRecord<String, String> record : records){
+            for (ConsumerRecord<String, String> record : records){          	
             	LOG.info("[*] Received record \n" +
             			"Key: {} \n" +
             			"Value: {} \n" +
@@ -73,7 +86,7 @@ public class BasicConsumerWithLimit {
         // Close consumer
         kafkaConsumer.close();
         
-        LOG.info("[BasicConsumerWithLimit] *** End ***");
+        LOG.info("[BasicConsumerWithRuntime] *** End ***");
     }
     
 

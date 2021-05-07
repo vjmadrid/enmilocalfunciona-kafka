@@ -14,27 +14,33 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import com.acme.kafka.custom.message.deserializer.CustomMessageDeserializer;
 import com.acme.kafka.custom.message.entity.CustomMessage;
 
 @Configuration
-public class KafkaConsumerJsonConfig {
+public class KafkaConsumerCustomMessageConfig {
 
 	@Autowired
 	private KafkaProperties kafkaProperties;
 
 	@Bean
-	public Map<String, Object> consumerConfigsJson() {
+	public Map<String, Object> consumerConfigsCustomMessage() {
 		Map<String, Object> props = new HashMap<>(kafkaProperties.buildConsumerProperties());
 
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomMessageDeserializer.class);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "example-group");
+		
+		props.put("enable.auto.commit", "true");
+        props.put("auto.commit.interval.ms", "1000");
+        props.put("session.timeout.ms", "30000");
+        props.put("auto.offset.reset", "earliest");
 
 		return props;
 	}
 
 	@Bean
-	public ConsumerFactory<String, Object> consumerFactoryJson() {
+	public ConsumerFactory<String, Object> consumerFactoryCustomMessage() {
 		//Option 1
 		//spring.kafka.consumer.properties.spring.json.trusted.packages=*
 		
@@ -56,7 +62,7 @@ public class KafkaConsumerJsonConfig {
 		
 		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		
-		factory.setConsumerFactory(consumerFactoryJson());
+		factory.setConsumerFactory(consumerFactoryCustomMessage());
 
 		return factory;
 	}
