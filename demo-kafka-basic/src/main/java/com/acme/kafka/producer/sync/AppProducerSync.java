@@ -56,7 +56,7 @@ public class AppProducerSync {
 	        	// Create producer record
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
-	            // Send data synchronous
+	            // Send data synchronous -> blocking call
 	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
 				kafkaProducer.send(record).get();
 				

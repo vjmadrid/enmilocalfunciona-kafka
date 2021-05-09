@@ -24,20 +24,20 @@ public class ProducerCallback implements Callback {
 		// Define send execution time
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		
-		LOG.info("[ProducerAsyncCallback] Received metadata \n" +
+		LOG.info("[ProducerCallback] Received metadata \n" +
                 "\tKey: {} \n" +
                 "\tMessage: {} \n", this.key, this.message);
 		
 		if (exception == null) {
-        	LOG.info("[ProducerAsyncCallback] Received metadata \n" +
+        	LOG.info("[ProducerCallback] Received metadata \n" +
                     "\tTopic: {} \n" +
                     "\tPartition: {} \n" +
                     "\tOffset: {} \n" +
                     "\tTimestamp: {}",
-                    "\tElapsed Time: {} ms",
-                    metadata.topic(), metadata.partition(), metadata.offset(), metadata.timestamp(), elapsedTime);
+                    "\tElapsed Time: {} seconds",
+                    metadata.topic(), metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
         } else {
-        	LOG.error("[ProducerAsyncCallback] Error while producing message ", exception);
+        	LOG.error("[ProducerCallback] Error while producing message ", exception);
         	exception.printStackTrace();
         }
 		

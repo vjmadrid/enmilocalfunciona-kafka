@@ -2,7 +2,6 @@ package com.acme.kafka.producer.async.callback;
 
 import java.util.Date;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -33,7 +32,7 @@ public class AppProducerAsyncWithCallbackClass {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncWithCallbackClass.class);
 	
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("[AppProducerAsyncWithCallbackClass] *** Init ***");
 
@@ -62,11 +61,7 @@ public class AppProducerAsyncWithCallbackClass {
 	            // Send data asynchronous -> Fire & Forget
 	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
 	            kafkaProducer.send(record, new ProducerCallback(startTime, null, message));
-	            
-	            // Define send execution time
-	            long elapsedTime = System.currentTimeMillis() - startTime;
-	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
-	            
+
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }
 	        

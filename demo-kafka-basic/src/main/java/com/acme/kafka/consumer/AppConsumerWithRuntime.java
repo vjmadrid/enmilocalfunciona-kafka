@@ -5,11 +5,9 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +16,10 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
- * 
- * 	With message limit (10)
+ *  
+ * 	No message limit
+ *  
+ *  ENABLE_AUTO_COMMIT_CONFIG = True
  *  
  *  Different producers can be used
  *   - Java producer with appropriate configuration
@@ -33,7 +33,7 @@ public class AppConsumerWithRuntime {
     
     private static final AtomicBoolean closed = new AtomicBoolean(false); // Close Process
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("[BasicConsumerWithRuntime] *** Init ***");
     	
@@ -46,47 +46,54 @@ public class AppConsumerWithRuntime {
         });
     	
     	// Create consumer properties
-    	Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsString();
+        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
 
-        // Create consumer
+        // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
         // Receive data asynchronous
         LOG.info("[BasicConsumerWithRuntime] Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
         kafkaConsumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
-        int readedMessages=0;
+        // Prepare send execution time
+        long startTime = System.currentTimeMillis();
         
         LOG.info("[BasicConsumerWithRuntime] Preparing to receive {} menssages", DemoConstant.NUM_MESSAGES);
-        while (!closed.get()) {
-        	// Create consumer records
-            ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(2000));
-            LOG.info("Check records -> Count {}", records.count());
-
-            for (ConsumerRecord<String, String> record : records){          	
-            	LOG.info("[*] Received record \n" +
-            			"Key: {} \n" +
-            			"Value: {} \n" +
-                        "Topic: {} \n" +
-                        "Partition: {}\n" +
-                        "Offset: {} \n" +
-                        "Timestamp: {}" , 
-                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
-            }
-            
-            // Check num messages limit
-            readedMessages++;
-            
-            LOG.info("[*] Readed message number '{}'", readedMessages);
-            if (readedMessages>=DemoConstant.NUM_MESSAGES) {
-            	break;
-            }
+        try {
+        	
+        	while (!closed.get()) {
+	        	// Create consumer records
+	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
+	            LOG.info("Check records -> \n" +
+	            		"\tRecord Count: {} \n" +
+	            		"\tPartition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
+	
+	            // Show Consumer Record info
+	            for (ConsumerRecord<String, String> record : consumerRecords){          	
+	            	LOG.info("[*] Received record \n" +
+	            			"\tKey: {} \n" +
+	            			"\tValue: {} \n" +
+	                        "\tTopic: {} \n" +
+	                        "\tPartition: {}\n" +
+	                        "\tOffset: {} \n" +
+	                        "\tTimestamp: {}" , 
+	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            }
+	            
+	        	// Define send execution time
+	            long elapsedTime = System.currentTimeMillis() - startTime;
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
+	            
+	            Thread.sleep(2000);
+	           
+	        }
+        }
+        finally {
+        	// Close consumer
+        	kafkaConsumer.close();
         }
         
-        // Close consumer
-        kafkaConsumer.close();
-        
-        LOG.info("[BasicConsumerWithRuntime] *** End ***");
+        LOG.info("*** End ***");
     }
     
 

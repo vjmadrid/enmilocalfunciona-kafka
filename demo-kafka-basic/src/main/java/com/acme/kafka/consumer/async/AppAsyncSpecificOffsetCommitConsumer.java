@@ -1,12 +1,18 @@
-package com.acme.kafka.consumer;
+package com.acme.kafka.consumer.async;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import org.apache.kafka.clients.consumer.CommitFailedException;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +21,10 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
- * 
- * 	With message limit (10)
- * 
- *  ENABLE_AUTO_COMMIT_CONFIG = True
+ *  
+ * 	No message limit
+ *  
+ *  ENABLE_AUTO_COMMIT_CONFIG = False
  *  
  *  Different producers can be used
  *   - Java producer with appropriate configuration
@@ -26,31 +32,37 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
  * 
  */
 
-public class AppConsumerWithLimit {
+public class AppAsyncSpecificOffsetCommitConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithLimit.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncSpecificOffsetCommitConsumer.class);
+    
     public static void main(String[] args) throws InterruptedException {
     	
-    	LOG.info("[AppConsumerWithLimit] *** Init ***");
+    	LOG.info("[AppAsyncSpecificOffsetCommitConsumer] *** Init ***");
     	
     	// Create consumer properties
         Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
+        
+        kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        kafkaConsumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
 
         // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
-        // Receive data asynchronous
-        LOG.info("Preparing to subscribe {}", Arrays.asList(DemoConstant.TOPIC));
+        // Subscribe topic
         kafkaConsumer.subscribe(Arrays.asList(DemoConstant.TOPIC));
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
         
-        int readedMessages=0;
+        // Define processed Topic Offsets 
+        Map<TopicPartition, OffsetAndMetadata> processedTopicOffsets = new HashMap<>();
         
-        LOG.info("Preparing to receive {} menssages", DemoConstant.NUM_MESSAGES);
+        int count = 0;
+        
+        LOG.info("[AppAsyncSpecificOffsetCommitConsumer] Preparing to receive menssages");
         try {
+        	
 	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
@@ -61,29 +73,36 @@ public class AppConsumerWithLimit {
 	            // Show Consumer Record info
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
 	            	LOG.info("[*] Received record \n" +
-	            			"Key: {} \n" +
-	            			"Value: {} \n" +
-	                        "Topic: {} \n" +
-	                        "Partition: {}\n" +
-	                        "Offset: {} \n" +
-	                        "Timestamp: {}" , 
+	            			"\tKey: {} \n" +
+	            			"\tValue: {} \n" +
+	                        "\tTopic: {} \n" +
+	                        "\tPartition: {}\n" +
+	                        "\tOffset: {} \n" +
+	                        "\tTimestamp: {}" , 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            	
+	            	 processedTopicOffsets.put(new TopicPartition(record.topic(),
+	                         record.partition()), new
+	                         OffsetAndMetadata(record.offset()+1, "no metadata"));
+	 	            
+	                 if (count % 5 == 0) {
+	                	 LOG.info("Manual commit offset asynchronous -> Count {}", consumerRecords.count());
+	                     try {
+	                     	kafkaConsumer.commitAsync(processedTopicOffsets, null);
+	                     } catch (CommitFailedException e) {
+	                     	LOG.error("Manual Commit Offset Asynchronous failed " + e);
+	                     }
+	                 }
+
+	                 count++;
 	            }
 	            
-	        	// Define send execution time
+	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
 	            Thread.sleep(2000);
-	            
-	            // Check num messages limit
-	            readedMessages++;
-	            
-	            LOG.info("[*] Readed message number '{}'", readedMessages);
-	            if (readedMessages >= DemoConstant.NUM_MESSAGES) {
-	            	break;
-	            }
-	            
+	           
 	        }
         }
         finally {
@@ -91,8 +110,6 @@ public class AppConsumerWithLimit {
         	kafkaConsumer.close();
         }
         
-        LOG.info("*** End ***");
     }
     
-
 }

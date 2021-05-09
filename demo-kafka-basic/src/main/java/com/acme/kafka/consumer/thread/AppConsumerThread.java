@@ -28,7 +28,7 @@ public class AppConsumerThread {
     	LOG.info("[AppConsumerThread] *** Init ***");
     	
     	// Create consumer properties
-        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsString();
+        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
 
         // Receive data asynchronous
       

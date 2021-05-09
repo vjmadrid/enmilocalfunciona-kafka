@@ -1,50 +1,39 @@
-package com.acme.kafka.consumer.runnable;
+package com.acme.kafka.consumer.rebalance;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
-public class ConsumerRunnable implements Runnable {
+public class ConsumerRebalanceRunnable implements Runnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRebalanceRunnable.class);
 
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
 	private final String topic;
 	
-	private CountDownLatch countDownLatch;
-
-	public ConsumerRunnable(String bootstrapServers, String groupId, String topic) {
-		LOG.info("[ConsumerRunnable] *** Init ***");
-		
-		// Create consumer properties
-		Properties consumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(bootstrapServers, groupId);
-		
-		// Create Kafka consumer
-		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
-		
-		// Prepare topic
-		this.topic = topic;
-
-		// Subscribe topic
-		kafkaConsumer.subscribe(Arrays.asList(this.topic));
-	}
+	private Map<TopicPartition, OffsetAndMetadata> processedOffsets = new HashMap<>();
 	
-	public ConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch countDownLatch) {
-		LOG.info("[ConsumerRunnable] *** Init ***");
+	public ConsumerRebalanceRunnable(String bootstrapServers, String groupId, String topic) {
+		LOG.info("[ConsumerRebalanceRunnable] *** Init ***");
 		
 		// Create consumer properties
 		Properties consumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(bootstrapServers, groupId);
+		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 		
 		// Create Kafka consumer
 		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
@@ -53,17 +42,15 @@ public class ConsumerRunnable implements Runnable {
 		this.topic = topic;
 
 		// Subscribe topic
-		kafkaConsumer.subscribe(Arrays.asList(this.topic));
-		
-		this.countDownLatch = countDownLatch;
+		kafkaConsumer.subscribe(Arrays.asList(this.topic), new CustomConsumerRebalanceListener(processedOffsets));
 	}
 
 	@Override
 	public void run() {
-		LOG.info("[ConsumerRunnable] *** Run ***");
+		LOG.info("[ConsumerRebalanceRunnable] *** Run ***");
 
 		try {
-			LOG.info("[ConsumerRunnable] Preparing to receive menssages");
+			LOG.info("[ConsumerRebalanceRunnable] Preparing to receive menssages");
 			while (true) {
 				ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(2000));
 				LOG.info("Check records -> Count {}", records.count());
@@ -77,20 +64,32 @@ public class ConsumerRunnable implements Runnable {
 		                        "\tOffset: {} \n" +
 		                        "\tTimestamp: {}" , 
 		                        Thread.currentThread().getId(),record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+		            	
+		            	processedOffsets.put(new TopicPartition(record.topic(),
+		                            record.partition()), new
+		                            OffsetAndMetadata(record.offset() + 1, "no metadata"));
 		         }
+				
+				LOG.info("[ConsumerRebalanceRunnable] Commit Async");
+				kafkaConsumer.commitAsync();
 
 			}
 		} catch (WakeupException e) {
 			LOG.info("Received shutdown signal");
-		} finally {
-			kafkaConsumer.close();
-			countDownLatch.countDown();
-		}
+		}catch (Exception e) {
+            System.out.println("Unexpected error" + e);
+        } finally {
+            try {
+            	kafkaConsumer.commitSync();
+            } finally {
+            	kafkaConsumer.close();
+            }
+        }
 
 	}
 
 	public void shutdown() {
-		LOG.info("[ConsumerRunnable] *** Shutdown ***");
+		LOG.info("[ConsumerRebalanceRunnable] *** Shutdown ***");
 		// interrupt consumer.poll() and throw WakeUpException
 		kafkaConsumer.wakeup();
 	}

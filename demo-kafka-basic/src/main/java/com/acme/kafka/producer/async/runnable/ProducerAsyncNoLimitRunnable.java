@@ -2,12 +2,10 @@ package com.acme.kafka.producer.async.runnable;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +35,14 @@ public class ProducerAsyncNoLimitRunnable implements Runnable {
 	@Override
 	public void run() {
 		LOG.info("[ProducerAsyncNoLimitRunnable] *** Run ***");
+		
+		// Prepare send execution time
+        long startTime = System.currentTimeMillis();
+		
 		int i = 0;
 		try {
 			LOG.info("Preparing to send menssages");
 			
-			// Prepare send execution time
-	        long startTime = System.currentTimeMillis();
-	        
 			while (true) {
 				// Prepare message
 	        	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
@@ -55,40 +54,17 @@ public class ProducerAsyncNoLimitRunnable implements Runnable {
 	            LOG.info("Sending message='{}' to topic='{}'", message, this.topic);
 	            
 	            // Send data asynchronous -> Fire and Forget
+                kafkaProducer.send(record);
 	            
-	            // Option 1
-                // kafkaProducer.send(record);
-	            
-	            // Option 2
-	            kafkaProducer.send(record, new Callback() {
-	            	
-	                public void onCompletion(RecordMetadata metadata, Exception exception) {
-	                	// Define send execution time
-	    	            long elapsedTime = System.currentTimeMillis() - startTime;
-	     
-	                	if (exception == null) {
-	                		LOG.info("[Callback] Received metadata \n" +
-	                                "\tTopic: {} \n" +
-	                                "\tPartition: {} \n" +
-	                                "\tOffset: {} \n" +
-	                                "\tTimestamp: {}",
-	                                "\tElapsed Time: {} ms",
-	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), elapsedTime);
-	                    } else {
-	                    	LOG.error("[Callback] Error while producing message ", exception);
-	                    }
-	                    
-	                }
-	                
-	            });
+	            // Define send execution time
+	            long elapsedTime = System.currentTimeMillis() - startTime;
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
 	            i++;
-                Thread.sleep(2000);
-
+	            
+	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 			}
 			
-		} catch (WakeupException e) {
-			LOG.error("Received shutdown signal");
 		} catch (InterruptedException e1) {
 			LOG.error("Received interruption signal");
 		} finally {

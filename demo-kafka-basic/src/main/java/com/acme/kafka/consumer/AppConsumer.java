@@ -16,8 +16,10 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
- * 
+ *  
  * 	No message limit
+ *  
+ *  ENABLE_AUTO_COMMIT_CONFIG = True
  *  
  *  Different producers can be used
  *   - Java producer with appropriate configuration
@@ -34,42 +36,43 @@ public class AppConsumer {
     	LOG.info("[AppConsumer] *** Init ***");
     	
     	// Create consumer properties
-        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsString();
+        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
 
-        // Create consumer
+        // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
-        // Receive data asynchronous
-       
-        // * Option 1 : Create topic list with Collections
+        // Create topic list with Collections
+        //  * with Collections : Collections.singletonList(DemoConstant.TOPIC)
+        //  * with Arrays : Arrays.asList(DemoConstant.TOPIC);
         List<String> topicList = Collections.singletonList(DemoConstant.TOPIC);
         
-        // * Option 2 : Create topic list with Arrays
-        //List<String> topicList = Arrays.asList(DemoConstant.TOPIC);
-        
-        LOG.info("Preparing to subscribe {}", topicList);
+        // Subscribe topic
         kafkaConsumer.subscribe(topicList);
+        
+        // Prepare send execution time
+        long startTime = System.currentTimeMillis();
         
         LOG.info("Preparing to receive menssages");
         try {
+        	
 	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
 	            LOG.info("Check records -> \n" +
-	            		"Record Count: {} \n" +
-	            		"Partition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
+	            		"\tRecord Count: {} \n" +
+	            		"\tPartition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
 	            
 	            // * Option 1 : With "for"
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
 	            	LOG.info("[*] Received record \n" +
-	            			"Key: {} \n" +
-	            			"Value: {} \n" +
-	                        "Topic: {} \n" +
-	                        "Partition: {}\n" +
-	                        "Offset: {} \n" +
-	                        "Timestamp: {}" , 
+	            			"\tKey: {} \n" +
+	            			"\tValue: {} \n" +
+	                        "\tTopic: {} \n" +
+	                        "\tPartition: {}\n" +
+	                        "\tOffset: {} \n" +
+	                        "\tTimestamp: {}" , 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            }
 	            
@@ -86,17 +89,16 @@ public class AppConsumer {
 //	     
 //                });
 	            
-	            Thread.sleep(200);
+	            // Define send execution time
+	            long elapsedTime = System.currentTimeMillis() - startTime;
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
-	            
-	            // When ENABLE_AUTO_COMMIT_CONFIG
-	            // 	* false : use commit
-	            //  * true : No use commit
-	            kafkaConsumer.commitSync();
-	            //kafkaConsumer.commitAsync();
+	            Thread.sleep(2000);
+	           
 	        }
         }
         finally {
+        	// Close consumer
         	kafkaConsumer.close();
         }
         

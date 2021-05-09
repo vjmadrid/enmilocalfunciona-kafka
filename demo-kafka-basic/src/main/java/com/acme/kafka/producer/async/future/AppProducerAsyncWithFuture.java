@@ -68,7 +68,7 @@ public class AppProducerAsyncWithFuture {
 	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
-	            LOG.info("\t * elapsedTime='{}' ", elapsedTime);
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
 	            
 	            if (future.isCancelled()) {
@@ -79,19 +79,14 @@ public class AppProducerAsyncWithFuture {
 	            	LOG.info("[Future] Sent message=[{}] with offset=[{}]", future.get().toString(), future.get().offset());
 	            }
 	            
-	            try {
-	                RecordMetadata metadata = future.get();
-	                LOG.info("[Future] Received metadata \n" +
+	            // Get RecordMetadata
+	            RecordMetadata metadata = future.get();
+	            LOG.info("[Future] Received metadata \n" +
 	                        "\tTopic: {} \n" +
 	                        "\tPartition: {} \n" +
 	                        "\tOffset: {} \n" +
 	                        "\tTimestamp: {}",
 	                        metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());
-	            } catch (InterruptedException e) {
-	                e.printStackTrace();
-	            } catch (ExecutionException e) {
-	                e.printStackTrace();
-	            }
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }

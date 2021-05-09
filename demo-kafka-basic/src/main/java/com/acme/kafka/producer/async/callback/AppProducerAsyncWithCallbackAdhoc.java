@@ -2,7 +2,6 @@ package com.acme.kafka.producer.async.callback;
 
 import java.util.Date;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.Callback;
@@ -34,7 +33,7 @@ public class AppProducerAsyncWithCallbackAdhoc {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncWithCallbackAdhoc.class);
 	
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("[AppProducerAsyncWithCallbackAdhoc] *** Init ***");
 
@@ -75,8 +74,8 @@ public class AppProducerAsyncWithCallbackAdhoc {
 	                                "\tPartition: {} \n" +
 	                                "\tOffset: {} \n" +
 	                                "\tTimestamp: {}",
-	                                "\tElapsed Time: {} ms",
-	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), elapsedTime);
+	                                "\tElapsed Time: {} seconds",
+	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 	                    } else {
 	                    	LOG.error("[Callback] Error while producing message ", exception);
 	                    }
@@ -95,17 +94,13 @@ public class AppProducerAsyncWithCallbackAdhoc {
 //	                            "\tPartition: {} \n" +
 //	                            "\tOffset: {} \n" +
 //	                            "\tTimestamp: {}",
-//	                            "\tElapsed Time: {} ms",
-//	                            metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), elapsedTime);
+//	                            "\tElapsed Time: {} seconds",
+//	                            metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 //	                } else {
 //	                	LOG.error("[Callback] Error while producing message ", exception);
 //	                }
 //	            	
 //	            });
-	            
-	            // Define send execution time
-	            long elapsedTime = System.currentTimeMillis() - startTime;
-	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }

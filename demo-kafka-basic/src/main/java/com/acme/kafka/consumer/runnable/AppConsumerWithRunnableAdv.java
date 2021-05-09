@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer;
+package com.acme.kafka.consumer.runnable;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.consumer.runnable.ConsumerRunnable;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -23,9 +22,9 @@ import com.acme.kafka.consumer.runnable.ConsumerRunnable;
  * 
  */
 
-public class AppConsumerWithRunnable {
+public class AppConsumerWithRunnableAdv {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithRunnableAdv.class);
 
 	private static CountDownLatch countDownLatch = new CountDownLatch(1);
 	
@@ -36,7 +35,7 @@ public class AppConsumerWithRunnable {
 		
 		basicConsumerRunnable = new ConsumerRunnable(DemoConstant.BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
 		
-		new AppConsumerWithRunnable().run();
+		new AppConsumerWithRunnableAdv().run();
 	}
 
 	private void run() {

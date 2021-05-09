@@ -38,26 +38,33 @@ public class ProducerAsyncLimitRunnable implements Runnable {
 		
 		// Prepare send execution time
         long startTime = System.currentTimeMillis();
+        
+        try {
 		
-		LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
-		for (int i=1; i<=DemoConstant.NUM_MESSAGES; i++ ) {
-        	// Prepare message
-        	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
-        	
-        	// Create producer record
-            ProducerRecord<String, String> record = new ProducerRecord<>(this.topic, message);
-            
-            // Send data synchronous
-            LOG.info("sending message='{}' to topic='{}'", message, this.topic);
-            kafkaProducer.send(record);
-            
-            try {
+			LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
+			for (int i=1; i<=DemoConstant.NUM_MESSAGES; i++ ) {
+	        	// Prepare message
+	        	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
+	        	
+	        	// Create producer record
+	            ProducerRecord<String, String> record = new ProducerRecord<>(this.topic, message);
+	            
+	            // Send data asynchronous
+	            LOG.info("sending message='{}' to topic='{}'", message, this.topic);
+	            kafkaProducer.send(record);
+	            
+	            // Define send execution time
+	            long elapsedTime = System.currentTimeMillis() - startTime;
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
+	            
 				TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        }
+	        }
+			
+        } catch (InterruptedException e1) {
+			LOG.error("Received interruption signal");
+		} finally {
+			kafkaProducer.close();
+		}
 		
 	}
 	

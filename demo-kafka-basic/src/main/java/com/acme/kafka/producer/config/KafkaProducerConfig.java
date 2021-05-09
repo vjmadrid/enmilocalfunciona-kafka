@@ -27,6 +27,11 @@ public  class KafkaProducerConfig {
 //      kafkaProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer"); 
       
         // Other values
+        //kafkaProducerProperties.put(ProducerConfig.RETRIES_CONFIG, 0);
+        //kafkaProducerProperties.put(ProducerConfig.ACKS_CONFIG, "all");
+        //kafkaProducerProperties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+        //kafkaProducerProperties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+        //kafkaProducerProperties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         
         return kafkaProducerProperties;
 	}
@@ -47,6 +52,7 @@ public  class KafkaProducerConfig {
         kafkaProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         
         kafkaProducerProperties.put(ProducerConfig.RETRIES_CONFIG, 0);
+        kafkaProducerProperties.put("acks", "all");
         kafkaProducerProperties.put("batch.size", 16384);
         kafkaProducerProperties.put("linger.ms", 1);
         kafkaProducerProperties.put("buffer.memory", 33554432);
