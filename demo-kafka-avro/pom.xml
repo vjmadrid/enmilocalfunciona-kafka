@@ -47,12 +47,20 @@
 
         <!-- *** Third Party Libraries *** -->
 
-        <!-- kafka-clients : Client for use Apache Kafka  -->
+        <!-- kafka-clients : Client for use Apache Kafka -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka-clients</artifactId>
 			<version>${kafka-clients.version}</version>
 		</dependency>
+		
+		<!-- kafka-avro-serializer : Kafka Avro Serializer 
+		<dependency>
+		    <groupId>io.confluent</groupId>
+		    <artifactId>kafka-avro-serializer</artifactId>
+		    <version>5.3.0</version>
+		</dependency>
+		-->
 		
 		<!-- log4j-over-slf4j : Log4j implemented over SLF4J -->
 		<dependency>

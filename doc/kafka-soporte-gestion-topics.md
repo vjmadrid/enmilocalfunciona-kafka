@@ -1,25 +1,44 @@
 # Soporte de Gestión de Topics
 
-Este documento sirve como ayuda en el uso de los comandos de Kafka
+>Nota
+>
+>Recordar tener las herramientas de gestión de Apache Kafka instaladas en el ordenador desde el que se va a utilizar. Normalmente estos scripts se ubican en el directorio de instalación (KAFKA_HOME).
+>
+> * **Entorno Unix:** Todos los ejecutables .sh se encuentran bajo el directorio %KAFKA_HOME%\bin
+> * **Entorno Windows:** Todos los ejecutables .bat se encuentran bajo el directorio %KAFKA_HOME%\bin\windows
+>
+>Nota : Cuidado cuando se utiliza un gestor de instalaciones
+>
+>También se requiere tener la infraestructura de Apache Kafka "arrancada"
+
+Este documento sirve como ayuda en el uso de los comandos de Kafka, este caso se explicará detenidamente las posibilidades para la gestión de topics :
+
+* Crear un Topic
+* Listar todos los Topics
+* Detalle de un Topic
+* Borrar un Topic
+* Modificar un Topic
 
 
-**Importante :** Asegurarse que la infraestructura esta "arrancada"
 
 
+## Crear un Topic
 
-##Crear un Topic
-
-Permite crear un topic con una configuración específica
+Permite crear un topic con una configuración específica.
 
 Primero de todo se requiere tener claros ciertos aspectos de la configuración de un topic como : replication-factor, partitions, ...
 
 Los parámetros utilizados son :
 
 * **--create:* Indica que la acción a realizar es la creación
-* **--zookeeper:** Establece la dirección del Zookeeper con la que trabajara
-* **--replication-factor:** Si Kafka se está ejecutando en un clúster, esto determina en cuántos brokers se replicará una partición (En este caso 1)
-* **--partitions:** Define cuántas particiones habrá en un topic (En este caso 1)
-* **--topic:** Establece el nombre del topic (En este caso "xxx")
+* **--zookeeper :** Establece la dirección del Zookeeper con la que trabajará
+    * *--zookeeper localhost:2181*
+* **--bootstrap-server :** Establece la dirección de los Brokers con los que se trabajará
+    * *--bootstrap-server localhost:9092*
+    * *--bootstrap-server localhost:9092,localhost:9093,localhost:9094*
+* **--replication-factor:** Si Kafka se está ejecutando en un clúster, esto determina en cuántos brokers se replicará una partición
+* **--partitions:** Define cuántas particiones habrá en un topic
+* **--topic:** Establece el nombre del topic
 
 
 Según cada caso de instalación utilizar alguno de los métodos siguientes :
@@ -48,10 +67,10 @@ bin/kafka-topics.sh \
 # *** Ejemplos Windows ***
 
 # Referencia a Zookeeper
-KAFKA_HOME\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic XXX
+bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic XXX
 
 # Referencia a Brokers
-KAFKA_HOME\bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic XXX 
+bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic XXX 
 ```
 
 * Verificar que se ha creado correctamente con algún mensaje como "Created topic XXX."
@@ -60,9 +79,9 @@ KAFKA_HOME\bin\windows\kafka-topics.bat --create --bootstrap-server localhost:90
 
 
 
-##Listar todos los Topics
+## Listar todos los Topics
 
-Muestra todos los topics que se encuentran dados de alta en Zookeeper
+Muestra todos los topics que se encuentran dados de alta.
 
 Los parámetros utilizados son :
 
@@ -102,9 +121,9 @@ bin/kafka-topics.sh \
 
 
 
-##Detalle de un Topic
+## Detalle de un Topic
 
-Permite ver la información detallada sobre el uso y configuración de un topic
+Permite ver la información detallada sobre el uso y configuración de un topic.
 
 Los parámetros utilizados son :
 
@@ -152,9 +171,9 @@ KAFKA_HOME\bin\windows\kafka-topics.bat --describe --bootstrap-server localhost:
 
 
 
-##Borrar un Topic
+## Borrar un Topic
 
-Permite borrar un topic
+Permite borrar un topic.
 
 Para que el borrado sea "real" tiene que tener la siguiente propiedad activa : delete.topic.enable=true
 
@@ -196,7 +215,7 @@ KAFKA_HOME\bin\windows\kafka-topics.bat --delete --bootstrap-server localhost:90
 
 
 
-##Modificar un Topic
+## Modificar un Topic
 
 Existe la posibilidad de tener que modificar la configuración de un topic, para ellos existe el parámetro --alter.
 

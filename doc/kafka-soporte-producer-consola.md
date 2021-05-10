@@ -1,12 +1,21 @@
 # Soporte de Producer por Consola
 
-Este documento sirve como ayuda en el uso de los comandos de Kafka
+>Nota
+>
+>Recordar tener las herramientas de gestión de Apache Kafka instaladas en el ordenador desde el que se va a utilizar. Normalmente estos scripts se ubican en el directorio de instalación (KAFKA_HOME).
+>
+> * **Entorno Unix:** Todos los ejecutables .sh se encuentran bajo el directorio %KAFKA_HOME%\bin
+> * **Entorno Windows:** Todos los ejecutables .bat se encuentran bajo el directorio %KAFKA_HOME%\bin\windows
+>
+>Nota : Cuidado cuando se utiliza un gestor de instalaciones
+>
+>También se requiere tener la infraestructura de Apache Kafka "arrancada"
 
+Este documento sirve como ayuda en el uso de los comandos de Kafka, en este caso se explicará detenidamente las posibilidades de utilizar el productor facilitado para su uso por consola.
 
-**Importante :** Asegurarse que la infraestructura esta "arrancada"
+* Ejecutar un productor por consola
 
-
-Los parámetros utilizados son :
+Los parámetros "comunes" utilizados son :
 
 * **--broker-list:** Establece la lista de Brokers con los que trabajará
     * *--broker-list localhost:9092*
@@ -15,10 +24,19 @@ Los parámetros utilizados son :
 
 
 
-##Ejecutar productor por consola
+
+
+## Ejecutar un productor por consola
 
 ```bash
+# *** Ejemplos Linux / Mac ***
+
 bin/kafka-console-producer.sh \
 --broker-list localhost:9092 \
 --topic XXX
+
+
+# *** Ejemplos Windows ***
+
+bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic XXX
 ```
