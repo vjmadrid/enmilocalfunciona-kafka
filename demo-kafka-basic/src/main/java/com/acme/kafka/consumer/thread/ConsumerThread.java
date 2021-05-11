@@ -18,9 +18,12 @@ public class ConsumerThread extends Thread {
 	 private static final Logger LOG = LoggerFactory.getLogger(ConsumerThread.class);
 	
 	private KafkaConsumer<String, String> kafkaConsumer;
+	
     private String topic;
     
     public ConsumerThread(String topic, Properties kafkaConsumerProperties) {
+    	LOG.info("[ConsumerThread] *** Init ***");
+    	
     	this.kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         this.topic = topic;
         
