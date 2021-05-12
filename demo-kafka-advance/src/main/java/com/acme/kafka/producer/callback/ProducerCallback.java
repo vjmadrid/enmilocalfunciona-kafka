@@ -5,6 +5,8 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.kafka.constant.KafkaTemplateConstant;
+
 public class ProducerCallback implements Callback {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ProducerCallback.class);
@@ -24,20 +26,13 @@ public class ProducerCallback implements Callback {
 		// Define send execution time
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		
-		LOG.info("[ProducerCallback] Received metadata \n" +
-                "\tKey: {} \n" +
-                "\tMessage: {} \n", this.key, this.message);
+		LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_DATA, this.key, this.message);
 		
 		if (exception == null) {
-        	LOG.info("[ProducerCallback] Received metadata \n" +
-                    "\tTopic: {} \n" +
-                    "\tPartition: {} \n" +
-                    "\tOffset: {} \n" +
-                    "\tTimestamp: {}",
-                    "\tElapsed Time: {} seconds",
+        	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
                     metadata.topic(), metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
         } else {
-        	LOG.error("[ProducerCallback] Error while producing message ", exception);
+        	LOG.error(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
         	exception.printStackTrace();
         }
 		

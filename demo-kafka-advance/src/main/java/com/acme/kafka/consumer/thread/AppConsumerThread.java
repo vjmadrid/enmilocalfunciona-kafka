@@ -2,7 +2,7 @@ package com.acme.kafka.consumer.thread;
 
 import java.util.Properties;
 
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
@@ -25,7 +25,7 @@ public class AppConsumerThread {
 
         // Receive data asynchronous
       
-        ConsumerThread consumerThread = new ConsumerThread(KafkaConstant.TOPIC, kafkaConsumerProperties);
+        ConsumerThread consumerThread = new ConsumerThread(DemoConstant.TOPIC, kafkaConsumerProperties);
         consumerThread.start();
     }
     

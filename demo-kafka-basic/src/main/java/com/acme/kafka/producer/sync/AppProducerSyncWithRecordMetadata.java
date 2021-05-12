@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -47,7 +46,7 @@ public class AppProducerSyncWithRecordMetadata {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
@@ -64,9 +63,15 @@ public class AppProducerSyncWithRecordMetadata {
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
 	            // Send data synchronous -> blocking call
+	            // 	* The send method returns a Java Future
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				RecordMetadata metadata = kafkaProducer.send(record).get();
-					
+				
+				// Define send execution time
+	            long elapsedTime = System.currentTimeMillis() - startTime;
+	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
+	            
+				// Receive sent record
 		        LOG.info("[RecordMetadata] Received metadata \n" +
 		                    "\tTopic: {} \n" +
 		                    "\tPartition: {} \n" +
@@ -74,10 +79,6 @@ public class AppProducerSyncWithRecordMetadata {
 		                    "\tTimestamp: {}",
 		                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
 				
-	            // Define send execution time
-	            long elapsedTime = System.currentTimeMillis() - startTime;
-	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
-	            
 	            // Prepare counter num sent messages
 	            numSentMessages++;
 	            

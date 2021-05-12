@@ -5,6 +5,7 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -33,7 +34,7 @@ public class AppConsumerWithRunnableAdv {
 	public static void main(String[] args) {
 		LOG.info("*** Init ***");
 		
-		basicConsumerRunnable = new ConsumerRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.GROUP_ID, KafkaConstant.TOPIC, countDownLatch);
+		basicConsumerRunnable = new ConsumerRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
 		
 		new AppConsumerWithRunnableAdv().run();
 	}

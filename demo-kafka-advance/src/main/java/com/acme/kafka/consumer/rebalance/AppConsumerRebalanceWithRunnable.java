@@ -1,8 +1,6 @@
 package com.acme.kafka.consumer.rebalance;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -20,18 +18,12 @@ import com.acme.kafka.constant.KafkaConstant;
 
 public class AppConsumerRebalanceWithRunnable {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AppConsumerRebalanceWithRunnable.class);
-	
     public static void main(String[] args) throws InterruptedException {
     	
-    	LOG.info("*** Init ***");
-
-    	ConsumerRebalanceRunnable consumerThread = new ConsumerRebalanceRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.GROUP_ID, KafkaConstant.TOPIC);
+    	ConsumerRebalanceRunnable consumerThread = new ConsumerRebalanceRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
     	
         Thread t1 = new Thread(consumerThread);
         t1.start();
-        
-        LOG.info("*** End ***");
     }
 
 }

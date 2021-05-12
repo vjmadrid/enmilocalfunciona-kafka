@@ -6,3 +6,7 @@ kafka-topics --create \
 --replication-factor 1 \
 --partitions 1 \
 --topic my-topic
+
+## List created topics
+kafka-topics --list \
+--zookeeper localhost:2181

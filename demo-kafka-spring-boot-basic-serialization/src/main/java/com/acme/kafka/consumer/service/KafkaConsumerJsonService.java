@@ -10,8 +10,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import com.acme.kafka.constant.KafkaConfigConstant;
-import com.acme.kafka.custom.message.entity.CustomMessage;
 import com.acme.kafka.util.KafkaUtil;
+import com.acme.model.custom.message.entity.CustomMessage;
 
 @Service
 public class KafkaConsumerJsonService {

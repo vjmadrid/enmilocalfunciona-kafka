@@ -1,4 +1,4 @@
-package com.acme.kafka.producer.config;
+package com.acme.model.producer.custom.message.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +14,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import com.acme.kafka.custom.message.entity.CustomMessage;
-import com.acme.kafka.custom.message.serializer.CustomMessageSerializer;
+import com.acme.model.custom.message.entity.CustomMessage;
+import com.acme.model.custom.message.serializer.CustomMessageJsonSerializer;
 
 @Configuration
 @EnableKafka
@@ -28,8 +28,12 @@ public class KafkaProducerCustomMessageConfig {
 	public Map<String, Object> producerConfigsCustomMessage() {
 		Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties());
 		
+		props.put(ProducerConfig.CLIENT_ID_CONFIG, "custom-message-producer-id");
+		
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CustomMessageSerializer.class);
+		
+		//Option 1
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, CustomMessageJsonSerializer.class);
 		
 		return props;
 	}

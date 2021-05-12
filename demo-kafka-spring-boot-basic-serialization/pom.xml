@@ -26,8 +26,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<!-- Architecture libraries -->
+		
+		<!-- API model libraries -->
+		<custom-message-model.version>0.0.1-SNAPSHOT</custom-message-model.version>
+		
 		<!-- Spring Boot Properties -->
 		<start-class>com.acme.kafka.SpringKafkaStringApplication</start-class>
+		
 
 		<!-- Dependency Versions -->
 		
@@ -48,6 +54,14 @@
 	<dependencies>
 
 		<!-- *** Architecture libraries *** -->
+		
+		<!-- *** API model libraries *** -->
+		
+		<dependency>
+			<groupId>com.acme.model</groupId>
+			<artifactId>custom-message-model</artifactId>
+			<version>${custom-message-model.version}</version>
+		</dependency>
 
         <!-- *** Spring Boot Starters *** -->
         

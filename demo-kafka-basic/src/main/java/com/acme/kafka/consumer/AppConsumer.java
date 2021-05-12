@@ -2,7 +2,9 @@ package com.acme.kafka.consumer;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
@@ -46,7 +48,7 @@ public class AppConsumer {
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Create topic list with Collections
         //  * with Collections : Collections.singletonList(topic)
@@ -66,33 +68,29 @@ public class AppConsumer {
 	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
-	            LOG.info("Check records -> \n" +
-	            		"\tRecord Count: {} \n" +
-	            		"\tPartition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
+	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
 	            
 	            // * Option 1 : With "for"
-	            for (ConsumerRecord<String, String> record : consumerRecords){          	
-	            	LOG.info("[*] Received record \n" +
-	            			"\tKey: {} \n" +
-	            			"\tValue: {} \n" +
-	                        "\tTopic: {} \n" +
-	                        "\tPartition: {}\n" +
-	                        "\tOffset: {} \n" +
-	                        "\tTimestamp: {}" , 
+	            for (ConsumerRecord<String, String> record : consumerRecords){
+	            	
+	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            	
+	            	Map<String, Object> data = new HashMap<>();
+	            	data.put("key", record.key());
+	            	data.put("value", record.value());
+					data.put("partition", record.partition());
+					data.put("offset", record.offset());
+					
+	            	long latency = (long) (System.nanoTime() - Long.parseLong(record.value())); 
+	            	LOG.info("\t * latency='{}' ", latency);
 	            }
 	            
 	            // * Option 2 : With "forEach"
 //	            consumerRecords.forEach(record -> {
-//	            	LOG.info("[*] Received record \n" +
-//	            			"Key: {} \n" +
-//	            			"Value: {} \n" +
-//	                        "Topic: {} \n" +
-//	                        "Partition: {}\n" +
-//	                        "Offset: {} \n" +
-//	                        "Timestamp: {}" , 
+//	            	LOG.info("KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
 //	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 //	     
 //                });

@@ -9,12 +9,11 @@ public final class KafkaConstant {
 	public static final int DEFAULT_KAFKA_SERVER_PORT = 9092;
 	
 	public static final String DEFAULT_KAFKA_BROKERS = DEFAULT_KAFKA_SERVER_URL+":"+DEFAULT_KAFKA_SERVER_PORT;
-	public static final String BOOTSTRAP_SERVERS = DEFAULT_KAFKA_BROKERS;
+	public static final String DEFAULT_BOOTSTRAP_SERVERS = DEFAULT_KAFKA_BROKERS;
 	
-	public static final String TOPIC = "topic-1";
-	
-    public static final String KEY_TEMPLATE = "id_%s";
-    
-    public static final String GROUP_ID = "my-group";
+	public static final String DEFAULT_CLIENT_ID = "default-client";
+	public static final String DEFAULT_GROUP_ID = "default-group";
+	public static final String DEFAULT_TOPIC = "default-topic";
+	public static final Integer DEFAULT_MESSAGE_COUNT = 1000;
 	
 }

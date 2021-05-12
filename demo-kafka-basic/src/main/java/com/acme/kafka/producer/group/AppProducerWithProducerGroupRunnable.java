@@ -1,5 +1,6 @@
 package com.acme.kafka.producer.group;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -23,7 +24,7 @@ public class AppProducerWithProducerGroupRunnable {
 	
     public static void main(String[] args) {
 
-    	ProducerGroupRunnable producerGroup =  new ProducerGroupRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.TOPIC, NUM_PRODUCERS);
+    	ProducerGroupRunnable producerGroup =  new ProducerGroupRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC, NUM_PRODUCERS);
     	producerGroup.executeProducers();
 
     }

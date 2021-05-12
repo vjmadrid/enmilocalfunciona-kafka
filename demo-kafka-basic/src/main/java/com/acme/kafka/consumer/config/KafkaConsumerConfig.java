@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 public class KafkaConsumerConfig {
@@ -29,7 +30,7 @@ public class KafkaConsumerConfig {
 //      kafkaProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer"); 
 
 		// Other values
-		kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+		kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId + " - "+ System.currentTimeMillis());
 		kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 		kafkaConsumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
@@ -37,8 +38,8 @@ public class KafkaConsumerConfig {
 	}
 
 	public static Properties consumerConfigsStringKeyStringValue() {
-		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(KafkaConstant.BOOTSTRAP_SERVERS,
-				KafkaConstant.GROUP_ID);
+		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,
+				DemoConstant.GROUP_ID);
 
 		// Other values
 		kafkaConsumerProperties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");

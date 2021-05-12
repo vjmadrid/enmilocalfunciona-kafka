@@ -3,6 +3,7 @@ package com.acme.kafka.consumer.group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -31,7 +32,7 @@ public class AppConsumerWithConsumerGroupRunnable {
     	//Se puede disparar aqui el productor
     	
     	// xxx
-        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.GROUP_ID,KafkaConstant.TOPIC, NUM_CONSUMERS);
+        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, NUM_CONSUMERS);
 
         consumerGroup.executeConsumers();
         

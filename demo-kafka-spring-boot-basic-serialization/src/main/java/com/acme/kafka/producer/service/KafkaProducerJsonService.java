@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.acme.kafka.custom.message.entity.CustomMessage;
-
 @Service
 public class KafkaProducerJsonService {
 
@@ -20,14 +18,14 @@ public class KafkaProducerJsonService {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplateJson;
     
-    public void send(CustomMessage customMessage){
-        LOG.info("[KafkaProducerJsonService] sending custommessage='{}' to topic='{}'", customMessage, topic);
-        kafkaTemplateJson.send(topic, customMessage);
+    public void send(Object objectValue){
+        LOG.info("[KafkaProducerJsonService] sending object='{}' to topic='{}'", objectValue, topic);
+        kafkaTemplateJson.send(topic, objectValue);
     }
     
-    public void send(String topic, CustomMessage customMessage){
-        LOG.info("[KafkaProducerJsonService] sending custommessage='{}' to topic param='{}'", customMessage, topic);
-        kafkaTemplateJson.send(topic, customMessage);
+    public void send(String topic, Object objectValue){
+        LOG.info("[KafkaProducerJsonService] sending custommessage='{}' to topic param='{}'", objectValue, topic);
+        kafkaTemplateJson.send(topic, objectValue);
     }
     
 }

@@ -1,5 +1,9 @@
 package com.acme.kafka.producer.async.runnable;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -24,15 +28,15 @@ public class AppProducerAsyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerAsyncRunnable producerNoLimitThread = new ProducerAsyncRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.TOPIC);
+    	ProducerAsyncRunnable producerNoLimitThread = new ProducerAsyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
         
 //        // Option 2: limit messages
-//    	ProducerAsyncWithLimitRunnable producerLimitThread = new ProducerAsyncWithLimitRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.TOPIC);
+//    	ProducerAsyncWithLimitRunnable producerLimitThread = new ProducerAsyncWithLimitRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.DEFAULT_CLIENT_ID, KafkaConstant.TOPIC);
 //        Thread t2 = new Thread(producerLimitThread);
 //        t2.start();
-        
+
     }
 
 }

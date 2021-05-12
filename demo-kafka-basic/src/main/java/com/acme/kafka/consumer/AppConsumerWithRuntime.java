@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
@@ -56,7 +56,7 @@ public class AppConsumerWithRuntime {
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Subscribe topic
         LOG.info("Preparing to subscribe {}", Arrays.asList(topic));
@@ -71,19 +71,11 @@ public class AppConsumerWithRuntime {
         	while (!closed.get()) {
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
-	            LOG.info("Check records -> \n" +
-	            		"\tRecord Count: {} \n" +
-	            		"\tPartition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
+	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
-	            	LOG.info("[*] Received record \n" +
-	            			"\tKey: {} \n" +
-	            			"\tValue: {} \n" +
-	                        "\tTopic: {} \n" +
-	                        "\tPartition: {}\n" +
-	                        "\tOffset: {} \n" +
-	                        "\tTimestamp: {}" , 
+	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            }
 	            

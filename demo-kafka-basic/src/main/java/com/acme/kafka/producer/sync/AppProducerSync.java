@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -46,7 +45,7 @@ public class AppProducerSync {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
@@ -63,6 +62,7 @@ public class AppProducerSync {
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
 	            // Send data synchronous -> blocking call
+	            //	* The send method returns a Java Future
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				kafkaProducer.send(record).get();
 				

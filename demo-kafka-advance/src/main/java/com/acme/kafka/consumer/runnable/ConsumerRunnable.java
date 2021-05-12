@@ -12,6 +12,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 public class ConsumerRunnable implements Runnable {
@@ -65,17 +66,11 @@ public class ConsumerRunnable implements Runnable {
 		try {
 			LOG.info("[ConsumerRunnable] Preparing to receive menssages");
 			while (true) {
-				ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(2000));
-				LOG.info("Check records -> Count {}", records.count());
+				ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
+				LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 				
-				for (ConsumerRecord<String, String> record : records){          	
-		            	LOG.info("[*] Received record with ThreadId=[{}] \n" +
-		            			"\tKey: {} \n" +
-		            			"\tValue: {} \n" +
-		                        "\tTopic: {} \n" +
-		                        "\tPartition: {}\n" +
-		                        "\tOffset: {} \n" +
-		                        "\tTimestamp: {}" , 
+				for (ConsumerRecord<String, String> record : consumerRecords){          	
+		            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD_FOR_THREAD , 
 		                        Thread.currentThread().getId(),record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 		         }
 

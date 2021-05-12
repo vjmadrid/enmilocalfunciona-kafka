@@ -1,5 +1,6 @@
 package com.acme.kafka.producer.sync.runnable;
 
+import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 
 /**
@@ -24,7 +25,7 @@ public class AppProducerSyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerSyncRunnable producerNoLimitThread = new ProducerSyncRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.TOPIC);
+    	ProducerSyncRunnable producerNoLimitThread = new ProducerSyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
        

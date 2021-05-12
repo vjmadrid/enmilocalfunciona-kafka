@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -45,7 +45,7 @@ public class AppProducerAsyncWithKey {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
@@ -59,7 +59,7 @@ public class AppProducerAsyncWithKey {
 	        	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, numSentMessages, new Date().toString());
 	        	
 	        	// Prepare key
-	        	String key = String.format(KafkaConstant.KEY_TEMPLATE, numSentMessages);
+	        	String key = String.format(KafkaTemplateConstant.TEMPLATE_KEY, numSentMessages);
 	        	
 	        	// Create producer record
 	        	// 	* Use Key : specific key, Integer.toString(i), ...

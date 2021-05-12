@@ -34,7 +34,7 @@ public class ProducerGroupRunnable {
 		
 		// Prepare Producer
 		for (int i = 0; i < this.numberProducer; i++) {
-			ProducerAsyncRunnable producerThread = new ProducerAsyncRunnable(this.brokers, this.topic);
+			ProducerAsyncRunnable producerThread = new ProducerAsyncRunnable(this.brokers, "producer-"+i, this.topic);
 			kafkaProducerList.add(producerThread);
 		}
 	}

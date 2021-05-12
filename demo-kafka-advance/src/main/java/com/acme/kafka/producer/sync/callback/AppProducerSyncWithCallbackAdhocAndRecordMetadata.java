@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -50,7 +50,7 @@ public class AppProducerSyncWithCallbackAdhocAndRecordMetadata {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
@@ -75,26 +75,18 @@ public class AppProducerSyncWithCallbackAdhocAndRecordMetadata {
 	                	long elapsedTime = System.currentTimeMillis() - startTime;
 	                	
 	                	if (exception == null) {
-	                		LOG.info("[Callback] Received metadata \n" +
-	                                "\tTopic: {} \n" +
-	                                "\tPartition: {} \n" +
-	                                "\tOffset: {} \n" +
-	                                "\tTimestamp: {}",
-	                                "\tElapsed Time: {} seconds",
+	                		LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
 	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 	                    } else {
-	                    	LOG.error("[Callback] Error while producing message ", exception);
+	                    	LOG.error(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
+	                    	exception.printStackTrace();
 	                    }
 	                    
 	                }
 	                
 	            }).get();
 	          
-	            LOG.info("[RecordMetadata] Received metadata \n" +
-	                    "\tTopic: {} \n" +
-	                    "\tPartition: {} \n" +
-	                    "\tOffset: {} \n" +
-	                    "\tTimestamp: {}",
+	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_RECORD_METADATA,
 	                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
 
 	                        

@@ -37,7 +37,7 @@ public  class KafkaProducerConfig {
 	}
 
 	public static Properties producerConfigsStringKeyStringValue() {
-		Properties kafkaProducerProperties = producerConfigsStringKeyStringValue(KafkaConstant.BOOTSTRAP_SERVERS);
+		Properties kafkaProducerProperties = producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
 
         // Other values
         

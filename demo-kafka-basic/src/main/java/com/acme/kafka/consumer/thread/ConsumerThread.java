@@ -7,15 +7,18 @@ import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.acme.kafka.constant.KafkaTemplateConstant;
 
 import lombok.Data;
 
 @Data
 public class ConsumerThread extends Thread {
 	
-	 private static final Logger LOG = LoggerFactory.getLogger(ConsumerThread.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConsumerThread.class);
 	
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
@@ -30,23 +33,28 @@ public class ConsumerThread extends Thread {
         this.kafkaConsumer.subscribe(Collections.singletonList(this.topic));
     }
     
-    public void doWork() {
-    	
-        ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(2000));
-        
-        LOG.info("Check records -> Count {}", records.count());
-
-        for (ConsumerRecord<String, String> record : records){          	
-        	LOG.info("[*] Received record \n" +
-        			"Key: {} \n" +
-        			"Value: {} \n" +
-                    "Topic: {} \n" +
-                    "Partition: {}\n" +
-                    "Offset: {} \n" +
-                    "Timestamp: {}" , 
-                    record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
-        }
+    public void run() {
+    	try {
+	        ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
+	        LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
+	    	
+	        for (ConsumerRecord<String, String> record : consumerRecords){          	
+	        	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
+	                    record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	        }
+	        
+    	} catch (WakeupException e) {
+			// ignore for shutdown
+		} finally {
+			// Close consumer
+			kafkaConsumer.close();
+		}
+	        
         
     }
+    
+    public void shutdown() {
+    	kafkaConsumer.wakeup();
+	}
 
 }

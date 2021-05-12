@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.callback.ProducerCallback;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
@@ -49,7 +48,7 @@ public class AppProducerSyncWithCallbackClass {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();

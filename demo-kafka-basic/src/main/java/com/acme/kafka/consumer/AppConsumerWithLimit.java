@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
@@ -20,7 +20,7 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
  *  
  *  Asynchronous
  *  
- * 	With message limit (10)
+ * 	With message limit (10) and no record count limit (5)
  *  
  *  ENABLE_AUTO_COMMIT_CONFIG = True
  *  
@@ -33,6 +33,8 @@ import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 public class AppConsumerWithLimit {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithLimit.class);
+    
+    private static final int NO_RECORD_COUNT_LIMIT = 5;
 
     public static void main(String[] args) throws InterruptedException {
     	
@@ -45,7 +47,7 @@ public class AppConsumerWithLimit {
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
         
         // Define topic
-        String topic = KafkaConstant.TOPIC;
+        String topic = DemoConstant.TOPIC;
         
         // Subscribe topic
         LOG.info("Preparing to subscribe {}", Arrays.asList(topic));
@@ -58,22 +60,26 @@ public class AppConsumerWithLimit {
         try {
         	
         	int readedMessages=0;
+        
+        	int noReadedRecords = 0;
+        	
 	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
-	            LOG.info("Check records -> \n" +
-	            		"\tRecord Count: {} \n" +
-	            		"\tPartition Count: {} ", consumerRecords.count(), consumerRecords.partitions().size());
-	
+	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
+	            
+	            // Check no readed records limit
+	            if (consumerRecords.count() == 0) {
+	            	noReadedRecords++;
+                    if (noReadedRecords > NO_RECORD_COUNT_LIMIT) {
+                    	LOG.info("No Readed Records Limit");
+                    	break;
+                    }
+                }
+
 	            // Show Consumer Record info
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
-	            	LOG.info("[*] Received record \n" +
-	            			"Key: {} \n" +
-	            			"Value: {} \n" +
-	                        "Topic: {} \n" +
-	                        "Partition: {}\n" +
-	                        "Offset: {} \n" +
-	                        "Timestamp: {}" , 
+	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            }
 	            
@@ -86,6 +92,7 @@ public class AppConsumerWithLimit {
 	            
 	            LOG.info("[*] Readed message number '{}'", readedMessages);
 	            if (readedMessages >= DemoConstant.NUM_MESSAGES) {
+	            	LOG.info("Readed Messages Limit");
 	            	break;
 	            }
 	            

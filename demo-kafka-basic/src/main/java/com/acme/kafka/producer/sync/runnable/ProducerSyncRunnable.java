@@ -21,11 +21,11 @@ public class ProducerSyncRunnable implements Runnable {
 	private final KafkaProducer<String, String> kafkaProducer;
     private final String topic;
 	
-	public ProducerSyncRunnable(String bootstrapServers, String topic) {
+	public ProducerSyncRunnable(String bootstrapServers, String producerId, String topic) {
 		LOG.info("[ProducerSyncRunnable] *** Init ***");
 		
 		// Create producer properties
-		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers);
+		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
 
 		// Create Kafka producer
 		this.kafkaProducer = new KafkaProducer<>(producerProperties);

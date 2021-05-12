@@ -1,13 +1,13 @@
-package com.acme.kafka.custom.message.serializer;
+package com.acme.model.custom.message.serializer;
 
 import java.nio.ByteBuffer;
 
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
-import com.acme.kafka.custom.message.entity.CustomMessage;
+import com.acme.model.custom.message.entity.CustomMessage;
 
-public class CustomMessageSerializer implements Serializer<CustomMessage> {
+public class CustomMessageByteSerializer implements Serializer<CustomMessage> {
 	
 	private String ENCODING_UTF8 = "UTF8";
 
@@ -36,7 +36,7 @@ public class CustomMessageSerializer implements Serializer<CustomMessage> {
             if (data == null)
                 return null;
             
-            serializedIdentifier = intToByteArray(data.getIdentifier());
+            serializedIdentifier = intToByteArray(data.getId());
             sizeOfIndentifier = serializedIdentifier.length;
             
             serializedMessage = data.getMessage().getBytes(ENCODING_UTF8);
@@ -46,7 +46,7 @@ public class CustomMessageSerializer implements Serializer<CustomMessage> {
             sizeOfCreatedDate = serializedCreatedDate.length;
 
             ByteBuffer buf = ByteBuffer.allocate(4+4+sizeOfMessage+4+sizeOfCreatedDate);
-            buf.putInt(data.getIdentifier());
+            buf.putInt(data.getId());
             buf.putInt(sizeOfMessage);
             buf.put(serializedMessage);
             buf.putInt(sizeOfCreatedDate);

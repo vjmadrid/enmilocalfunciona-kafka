@@ -1,4 +1,4 @@
-package com.acme.kafka.custom.message.deserializer;
+package com.acme.model.custom.message.deserializer;
 
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
-import com.acme.kafka.custom.message.entity.CustomMessage;
+import com.acme.model.custom.message.entity.CustomMessage;
+import com.acme.model.custom.message.factory.CustomMessageFactory;
 
 public class CustomMessageDeserializer implements Deserializer<CustomMessage>{
 	
@@ -41,7 +42,7 @@ public class CustomMessageDeserializer implements Deserializer<CustomMessage>{
 
             DateFormat df = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
 
-            return new CustomMessage(id,deserializedMessage,df.parse(createdDateString));
+            return CustomMessageFactory.create(id,deserializedMessage,df.parse(createdDateString));
 
 
 

@@ -12,8 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.custom.message.entity.CustomMessage;
 import com.acme.kafka.producer.service.KafkaProducerJsonService;
+import com.acme.model.custom.message.entity.CustomMessage;
 
 @SpringBootApplication
 public class SpringKafkaJsonApplication implements CommandLineRunner {
@@ -42,7 +42,7 @@ public class SpringKafkaJsonApplication implements CommandLineRunner {
         	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, i, new Date().toString());
         	
         	CustomMessage customMessage = new CustomMessage();
-        	customMessage.setIdentifier(i);
+        	customMessage.setId(i);
         	customMessage.setMessage(message);
         	
             // Send data asynchronous

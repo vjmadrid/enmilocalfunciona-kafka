@@ -19,11 +19,11 @@ public class ProducerAsyncWithLimitRunnable implements Runnable {
 	private final KafkaProducer<String, String> kafkaProducer;
     private final String topic;
 	
-	public ProducerAsyncWithLimitRunnable(String bootstrapServers, String topic) {
+	public ProducerAsyncWithLimitRunnable(String bootstrapServers, String producerId, String topic) {
 		LOG.info("[ProducerAsyncLimitRunnable] *** Init ***");
 		
 		// Create producer properties
-		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers);
+		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
 
 		// Create Kafka producer
 		this.kafkaProducer = new KafkaProducer<>(producerProperties);
