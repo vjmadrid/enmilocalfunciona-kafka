@@ -9,6 +9,9 @@ import org.apache.kafka.common.MetricName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.config.KafkaMetricsConfig;
+import com.acme.architecture.kafka.common.util.KafkaMetricsUtil;
+
 public class ProducerMetricsReporterRunnable implements Runnable {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ProducerMetricsReporterRunnable.class);

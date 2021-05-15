@@ -14,10 +14,12 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalConsumerKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
+import com.acme.architecture.kafka.common.consumer.config.KafkaConsumerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaTemplateConstant;
-import com.acme.kafka.consumer.config.KafkaConsumerConfig;
-import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -43,7 +45,7 @@ public class AppConsumer {
     	LOG.info("*** Init ***");
     	
     	// Create consumer properties
-        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
+        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(GlobalConsumerKafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, GlobalConsumerKafkaConstant.DEFAULT_GROUP_ID);
         
         LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaConsumerProperties, LOG);
@@ -72,14 +74,14 @@ public class AppConsumer {
 	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
-	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
+	            LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
 	            
 	            // * Option 1 : With "for"
 	            for (ConsumerRecord<String, String> record : consumerRecords){
 	            	
-	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
+	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            	
 	            	Map<String, Object> data = new HashMap<>();

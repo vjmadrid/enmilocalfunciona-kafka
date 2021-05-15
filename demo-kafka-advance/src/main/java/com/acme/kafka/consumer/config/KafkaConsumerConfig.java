@@ -6,8 +6,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 
 public class KafkaConsumerConfig {
 
@@ -38,7 +38,7 @@ public class KafkaConsumerConfig {
 	}
 
 	public static Properties consumerConfigsStringKeyStringValue() {
-		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,
+		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,
 				DemoConstant.GROUP_ID);
 
 		// Other values

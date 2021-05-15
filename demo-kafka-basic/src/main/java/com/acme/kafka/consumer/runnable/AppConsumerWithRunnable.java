@@ -1,7 +1,8 @@
 package com.acme.kafka.consumer.runnable;
 
+import com.acme.architecture.kafka.common.constant.GlobalConsumerKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.consumer.runnable.factory.ConsumerRunnableFactory;
 
 /**
@@ -21,7 +22,7 @@ public class AppConsumerWithRunnable {
 	
     public static void main(String[] args) {
     	
-    	ConsumerRunnable consumerThread = ConsumerRunnableFactory.createConsumerRunnable(KafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
+    	ConsumerRunnable consumerThread = ConsumerRunnableFactory.createConsumerRunnable(GlobalConsumerKafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
     	
         Thread t1 = new Thread(consumerThread);
         t1.start();

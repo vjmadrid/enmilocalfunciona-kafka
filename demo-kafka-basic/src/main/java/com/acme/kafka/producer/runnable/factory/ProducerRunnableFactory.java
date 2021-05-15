@@ -6,12 +6,12 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.kafka.producer.config.KafkaProducerConfig;
-import com.acme.kafka.producer.config.KafkaProducerPropertiesConfig;
+import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
+import com.acme.architecture.kafka.common.producer.config.KafkaProducerPropertiesConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.producer.runnable.async.ProducerAsyncRunnable;
 import com.acme.kafka.producer.runnable.async.ProducerAsyncWithLimitRunnable;
 import com.acme.kafka.producer.runnable.sync.ProducerSyncRunnable;
-import com.acme.kafka.util.KafkaPropertiesUtil;
 
 public class ProducerRunnableFactory {
 	

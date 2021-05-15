@@ -7,9 +7,9 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.kafka.consumer.config.KafkaConsumerConfig;
+import com.acme.architecture.kafka.common.consumer.config.KafkaConsumerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.consumer.runnable.ConsumerRunnable;
-import com.acme.kafka.util.KafkaPropertiesUtil;
 
 public class ConsumerRunnableFactory {
 	

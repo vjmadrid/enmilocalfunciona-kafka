@@ -3,8 +3,8 @@ package com.acme.kafka.consumer.group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 
 /**
  * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
@@ -32,7 +32,7 @@ public class AppConsumerWithConsumerGroupRunnable {
     	//Se puede disparar aqui el productor
     	
     	// xxx
-        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, NUM_CONSUMERS);
+        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, NUM_CONSUMERS);
 
         consumerGroup.executeConsumers();
         

@@ -12,9 +12,12 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
+import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
+import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaTemplateConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -44,8 +47,11 @@ public class AppProducerSyncWithCallbackAdhoc {
     	LOG.info("*** Init ***");
 
     	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue();
-
+        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(GlobalProducerKafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
+        
         // Create producer
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
@@ -75,10 +81,10 @@ public class AppProducerSyncWithCallbackAdhoc {
 	                	long elapsedTime = System.currentTimeMillis() - startTime;
 	                	
 	                	if (exception == null) {
-	                		LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
+	                		LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
 	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 	                    } else {
-	                    	LOG.error(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
+	                    	LOG.error(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
 	                    	exception.printStackTrace();
 	                    }
 	                    
@@ -88,7 +94,7 @@ public class AppProducerSyncWithCallbackAdhoc {
 	            
             	TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }
-	        
+			
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

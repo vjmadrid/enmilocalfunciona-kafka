@@ -10,8 +10,8 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaTemplateConstant;
 
 import lombok.Data;
 
@@ -46,7 +46,7 @@ public class ProducerSyncRunnable implements Runnable {
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				RecordMetadata metadata = kafkaProducer.send(record).get();
 					
-		        LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_RECORDMETADATA,
+		        LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_RECORD_METADATA,
 		                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
 				
 	            // Define send execution time

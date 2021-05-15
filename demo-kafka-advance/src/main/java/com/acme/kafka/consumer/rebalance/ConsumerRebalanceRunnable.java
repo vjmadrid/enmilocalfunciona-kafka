@@ -16,7 +16,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.kafka.constant.KafkaTemplateConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 public class ConsumerRebalanceRunnable implements Runnable {
@@ -54,10 +54,10 @@ public class ConsumerRebalanceRunnable implements Runnable {
 			LOG.info("Preparing to receive menssages");
 			while (true) {
 				ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
-				LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
+				LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 				
 				for (ConsumerRecord<String, String> record : consumerRecords){          	
-		            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD_FOR_THREAD , 
+		            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD_FOR_THREAD , 
 		                        Thread.currentThread().getId(),record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 		            	
 		            	processedOffsets.put(new TopicPartition(record.topic(),

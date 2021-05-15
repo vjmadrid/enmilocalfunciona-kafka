@@ -19,12 +19,11 @@
 		<!-- Compiler & Resources -->
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Architecture libraries -->
+		<acme-architecture-kafka-common.version>0.0.1-SNAPSHOT</acme-architecture-kafka-common.version>
 
 		<!-- Dependency Versions -->
-		<kafka-clients.version>2.4.1</kafka-clients.version>
-		
-		<logback.version>1.2.3</logback.version>
-		<slf4j.version>1.7.25</slf4j.version>
 
 		<!-- Testing -->
 		<!-- * Default value -> use profile -->
@@ -43,57 +42,15 @@
 
 	<dependencies>
 
-		<!-- *** Architecture libraries *** -->
+		<!-- *** Architecture Libraries *** -->
+		
+		<dependency>
+			<groupId>com.acme.architecture.kafka.common</groupId>
+			<artifactId>architecture-kafka-common</artifactId>
+			<version>${acme-architecture-kafka-common.version}</version>
+		</dependency>
 
         <!-- *** Third Party Libraries *** -->
-
-        <!-- kafka-clients : Client for use Apache Kafka  -->
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-clients</artifactId>
-			<version>${kafka-clients.version}</version>
-		</dependency>
-		
-		<!-- log4j-over-slf4j : Log4j implemented over SLF4J -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<!-- slf4j-api : slf4j APIs -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<!-- jcl-over-slf4j : Bridge logging from JCL to SLF4j -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<!-- logback : logging -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
-		
-		<!-- lombok : automatic generation of getters, setters, equals, hashCode, toString, etc -->
-		<dependency>
-		    <groupId>org.projectlombok</groupId>
-		    <artifactId>lombok</artifactId>
-		    <version>1.18.20</version>
-		</dependency>
 		
 	</dependencies>
 

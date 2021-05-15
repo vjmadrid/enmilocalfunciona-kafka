@@ -1,7 +1,7 @@
 package com.acme.kafka.producer.runnable.group;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.runnable.async.ProducerAsyncRunnable;
 
 /**
@@ -26,7 +26,7 @@ public class AppProducerWithProducerGroupRunnable {
     public static void main(String[] args) {
 
     	// Option 1 : Execute Group
-    	ProducerGroupRunnable<ProducerAsyncRunnable> producerGroup =  new ProducerGroupRunnable<>(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC, NUM_PRODUCERS);
+    	ProducerGroupRunnable<ProducerAsyncRunnable> producerGroup =  new ProducerGroupRunnable<>(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC, NUM_PRODUCERS);
     	producerGroup.executeProducers();
     	
     	// Option 2 : Create Pool 

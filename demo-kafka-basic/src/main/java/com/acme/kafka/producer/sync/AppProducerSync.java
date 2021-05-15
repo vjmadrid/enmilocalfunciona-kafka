@@ -10,10 +10,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
+import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
-import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -41,7 +42,7 @@ public class AppProducerSync {
     	LOG.info("*** Init ***");
 
     	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(GlobalProducerKafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
         
         LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);

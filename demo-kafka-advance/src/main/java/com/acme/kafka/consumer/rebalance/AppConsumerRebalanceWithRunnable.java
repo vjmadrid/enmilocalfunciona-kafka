@@ -1,7 +1,7 @@
 package com.acme.kafka.consumer.rebalance;
 
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.constant.KafkaConstant;
 
 /**
  * 	Sends a set number of messages (10) defined as "String" and with a delay between them (2 seconds)
@@ -20,7 +20,7 @@ public class AppConsumerRebalanceWithRunnable {
 	
     public static void main(String[] args) throws InterruptedException {
     	
-    	ConsumerRebalanceRunnable consumerThread = new ConsumerRebalanceRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
+    	ConsumerRebalanceRunnable consumerThread = new ConsumerRebalanceRunnable(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
     	
         Thread t1 = new Thread(consumerThread);
         t1.start();
