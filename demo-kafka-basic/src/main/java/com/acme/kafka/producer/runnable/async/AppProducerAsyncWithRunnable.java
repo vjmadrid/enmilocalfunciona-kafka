@@ -1,10 +1,8 @@
-package com.acme.kafka.producer.async.runnable;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+package com.acme.kafka.producer.runnable.async;
 
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.producer.runnable.factory.ProducerRunnableFactory;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -28,12 +26,12 @@ public class AppProducerAsyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerAsyncRunnable producerNoLimitThread = new ProducerAsyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
+    	ProducerAsyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerAsyncRunnable(KafkaConstant.DEFAULT_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
         
 //        // Option 2: limit messages
-//    	ProducerAsyncWithLimitRunnable producerLimitThread = new ProducerAsyncWithLimitRunnable(KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.DEFAULT_CLIENT_ID, KafkaConstant.TOPIC);
+//    	ProducerAsyncWithLimitRunnable producerLimitThread = ProducerRunnableFactory.createProducerAsyncWithLimitRunnable(KafkaConstant.DEFAULT_CLIENT_ID, KafkaConstant.BOOTSTRAP_SERVERS, KafkaConstant.TOPIC);
 //        Thread t2 = new Thread(producerLimitThread);
 //        t2.start();
 

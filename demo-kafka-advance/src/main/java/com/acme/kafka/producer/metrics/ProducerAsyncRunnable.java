@@ -1,4 +1,4 @@
-package com.acme.kafka.producer.async.runnable;
+package com.acme.kafka.producer.metrics;
 
 import java.util.Date;
 import java.util.Properties;
@@ -12,15 +12,15 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
-public class ProducerAsyncWithLimitRunnable implements Runnable {
+public class ProducerAsyncRunnable implements Runnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProducerAsyncWithLimitRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ProducerAsyncRunnable.class);
 
 	private final KafkaProducer<String, String> kafkaProducer;
     private final String topic;
 	
-	public ProducerAsyncWithLimitRunnable(String bootstrapServers, String producerId, String topic) {
-		LOG.info("[ProducerAsyncLimitRunnable] *** Init ***");
+	public ProducerAsyncRunnable(String bootstrapServers, String producerId, String topic) {
+		LOG.info("[ProducerAsyncRunnable] *** Init ***");
 		
 		// Create producer properties
 		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
@@ -34,14 +34,14 @@ public class ProducerAsyncWithLimitRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		LOG.info("[ProducerAsyncLimitRunnable] *** Run ***");
+		LOG.info("[ProducerAsyncRunnable] *** Run ***");
 		
-        // Prepare send execution time
+		// Prepare send execution time
         long startTime = System.currentTimeMillis();
         
-        LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
+        LOG.info("Preparing to send menssages");
         try {
-        	
+		
         	int numSentMessages=1;
 	        while (true) {
 	        	// Prepare message
@@ -61,13 +61,8 @@ public class ProducerAsyncWithLimitRunnable implements Runnable {
 	            // Prepare counter num sent messages
 	            numSentMessages++;
 	            
-	            LOG.info("[*] Readed message number '{}'", numSentMessages);
-	            if (numSentMessages >= DemoConstant.NUM_MESSAGES) {
-	            	break;
-	            }
-	            
-	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
-	            
+				TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
+				
 	        }
 			
         } catch (InterruptedException e) {
@@ -79,7 +74,7 @@ public class ProducerAsyncWithLimitRunnable implements Runnable {
 	        // Flush + close producer
 	        kafkaProducer.close();
 		}
-        
-    }
+		
+	}
 
 }

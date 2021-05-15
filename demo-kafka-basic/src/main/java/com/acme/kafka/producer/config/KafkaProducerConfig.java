@@ -29,6 +29,11 @@ public class KafkaProducerConfig {
       
         // Other values
         //kafkaProducerProperties.put(ProducerConfig.RETRIES_CONFIG, 0);
+        
+        // ACKs (Default All) : Todas las replicas ISR in-sync tienen que responder para que la escritura se considere válida
+        // 	Las replicas in-sync se pueden configurar vía brokers (min.insync.replicas) o bien vía topic
+        //  Con valor "ack" : El leader contestará con un ACK exitoso después de que todos los followers hayan escrito el mensaje en el log
+        //	Con valor "1" 	: El leader contestará con un ACK exitoso después de escribir en escribir en su log y no espera a que lo hagan sus followers (replicas)
         //kafkaProducerProperties.put(ProducerConfig.ACKS_CONFIG, "all");
         //kafkaProducerProperties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
         //kafkaProducerProperties.put(ProducerConfig.LINGER_MS_CONFIG, 1);

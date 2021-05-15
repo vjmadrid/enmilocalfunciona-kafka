@@ -1,7 +1,6 @@
-package com.acme.kafka.producer.async.runnable;
+package com.acme.kafka.producer.runnable.async;
 
 import java.util.Date;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -10,38 +9,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
 
-public class ProducerAsyncRunnable implements Runnable {
+import lombok.Data;
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProducerAsyncRunnable.class);
+@Data
+public class ProducerAsyncWithLimitRunnable implements Runnable {
 
-	private final KafkaProducer<String, String> kafkaProducer;
-    private final String topic;
+	private static final Logger LOG = LoggerFactory.getLogger(ProducerAsyncWithLimitRunnable.class);
+
+	private KafkaProducer<String, String> kafkaProducer;
 	
-	public ProducerAsyncRunnable(String bootstrapServers, String producerId, String topic) {
-		LOG.info("[ProducerAsyncNoLimitRunnable] *** Init ***");
-		
-		// Create producer properties
-		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
-
-		// Create Kafka producer
-		this.kafkaProducer = new KafkaProducer<>(producerProperties);
-
-		// Prepare topic
-		this.topic = topic;
-	}
-
+    private String topic;
+	
 	@Override
 	public void run() {
-		LOG.info("[ProducerAsyncNoLimitRunnable] *** Run ***");
+		LOG.info("*** Run ***");
 		
 		// Prepare send execution time
         long startTime = System.currentTimeMillis();
         
-        LOG.info("Preparing to send menssages");
+        LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
         try {
-		
+        	
         	int numSentMessages=1;
 	        while (true) {
 	        	// Prepare message
@@ -61,8 +50,13 @@ public class ProducerAsyncRunnable implements Runnable {
 	            // Prepare counter num sent messages
 	            numSentMessages++;
 	            
-				TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
-				
+	            LOG.info("[*] Readed message number '{}'", numSentMessages);
+	            if (numSentMessages >= DemoConstant.NUM_MESSAGES) {
+	            	break;
+	            }
+	            
+	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
+	            
 	        }
 			
         } catch (InterruptedException e) {
@@ -74,7 +68,7 @@ public class ProducerAsyncRunnable implements Runnable {
 	        // Flush + close producer
 	        kafkaProducer.close();
 		}
-		
-	}
+        
+    }
 
 }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -74,15 +75,11 @@ public class AppProducerAsyncWithCallbackAdhoc {
 	                	long elapsedTime = System.currentTimeMillis() - startTime;
 	     
 	                	if (exception == null) {
-	                		LOG.info("[Callback] Received metadata \n" +
-	                                "\tTopic: {} \n" +
-	                                "\tPartition: {} \n" +
-	                                "\tOffset: {} \n" +
-	                                "\tTimestamp: {}",
-	                                "\tElapsed Time: {} seconds",
+	                		LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
 	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 	                    } else {
-	                    	LOG.error("[Callback] Error while producing message ", exception);
+	                    	LOG.error(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
+	                    	exception.printStackTrace();
 	                    }
 	                    
 	                }
@@ -94,15 +91,10 @@ public class AppProducerAsyncWithCallbackAdhoc {
 //	            	long elapsedTime = System.currentTimeMillis() - startTime;
 //	            	
 //	            	if (exception == null) {
-//	            		LOG.info("[Callback] Received metadata \n" +
-//	                            "\tTopic: {} \n" +
-//	                            "\tPartition: {} \n" +
-//	                            "\tOffset: {} \n" +
-//	                            "\tTimestamp: {}",
-//	                            "\tElapsed Time: {} seconds",
+//	            		LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
 //	                            metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
 //	                } else {
-//	                	LOG.error("[Callback] Error while producing message ", exception);
+//	                	LOG.error(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR,, exception);
 //	                }
 //	            	
 //	            });

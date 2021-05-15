@@ -10,7 +10,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 import com.acme.model.custom.message.entity.CustomMessage;
 import com.acme.model.custom.message.factory.CustomMessageFactory;
 
-public class CustomMessageDeserializer implements Deserializer<CustomMessage>{
+public class CustomMessage2Deserializer implements Deserializer<CustomMessage>{
 	
 	private String ENCODING_UTF8 = "UTF8";
 

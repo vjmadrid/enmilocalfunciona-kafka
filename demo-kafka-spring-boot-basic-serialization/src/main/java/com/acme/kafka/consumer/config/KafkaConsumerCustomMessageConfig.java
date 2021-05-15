@@ -14,7 +14,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.acme.model.custom.message.deserializer.CustomMessageDeserializer;
+import com.acme.model.custom.message.deserializer.CustomMessage2Deserializer;
 import com.acme.model.custom.message.entity.CustomMessage;
 
 @Configuration
@@ -28,7 +28,7 @@ public class KafkaConsumerCustomMessageConfig {
 		Map<String, Object> props = new HashMap<>(kafkaProperties.buildConsumerProperties());
 
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomMessageDeserializer.class);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomMessage2Deserializer.class);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "example-group");
 		
 		props.put("enable.auto.commit", "true");

@@ -3,6 +3,8 @@ package com.acme.model.custom.message.factory;
 import java.util.Date;
 
 import com.acme.model.custom.message.entity.CustomMessage;
+import com.acme.model.custom.message.util.CustomMessageJsonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class CustomMessageFactory {
 	
@@ -26,6 +28,10 @@ public class CustomMessageFactory {
 		customMessage.setCreatedDate(newCreatedDate);
 		
 		return customMessage;
+	}
+	
+	public static CustomMessage create(final String customMessageJson) throws JsonProcessingException {
+		return CustomMessageJsonUtil.toObject(customMessageJson);
 	}
 
 }

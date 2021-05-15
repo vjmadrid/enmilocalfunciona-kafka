@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 /**
@@ -67,16 +68,12 @@ public class AppProducerSyncWithRecordMetadata {
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				RecordMetadata metadata = kafkaProducer.send(record).get();
 				
-				// Define send execution time
+	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
-				// Receive sent record
-		        LOG.info("[RecordMetadata] Received metadata \n" +
-		                    "\tTopic: {} \n" +
-		                    "\tPartition: {} \n" +
-		                    "\tOffset: {} \n" +
-		                    "\tTimestamp: {}",
+				// Receive sent record -> RecordMetadata
+		        LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_RECORDMETADATA,
 		                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
 				
 	            // Prepare counter num sent messages
@@ -85,7 +82,12 @@ public class AppProducerSyncWithRecordMetadata {
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	            
 	        }
-	        
+			
+        } catch (InterruptedException e) {
+			LOG.error("Received interruption signal : {}",e);
+		} catch (ExecutionException e) {
+			LOG.error("Execution Exception : {}",e);
+			e.printStackTrace();
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

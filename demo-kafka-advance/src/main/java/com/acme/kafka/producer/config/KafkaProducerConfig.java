@@ -8,16 +8,17 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import com.acme.kafka.constant.KafkaConstant;
 
-public  class KafkaProducerConfig {
+public class KafkaProducerConfig {
 	
 	private KafkaProducerConfig() {
-		throw new IllegalStateException("KafkaProducerConfig");
+		throw new IllegalStateException(this.getClass().getName());
 	}
 	
-	public static Properties producerConfigsStringKeyStringValue(String brokers) {
+	public static Properties producerConfigsStringKeyStringValue(String brokers, String idProducer) {
 		Properties kafkaProducerProperties = new Properties();
         kafkaProducerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
-        
+        kafkaProducerProperties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, idProducer);
+
         //Option 1 : Used Class
         kafkaProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         kafkaProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -37,7 +38,7 @@ public  class KafkaProducerConfig {
 	}
 
 	public static Properties producerConfigsStringKeyStringValue() {
-		Properties kafkaProducerProperties = producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+		Properties kafkaProducerProperties = producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, KafkaConstant.DEFAULT_CLIENT_ID);
 
         // Other values
         

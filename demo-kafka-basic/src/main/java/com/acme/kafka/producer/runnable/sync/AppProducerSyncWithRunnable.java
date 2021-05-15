@@ -1,7 +1,8 @@
-package com.acme.kafka.producer.sync.runnable;
+package com.acme.kafka.producer.runnable.sync;
 
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.producer.runnable.factory.ProducerRunnableFactory;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -25,7 +26,7 @@ public class AppProducerSyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerSyncRunnable producerNoLimitThread = new ProducerSyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
+    	ProducerSyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerSyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
        

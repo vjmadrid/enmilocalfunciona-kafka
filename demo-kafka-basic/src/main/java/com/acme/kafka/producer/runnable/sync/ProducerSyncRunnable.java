@@ -1,52 +1,34 @@
-package com.acme.kafka.producer.async;
+package com.acme.kafka.producer.runnable.sync;
 
 import java.util.Date;
-import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
+import com.acme.kafka.constant.KafkaTemplateConstant;
 
-/**
- * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
- *  
- *  Asynchronous
- *  
- *  NO Limit Messages
- *  
- *  No Key
- *  
- * 	Message Template : Hello World! CUSTOM_ID - SEND_DATE
- *  
- *  Different consumers can be used
- *   - Java consumer with appropriate configuration
- *   - kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic-1 --property print.key=true --from-beginning
- * 
- */
+import lombok.Data;
 
-public class AppProducerAsync {
+@Data
+public class ProducerSyncRunnable implements Runnable {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ProducerSyncRunnable.class);
+
+	private KafkaProducer<String, String> kafkaProducer;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsync.class);
+    private String topic;
 	
-    public static void main(String[] args) throws InterruptedException {
-    	
-    	LOG.info("*** Init ***");
-
-    	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue();
-
-        // Create producer
-        KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
-        
-        // Define topic
-        String topic = DemoConstant.TOPIC;
-        
-        // Prepare send execution time
+	@Override
+	public void run() {
+		LOG.info("*** Run ***");
+		
+		// Prepare send execution time
         long startTime = System.currentTimeMillis();
         
         LOG.info("Preparing to send menssages");
@@ -60,10 +42,13 @@ public class AppProducerAsync {
 	        	// Create producer record
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
-	            // Send data asynchronous -> Fire & Forget
+	            // Send data synchronous -> blocking call
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
-	            kafkaProducer.send(record);
-	            
+				RecordMetadata metadata = kafkaProducer.send(record).get();
+					
+		        LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_RECORDMETADATA,
+		                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
+				
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
@@ -75,6 +60,11 @@ public class AppProducerAsync {
 	            
 	        }
 			
+        } catch (InterruptedException e) {
+			LOG.error("Received interruption signal : {}",e);
+		} catch (ExecutionException e) {
+			LOG.error("Execution Exception : {}",e);
+			e.printStackTrace();
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

@@ -1,42 +1,29 @@
-package com.acme.kafka.producer.sync.runnable;
+package com.acme.kafka.producer.runnable.async;
 
 import java.util.Date;
-import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
 
-public class ProducerSyncRunnable implements Runnable {
+import lombok.Data;
 
-	private static final Logger LOG = LoggerFactory.getLogger(ProducerSyncRunnable.class);
+@Data
+public class ProducerAsyncRunnable implements Runnable {
 
-	private final KafkaProducer<String, String> kafkaProducer;
-    private final String topic;
+	private static final Logger LOG = LoggerFactory.getLogger(ProducerAsyncRunnable.class);
+
+	private KafkaProducer<String, String> kafkaProducer;
 	
-	public ProducerSyncRunnable(String bootstrapServers, String producerId, String topic) {
-		LOG.info("[ProducerSyncRunnable] *** Init ***");
-		
-		// Create producer properties
-		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
-
-		// Create Kafka producer
-		this.kafkaProducer = new KafkaProducer<>(producerProperties);
-
-		// Prepare topic
-		this.topic = topic;
-	}
-
+    private String topic;
+	
 	@Override
 	public void run() {
-		LOG.info("[ProducerSyncRunnable] *** Run ***");
+		LOG.info("*** Run ***");
 		
 		// Prepare send execution time
         long startTime = System.currentTimeMillis();
@@ -52,17 +39,10 @@ public class ProducerSyncRunnable implements Runnable {
 	        	// Create producer record
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
-	            // Send data synchronous -> blocking call
+	            // Send data asynchronous -> Fire & Forget
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
-				RecordMetadata metadata = kafkaProducer.send(record).get();
-					
-		        LOG.info("[RecordMetadata] Received metadata \n" +
-		                    "\tTopic: {} \n" +
-		                    "\tPartition: {} \n" +
-		                    "\tOffset: {} \n" +
-		                    "\tTimestamp: {}",
-		                    metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp());            
-				
+	            kafkaProducer.send(record);
+	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
@@ -76,9 +56,6 @@ public class ProducerSyncRunnable implements Runnable {
 			
         } catch (InterruptedException e) {
 			LOG.error("Received interruption signal : {}",e);
-		} catch (ExecutionException e) {
-			LOG.error("Execution Exception : {}",e);
-			e.printStackTrace();
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

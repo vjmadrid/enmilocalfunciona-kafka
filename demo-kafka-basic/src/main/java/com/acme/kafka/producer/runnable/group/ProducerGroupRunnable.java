@@ -1,4 +1,4 @@
-package com.acme.kafka.producer.group;
+package com.acme.kafka.producer.runnable.group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,45 +6,55 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.kafka.producer.async.runnable.ProducerAsyncRunnable;
+import com.acme.kafka.producer.runnable.factory.ProducerRunnableFactory;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ProducerGroupRunnable {
+public class ProducerGroupRunnable<T> {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ProducerGroupRunnable.class);
 
 	private String brokers;
+	
 	private String groupId;
+	
 	private String topic;
 
 	private int numberProducer;
-	private List<ProducerAsyncRunnable> kafkaProducerList;
+	
+	private List<T> kafkaProducerRunnableList;
 
 	public ProducerGroupRunnable(String brokers, String topic, int numberProducer) {
 		
+		// Prepare brokers
 		this.brokers = brokers;
+		
+		// Prepare topic
 		this.topic = topic;
 		
+		// Prepare producer number
 		this.numberProducer = numberProducer;
-		kafkaProducerList = new ArrayList<>();
+		
+		// Define Kafka Producer Runnable
+		kafkaProducerRunnableList = new ArrayList<>();
 		
 		// Prepare Producer
 		for (int i = 0; i < this.numberProducer; i++) {
-			ProducerAsyncRunnable producerThread = new ProducerAsyncRunnable(this.brokers, "producer-"+i, this.topic);
-			kafkaProducerList.add(producerThread);
+			kafkaProducerRunnableList.add((T) ProducerRunnableFactory.createProducerAsyncRunnable("producer-"+i, this.brokers, this.topic));
 		}
 	}
 	
 	public void executeProducers() {
-		LOG.info("[ProducerGroupRunnable] *** Execute Producers ***");
+		LOG.info("*** Execute Producers ***");
 		
-		if (!kafkaProducerList.isEmpty()) {
-			for (ProducerAsyncRunnable producerThread : kafkaProducerList) {
-	            Thread t = new Thread(producerThread);
+		if (!kafkaProducerRunnableList.isEmpty()) {
+			for (T producerThread : kafkaProducerRunnableList) {
+				
+				// Define + Start Producer Thread
+	            Thread t = new Thread((Runnable) producerThread);
 	            t.start();
 	            
 	            LOG.info("[*] Thread Id=[{}] \n" +

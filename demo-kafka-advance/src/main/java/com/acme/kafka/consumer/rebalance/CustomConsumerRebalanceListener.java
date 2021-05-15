@@ -1,5 +1,6 @@
 package com.acme.kafka.consumer.rebalance;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,13 +24,15 @@ public class CustomConsumerRebalanceListener implements ConsumerRebalanceListene
 	@Override
 	public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
 		LOG.info("[CustomConsumerRebalanceListener] New partition assigned partition=[{}]", partitions);
+		LOG.info("\t [*] %s topic-partitions are revoked from this consumer\n", Arrays.toString(partitions.toArray()));
 		
 	}
 
 	@Override
 	public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
 		LOG.info("[CustomConsumerRebalanceListener] Lost partitions in rebalance.  partition=[{}]", partitions);
-		LOG.info(" * Committing processed offsets processedOffsets=[{}]", processedOffsets);
+		LOG.info("\t [*] Committing processed offsets processedOffsets=[{}]", processedOffsets);
+		LOG.info("\t [*] %s topic-partitions are assigned to this consumer\n", Arrays.toString(partitions.toArray()));
 		
 	}
 

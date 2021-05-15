@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
-public class ConsumerRebalanceRunnable implements Runnable {
+public class Consumer2RebalanceRunnable implements Runnable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRebalanceRunnable.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Consumer2RebalanceRunnable.class);
 
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
@@ -29,7 +29,9 @@ public class ConsumerRebalanceRunnable implements Runnable {
 	
 	private Map<TopicPartition, OffsetAndMetadata> processedOffsets = new HashMap<>();
 	
-	public ConsumerRebalanceRunnable(String bootstrapServers, String groupId, String topic) {
+	private long startingOffset;
+	
+	public Consumer2RebalanceRunnable(String bootstrapServers, String groupId, String topic, long startingOffset) {
 		LOG.info("*** Init ***");
 		
 		// Create consumer properties
@@ -42,6 +44,9 @@ public class ConsumerRebalanceRunnable implements Runnable {
 		// Prepare topic
 		this.topic = topic;
 
+		// Prepare starting offset
+		this.startingOffset = startingOffset;
+		
 		// Subscribe topic
 		kafkaConsumer.subscribe(Arrays.asList(this.topic), new CustomConsumerRebalanceListener(processedOffsets));
 	}
@@ -65,9 +70,9 @@ public class ConsumerRebalanceRunnable implements Runnable {
 		                            OffsetAndMetadata(record.offset() + 1, "no metadata"));
 		         }
 				
-				LOG.info("Commit Async");
-				kafkaConsumer.commitAsync();
-				
+				if (startingOffset == -2)
+					kafkaConsumer.commitSync();
+
 			}
 		} catch (WakeupException e) {
 			LOG.error("Received shutdown signal");

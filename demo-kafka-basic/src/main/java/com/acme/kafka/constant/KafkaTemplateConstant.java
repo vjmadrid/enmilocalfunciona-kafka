@@ -26,5 +26,11 @@ public final class KafkaTemplateConstant {
             "\tPartition: {}\n" +
             "\tOffset: {} \n" +
             "\tTimestamp: {}";
+    
+    public static final String TEMPLATE_LOG_PRODUCER_RECORDMETADATA = "[*] [RecordMetadata] Received metadata \n" +
+		    "\tTopic: {} \n" +
+		    "\tPartition: {} \n" +
+		    "\tOffset: {} \n" +
+		    "\tTimestamp: {}";
 	
 }
