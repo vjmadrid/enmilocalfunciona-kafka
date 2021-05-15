@@ -80,7 +80,7 @@ public class AppConsumerWithRuntime {
 	            LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
-	            for (ConsumerRecord<String, String> record : consumerRecords){          	
+	            for (ConsumerRecord<String, String> record : consumerRecords){
 	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            }

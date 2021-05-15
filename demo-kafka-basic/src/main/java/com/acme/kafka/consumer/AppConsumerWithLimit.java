@@ -84,8 +84,11 @@ public class AppConsumerWithLimit {
                 }
 
 	            // Show Consumer Record info
-	            for (ConsumerRecord<String, String> record : consumerRecords){          	
-	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
+	            
+	            // * Option 1 : With "for"
+	            for (ConsumerRecord<String, String> record : consumerRecords){
+	            	
+	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            }
 	            
@@ -103,7 +106,7 @@ public class AppConsumerWithLimit {
 	            }
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
-	            
+	           
 	        }
         }
         finally {

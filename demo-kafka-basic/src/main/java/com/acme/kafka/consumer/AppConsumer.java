@@ -84,12 +84,14 @@ public class AppConsumer {
 	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
 	            	
+	            	// Register data
 	            	Map<String, Object> data = new HashMap<>();
 	            	data.put("key", record.key());
 	            	data.put("value", record.value());
 					data.put("partition", record.partition());
 					data.put("offset", record.offset());
 					
+					// Define send execution time
 	            	long latency = (long) (System.nanoTime() - Long.parseLong(record.value())); 
 	            	LOG.info("\t * latency='{}' ", latency);
 	            }
@@ -116,4 +118,5 @@ public class AppConsumer {
         
     }
     
+
 }

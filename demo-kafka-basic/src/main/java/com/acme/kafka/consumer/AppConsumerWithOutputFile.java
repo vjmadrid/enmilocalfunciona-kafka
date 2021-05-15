@@ -67,7 +67,7 @@ public class AppConsumerWithOutputFile {
         // Define topic
         String topic = DemoConstant.TOPIC;
         
-    	// Subscribe topic
+        // Subscribe topic
         LOG.info("Preparing to subscribe {}", Arrays.asList(topic));
         kafkaConsumer.subscribe(Arrays.asList(topic));
         
@@ -90,10 +90,10 @@ public class AppConsumerWithOutputFile {
 	
 	            // Show Consumer Record info
 	            for (ConsumerRecord<String, String> record : consumerRecords){
-	            	bufferFile.add(record);
-	            	
 	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            	
+	            	bufferFile.add(record);
 	            }
 	            
 	            // Copy buffer to file
@@ -125,4 +125,5 @@ public class AppConsumerWithOutputFile {
         
     }
     
+
 }
