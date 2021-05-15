@@ -26,7 +26,7 @@ public class AppProducerSyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerSyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerSyncRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,KafkaConstant.DEFAULT_CLIENT_ID, DemoConstant.TOPIC);
+    	ProducerSyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerSyncRunnable(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
        

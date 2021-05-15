@@ -32,7 +32,7 @@ public class AppConsumerWithConsumerGroupRunnable {
     	//Se puede disparar aqui el productor
     	
     	// xxx
-        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, NUM_CONSUMERS);
+        ConsumerGroupRunnable consumerGroup =  new ConsumerGroupRunnable(KafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, NUM_CONSUMERS);
 
         consumerGroup.executeConsumers();
         

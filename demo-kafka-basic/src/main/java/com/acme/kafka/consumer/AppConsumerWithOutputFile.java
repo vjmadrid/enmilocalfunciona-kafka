@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
+import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -54,6 +55,9 @@ public class AppConsumerWithOutputFile {
         Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
         
         kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaConsumerProperties, LOG);
 
         // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);

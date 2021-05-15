@@ -3,8 +3,6 @@ package com.acme.kafka.consumer.config;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
 
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
@@ -12,33 +10,23 @@ import com.acme.kafka.constant.KafkaConstant;
 public class KafkaConsumerConfig {
 
 	private KafkaConsumerConfig() {
-		throw new IllegalStateException("KafkaConsumerConfig");
+		throw new IllegalStateException(this.getClass().getName());
 	}
 
-	public static Properties consumerConfigsStringKeyStringValue(String brokers, String groupId) {
+	public static Properties consumerConfigsStringKeyStringValue(String idConsumer, String brokers, String groupId) {
 		Properties kafkaConsumerProperties = new Properties();
-		kafkaConsumerProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
-
-		// Option 1 : Used Class
-		kafkaConsumerProperties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-				StringDeserializer.class.getName());
-		kafkaConsumerProperties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-				StringDeserializer.class.getName());
-
-//      //Option 2 : Used String
-//      kafkaProducerProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-//      kafkaProducerProperties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer"); 
-
+		
+		KafkaConsumerPropertiesConfig.setupClientIdAndBootstrap(kafkaConsumerProperties, idConsumer, brokers, groupId);
+		KafkaConsumerPropertiesConfig.setupSerializerStringKeyStringValue(kafkaConsumerProperties);
+		KafkaConsumerPropertiesConfig.setupBasic(kafkaConsumerProperties);
+		
 		// Other values
-		kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId + " - "+ System.currentTimeMillis());
-		kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-		kafkaConsumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-
+	
 		return kafkaConsumerProperties;
 	}
 
 	public static Properties consumerConfigsStringKeyStringValue() {
-		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,
+		Properties kafkaConsumerProperties = consumerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS,
 				DemoConstant.GROUP_ID);
 
 		// Other values

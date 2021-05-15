@@ -27,7 +27,7 @@ public class ProducerGroupRunnable<T> {
 	
 	private List<T> kafkaProducerRunnableList;
 
-	public ProducerGroupRunnable(String brokers, String topic, int numberProducer) {
+	public ProducerGroupRunnable(final String brokers,final  String topic, final int numberProducer) {
 		
 		// Prepare brokers
 		this.brokers = brokers;
@@ -43,7 +43,7 @@ public class ProducerGroupRunnable<T> {
 		
 		// Prepare Producer
 		for (int i = 0; i < this.numberProducer; i++) {
-			kafkaProducerRunnableList.add((T) ProducerRunnableFactory.createProducerAsyncRunnable("producer-"+i, this.brokers, this.topic));
+			kafkaProducerRunnableList.add((T) ProducerRunnableFactory.createProducerAsyncRunnable("producer-"+i+"-"+System.currentTimeMillis(), this.brokers, this.topic));
 		}
 	}
 	

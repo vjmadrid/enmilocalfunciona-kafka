@@ -1,4 +1,4 @@
-package com.acme.kafka.producer.async;
+package com.acme.kafka.producer.batching;
 
 import java.util.Date;
 import java.util.Properties;
@@ -12,14 +12,15 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
+import com.acme.kafka.producer.config.KafkaProducerPropertiesConfig;
 import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
  *  
- *  Asynchronous
+ *  Asynchronous With Batching
  *  
- *  Limit Messages : 10
+ *  NO Limit Messages
  *  
  *  No Key
  *  
@@ -31,9 +32,9 @@ import com.acme.kafka.util.KafkaPropertiesUtil;
  * 
  */
 
-public class AppProducerAsyncWithLimit {
+public class AppProducerAsyncBatching {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncWithLimit.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncBatching.class);
 	
     public static void main(String[] args) throws InterruptedException {
     	
@@ -41,6 +42,9 @@ public class AppProducerAsyncWithLimit {
 
     	// Create producer properties
         Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        KafkaProducerPropertiesConfig.setupBatching(kafkaProducerProperties);
+        KafkaProducerPropertiesConfig.setupBatchComprension(kafkaProducerProperties);
         
         LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
@@ -54,7 +58,7 @@ public class AppProducerAsyncWithLimit {
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
         
-        LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
+        LOG.info("Preparing to send menssages");
         try {
         	
         	int numSentMessages=1;
@@ -75,11 +79,6 @@ public class AppProducerAsyncWithLimit {
 	            
 	            // Prepare counter num sent messages
 	            numSentMessages++;
-	            
-	            LOG.info("[*] Readed message number '{}'", numSentMessages);
-	            if (numSentMessages >= DemoConstant.NUM_MESSAGES) {
-	            	break;
-	            }
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	            

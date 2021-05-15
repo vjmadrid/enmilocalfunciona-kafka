@@ -6,8 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.acme.kafka.consumer.runnable.ConsumerRunnable;
+import com.acme.kafka.consumer.runnable.factory.ConsumerRunnableFactory;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +18,7 @@ public class ConsumerGroupRunnable {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ConsumerGroupRunnable.class);
 
+	private String idConsumer;
 	private String brokers;
 	private String groupId;
 	private String topic;
@@ -25,7 +26,8 @@ public class ConsumerGroupRunnable {
 	private int numberConsumers;
 	private List<ConsumerRunnable> kafkaConsumerList;
 
-	public ConsumerGroupRunnable(String brokers, String groupId, String topic, int numberConsumers) {
+	public ConsumerGroupRunnable(String idConsumer, String brokers, String groupId, String topic, int numberConsumers) {
+		this.idConsumer = idConsumer;
 		this.brokers = brokers;
 		this.topic = topic;
 		this.groupId = groupId;
@@ -35,7 +37,7 @@ public class ConsumerGroupRunnable {
 		
 		// Prepare Consumers
 		for (int i = 0; i < this.numberConsumers; i++) {
-			ConsumerRunnable consumerThread = new ConsumerRunnable(this.brokers, this.groupId, this.topic);
+			ConsumerRunnable consumerThread = ConsumerRunnableFactory.createConsumerRunnable(this.idConsumer, this.brokers, this.groupId, this.topic);
 			kafkaConsumerList.add(consumerThread);
 		}
 	}

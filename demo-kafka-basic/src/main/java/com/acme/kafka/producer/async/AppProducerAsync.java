@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
+import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -38,8 +40,11 @@ public class AppProducerAsync {
     	LOG.info("*** Init ***");
 
     	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue();
-
+        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
+        
         // Create producer
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         

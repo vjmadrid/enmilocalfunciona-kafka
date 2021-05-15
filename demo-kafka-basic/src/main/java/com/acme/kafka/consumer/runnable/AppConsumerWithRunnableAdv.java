@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaConstant;
+import com.acme.kafka.consumer.runnable.factory.ConsumerRunnableFactory;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -34,7 +35,7 @@ public class AppConsumerWithRunnableAdv {
 	public static void main(String[] args) {
 		LOG.info("*** Init ***");
 		
-		basicConsumerRunnable = new ConsumerRunnable(KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
+		basicConsumerRunnable = ConsumerRunnableFactory.createConsumerRunnable(KafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
 		
 		new AppConsumerWithRunnableAdv().run();
 	}

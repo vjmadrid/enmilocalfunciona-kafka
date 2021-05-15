@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
+import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -21,7 +23,7 @@ import com.acme.kafka.producer.config.KafkaProducerConfig;
  *  NO Limit Messages
  *  
  *  Key : String.format(KafkaConstant.KEY_TEMPLATE, i)
- *	
+ *  
  * 	Message Template : Hello World! CUSTOM_ID - SEND_DATE
  *  
  *  Different consumers can be used
@@ -33,14 +35,17 @@ import com.acme.kafka.producer.config.KafkaProducerConfig;
 public class AppProducerAsyncWithKey {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncWithKey.class);
-
+	
     public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("*** Init ***");
 
     	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue();
-
+        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
+        
         // Create producer
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
@@ -79,7 +84,7 @@ public class AppProducerAsyncWithKey {
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	            
 	        }
-	        
+			
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

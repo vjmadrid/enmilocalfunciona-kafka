@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.constant.KafkaConstant;
 import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.producer.config.KafkaProducerConfig;
+import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
@@ -23,7 +25,7 @@ import com.acme.kafka.producer.config.KafkaProducerConfig;
  *  NO Limit Messages
  *  
  *  No Key
- *	
+ *  
  * 	Message Template : Hello World! CUSTOM_ID - SEND_DATE
  *  
  *  Different consumers can be used
@@ -41,8 +43,11 @@ public class AppProducerSyncWithRecordMetadata {
     	LOG.info("*** Init ***");
 
     	// Create producer properties
-        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue();
-
+        Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
+        
         // Create producer
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
         
@@ -67,7 +72,7 @@ public class AppProducerSyncWithRecordMetadata {
 	            // 	* The send method returns a Java Future
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				RecordMetadata metadata = kafkaProducer.send(record).get();
-				
+	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));

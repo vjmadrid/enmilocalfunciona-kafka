@@ -1,11 +1,12 @@
-package com.acme.kafka.consumer;
+package com.acme.kafka.consumer.batching;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -15,16 +16,13 @@ import org.slf4j.LoggerFactory;
 import com.acme.kafka.constant.DemoConstant;
 import com.acme.kafka.constant.KafkaTemplateConstant;
 import com.acme.kafka.consumer.config.KafkaConsumerConfig;
-import com.acme.kafka.util.KafkaPropertiesUtil;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
  *  
- *  Asynchronous
- *  
  * 	No message limit
  *  
- *  ENABLE_AUTO_COMMIT_CONFIG = True
+ *  ENABLE_AUTO_COMMIT_CONFIG = False
  *  
  *  Different producers can be used
  *   - Java producer with appropriate configuration
@@ -32,29 +30,18 @@ import com.acme.kafka.util.KafkaPropertiesUtil;
  * 
  */
 
-public class AppConsumerWithRuntime {
+public class AppAsyncBatchingConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppConsumerWithRuntime.class);
-    
-    private static final AtomicBoolean closed = new AtomicBoolean(false); // Close Process
+    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncBatchingConsumer.class);
     
     public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("*** Init ***");
     	
-    	Runtime.getRuntime().addShutdownHook(new Thread(){
-            @Override
-            public void run() {
-            	LOG.info("Shutting down");
-                closed.set(true);
-            }
-        });
-    	
     	// Create consumer properties
         Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
         
-        LOG.info("*** Custom Properties ***");
-        KafkaPropertiesUtil.printProperties(kafkaConsumerProperties, LOG);
+        kafkaConsumerProperties.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
 
         // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
@@ -72,23 +59,28 @@ public class AppConsumerWithRuntime {
         LOG.info("Preparing to receive menssages");
         try {
         	
-        	while (!closed.get()) {
+        	final Map<String, String> map = new HashMap<>();
+        	
+	        while(true){
 	        	// Create consumer records
 	            ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
 	            LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
 	
 	            // Show Consumer Record info
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
-	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
+	            	LOG.info(KafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            	
+	            	map.put(record.key(), record.value());
 	            }
 	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
-	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
+	            Thread.sleep(2000);
 	           
+	            kafkaConsumer.commitAsync();
 	        }
         }
         finally {
@@ -96,8 +88,6 @@ public class AppConsumerWithRuntime {
         	kafkaConsumer.close();
         }
         
-        LOG.info("*** End ***");
     }
     
-
 }

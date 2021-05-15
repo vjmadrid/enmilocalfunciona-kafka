@@ -12,7 +12,7 @@ import com.acme.kafka.producer.runnable.factory.ProducerRunnableFactory;
  *  NO Limit Messages / Limit Messages
  *  
  *  No Key
- *	
+ *  
  * 	Message Template : Hello World! CUSTOM_ID - SEND_DATE
  *  
  *  Different consumers can be used
@@ -26,7 +26,7 @@ public class AppProducerAsyncWithRunnable {
     public static void main(String[] args) {
     	
     	// Option 1: No limit messages
-    	ProducerAsyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerAsyncRunnable(KafkaConstant.DEFAULT_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC);
+    	ProducerAsyncRunnable producerNoLimitThread = ProducerRunnableFactory.createProducerAsyncRunnable(KafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, KafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC);
         Thread t1 = new Thread(producerNoLimitThread);
         t1.start();
         
