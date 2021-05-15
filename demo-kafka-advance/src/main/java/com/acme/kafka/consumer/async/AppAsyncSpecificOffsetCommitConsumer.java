@@ -16,9 +16,12 @@ import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalConsumerKafkaConstant;
+import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
+import com.acme.architecture.kafka.common.consumer.config.KafkaConsumerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -42,10 +45,13 @@ public class AppAsyncSpecificOffsetCommitConsumer {
     	LOG.info("*** Init ***");
     	
     	// Create consumer properties
-        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue();
+        Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(GlobalConsumerKafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, GlobalConsumerKafkaConstant.DEFAULT_GROUP_ID);
         
         kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         kafkaConsumerProperties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
+        
+        LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaConsumerProperties, LOG);
 
         // Create Kafka consumer
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaConsumerProperties);
@@ -109,4 +115,5 @@ public class AppAsyncSpecificOffsetCommitConsumer {
         
     }
     
+
 }

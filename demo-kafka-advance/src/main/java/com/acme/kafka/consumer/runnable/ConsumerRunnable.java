@@ -1,8 +1,6 @@
 package com.acme.kafka.consumer.runnable;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -13,51 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
-import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
+import lombok.Data;
+
+@Data
 public class ConsumerRunnable implements Runnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRunnable.class);
 
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
-	private final String topic;
+	private String topic;
 	
 	private CountDownLatch countDownLatch;
-
-	public ConsumerRunnable(String bootstrapServers, String groupId, String topic) {
-		LOG.info("[ConsumerRunnable] *** Init ***");
-		
-		// Create consumer properties
-		Properties consumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(bootstrapServers, groupId);
-		
-		// Create Kafka consumer
-		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
-		
-		// Prepare topic
-		this.topic = topic;
-
-		// Subscribe topic
-		kafkaConsumer.subscribe(Arrays.asList(this.topic));
-	}
-	
-	public ConsumerRunnable(String bootstrapServers, String groupId, String topic, CountDownLatch countDownLatch) {
-		LOG.info("[ConsumerRunnable] *** Init ***");
-		
-		// Create consumer properties
-		Properties consumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(bootstrapServers, groupId);
-		
-		// Create Kafka consumer
-		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
-		
-		// Prepare topic
-		this.topic = topic;
-
-		// Subscribe topic
-		kafkaConsumer.subscribe(Arrays.asList(this.topic));
-		
-		this.countDownLatch = countDownLatch;
-	}
 
 	@Override
 	public void run() {

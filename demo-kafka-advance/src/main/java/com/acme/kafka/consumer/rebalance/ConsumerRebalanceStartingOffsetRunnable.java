@@ -1,12 +1,9 @@
 package com.acme.kafka.consumer.rebalance;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -17,39 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
-import com.acme.kafka.consumer.config.KafkaConsumerConfig;
 
-public class Consumer2RebalanceRunnable implements Runnable {
+import lombok.Data;
 
-	private static final Logger LOG = LoggerFactory.getLogger(Consumer2RebalanceRunnable.class);
+@Data
+public class ConsumerRebalanceStartingOffsetRunnable implements Runnable {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRebalanceStartingOffsetRunnable.class);
 
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
-	private final String topic;
+	private String topic;
 	
 	private Map<TopicPartition, OffsetAndMetadata> processedOffsets = new HashMap<>();
 	
 	private long startingOffset;
 	
-	public Consumer2RebalanceRunnable(String bootstrapServers, String groupId, String topic, long startingOffset) {
-		LOG.info("*** Init ***");
-		
-		// Create consumer properties
-		Properties consumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(bootstrapServers, groupId);
-		consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-		
-		// Create Kafka consumer
-		kafkaConsumer = new KafkaConsumer<>(consumerProperties);
-		
-		// Prepare topic
-		this.topic = topic;
-
-		// Prepare starting offset
-		this.startingOffset = startingOffset;
-		
-		// Subscribe topic
-		kafkaConsumer.subscribe(Arrays.asList(this.topic), new CustomConsumerRebalanceListener(processedOffsets));
-	}
 
 	@Override
 	public void run() {

@@ -26,7 +26,7 @@ public class ProducerRunnableFactory {
 		final ProducerAsyncRunnable runnable = new ProducerAsyncRunnable();
 		
 		// Create producer properties
-		Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(brokers, idProducer);
+		Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(idProducer, brokers);
 		
 		LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);

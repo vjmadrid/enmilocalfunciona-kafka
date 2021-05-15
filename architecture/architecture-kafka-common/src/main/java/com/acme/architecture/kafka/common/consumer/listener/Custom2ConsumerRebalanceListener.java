@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer.rebalance;
+package com.acme.architecture.kafka.common.consumer.listener;
 
 import java.util.Arrays;
 import java.util.Collection;

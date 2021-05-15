@@ -9,8 +9,9 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
+import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
-import com.acme.kafka.producer.config.KafkaProducerConfig;
 
 public class ProducerAsyncRunnable implements Runnable {
 
@@ -19,14 +20,17 @@ public class ProducerAsyncRunnable implements Runnable {
 	private final KafkaProducer<String, String> kafkaProducer;
     private final String topic;
 	
-	public ProducerAsyncRunnable(String bootstrapServers, String producerId, String topic) {
+	public ProducerAsyncRunnable(String idProducer, String brokers, String topic) {
 		LOG.info("[ProducerAsyncRunnable] *** Init ***");
 		
 		// Create producer properties
-		Properties producerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(bootstrapServers, producerId);
+		Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(idProducer, brokers);
+		
+		LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
 
 		// Create Kafka producer
-		this.kafkaProducer = new KafkaProducer<>(producerProperties);
+		this.kafkaProducer = new KafkaProducer<>(kafkaProducerProperties);
 
 		// Prepare topic
 		this.topic = topic;

@@ -5,8 +5,10 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.constant.GlobalConsumerKafkaConstant;
 import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.kafka.constant.DemoConstant;
+import com.acme.kafka.consumer.runnable.factory.ConsumerRunnableFactory;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
@@ -34,8 +36,8 @@ public class AppConsumerWithRunnableAdv {
 	public static void main(String[] args) {
 		LOG.info("*** Init ***");
 		
-		basicConsumerRunnable = new ConsumerRunnable(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC, countDownLatch);
-		
+		basicConsumerRunnable = ConsumerRunnableFactory.createConsumerRunnable(GlobalConsumerKafkaConstant.DEFAULT_CONSUMER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.GROUP_ID, DemoConstant.TOPIC);
+
 		new AppConsumerWithRunnableAdv().run();
 	}
 
