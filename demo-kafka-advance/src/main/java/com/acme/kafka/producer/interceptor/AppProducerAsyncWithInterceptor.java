@@ -1,30 +1,26 @@
-package com.acme.kafka.producer.sync;
+package com.acme.kafka.producer.interceptor;
 
 import java.util.Date;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
-import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
 import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
 import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
+import com.acme.architecture.kafka.common.producer.interceptor.CustomProducerInterceptor;
 import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
 
 /**
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
  *  
- *  Synchronous
- *  
- *  	- Blocking Call
- *  	- Send message synchronously using get() call followed by send()
+ *  Asynchronous
  *  
  *  NO Limit Messages
  *  
@@ -38,16 +34,18 @@ import com.acme.kafka.constant.DemoConstant;
  * 
  */
 
-public class AppProducerSyncWithRecordMetadata {
+public class AppProducerAsyncWithInterceptor {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AppProducerSyncWithRecordMetadata.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncWithInterceptor.class);
 	
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) throws InterruptedException {
     	
     	LOG.info("*** Init ***");
 
     	// Create producer properties
         Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(GlobalProducerKafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
+        
+        kafkaProducerProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, CustomProducerInterceptor.class.getName());
         
         LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
@@ -72,19 +70,14 @@ public class AppProducerSyncWithRecordMetadata {
 	        	// Create producer record
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
-	            // Send data synchronous -> blocking call
-	            // 	* The send method returns a Java Future
+	            // Send data asynchronous -> Fire & Forget
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
-				RecordMetadata outMetadata = kafkaProducer.send(record).get();
+	            kafkaProducer.send(record);
 	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
-				// Receive sent record -> RecordMetadata
-		        LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_RECORD_METADATA,
-		        		outMetadata.topic(),outMetadata.partition(), outMetadata.offset(), outMetadata.timestamp());            
-				
 	            // Prepare counter num sent messages
 	            numSentMessages++;
 	            
@@ -92,11 +85,6 @@ public class AppProducerSyncWithRecordMetadata {
 	            
 	        }
 			
-        } catch (InterruptedException e) {
-			LOG.error("Received interruption signal : {}",e);
-		} catch (ExecutionException e) {
-			LOG.error("Execution Exception : {}",e);
-			e.printStackTrace();
 		} finally {
 			// Flush data
 	        kafkaProducer.flush();

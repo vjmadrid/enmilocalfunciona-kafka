@@ -9,6 +9,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.producer.interceptor.CustomProducerInterceptor;
+
 public class KafkaProducerPropertiesConfig {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerPropertiesConfig.class);
@@ -61,7 +63,7 @@ public class KafkaProducerPropertiesConfig {
 		// "retries" : Set xxx
 		kafkaProducerProperties.put(ProducerConfig.RETRIES_CONFIG, 0);
 		
-		// "acks" : Set durability -> configure number of acknowledgments
+		// "acks" : Set durability -> configure number of acknowledgments(criteria under which requests are considered complete)
 		//
 		// 	Note :
 		//		Configure in-sync replicas : min.insync.replicas in broker configuration and/or topic configuration
@@ -90,7 +92,6 @@ public class KafkaProducerPropertiesConfig {
 
 		// "linger.ms" : Set how much to wait for other records before sending the batch -> 50 ms
 		kafkaProducerProperties.put(ProducerConfig.LINGER_MS_CONFIG, 50);
-
 	}
 	
 	public static void setupBatchComprension(Properties kafkaProducerProperties) {
@@ -116,6 +117,14 @@ public class KafkaProducerPropertiesConfig {
 
         // "retry.backoff.ms" : Set retry after ms -> 1 second
 		kafkaProducerProperties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 1_000);
+	}
+	
+	public static void setupInterceptors(Properties kafkaProducerProperties) {
+		LOG.info("[KafkaProducerPropertiesConfig] *** setupInterceptors ***");
+		Objects.requireNonNull(kafkaProducerProperties);
+		
+		// "interceptor.classes" : Set producer interceptors list
+		kafkaProducerProperties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, CustomProducerInterceptor.class.getName());
 	}
 
 }

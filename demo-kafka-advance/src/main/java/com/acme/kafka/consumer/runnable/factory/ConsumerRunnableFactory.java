@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,34 @@ public class ConsumerRunnableFactory {
 		
 		// Prepare topic
 		runnable.setTopic(topic);
+		
+		// Subscribe topic
+		runnable.getKafkaConsumer().subscribe(Arrays.asList(runnable.getTopic()), rebalanceListener);
+
+		return runnable;
+	}
+	
+	public static ConsumerRebalanceRunnable createConsumerRebalanceRunnable2(final String idConsumer, final String brokers, final String groupId, final String topic, CustomConsumerRebalanceListener rebalanceListener) {
+		LOG.info("[ConsumerRunnableFactory] *** createConsumerRebalanceRunnable ***");
+		final ConsumerRebalanceRunnable runnable = new ConsumerRebalanceRunnable();
+		
+		// Create consumer properties
+		Properties kafkaConsumerProperties = KafkaConsumerConfig.consumerConfigsStringKeyStringValue(idConsumer, brokers, groupId);
+		
+		kafkaConsumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+				
+		LOG.info("*** Custom Properties ***");
+        KafkaPropertiesUtil.printProperties(kafkaConsumerProperties, LOG);
+
+		// Create Kafka producer
+		runnable.setKafkaConsumer(new KafkaConsumer<>(kafkaConsumerProperties));
+		
+		// Prepare topic
+		runnable.setTopic(topic);
+		
+		// Create SeekToConsumerRebalanceListener and assign it to consumerRebalanceListener
+//        final ConsumerRebalanceListener consumerRebalanceListener =
+//                new SeekToConsumerRebalanceListener(consumer, seekTo, location);
 		
 		// Subscribe topic
 		runnable.getKafkaConsumer().subscribe(Arrays.asList(runnable.getTopic()), rebalanceListener);

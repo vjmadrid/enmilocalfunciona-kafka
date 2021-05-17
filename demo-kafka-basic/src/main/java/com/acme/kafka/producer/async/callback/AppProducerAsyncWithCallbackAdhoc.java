@@ -23,6 +23,15 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  Asynchronous
  *  
+ *  	- NO Blocking Call
+ *  	- Use callback mechanism -> Callback interface for asynchronous operations
+ *  	- Callback interface interface allows code to execute when the request is complete
+ *  	- onCompletion method is called when the operation send is complete
+ *  		with value = RecordMetadata
+ *  		without value = Exception
+ *      
+ *  
+ *  
  *  NO Limit Messages
  *  
  *  No Key
@@ -72,7 +81,7 @@ public class AppProducerAsyncWithCallbackAdhoc {
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
 	            // Send data asynchronous -> Fire & Forget
-	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
+	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 
 	            // Option 1
 	            kafkaProducer.send(record, new Callback() {

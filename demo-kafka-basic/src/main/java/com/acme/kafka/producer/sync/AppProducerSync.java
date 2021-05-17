@@ -21,6 +21,11 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  Synchronous
  *  
+ *  	- Blocking Call
+ *  	- Send message synchronously using get() call followed by send()
+ *  	- On invoking get() on this future will block until the associated request completes
+ *  	- Return the metadata for the record or throw any exception that occurred while sending the record
+ *  
  *  NO Limit Messages
  *  
  *  No Key

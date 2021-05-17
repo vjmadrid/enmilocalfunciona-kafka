@@ -23,6 +23,8 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  Asynchronous
  *  
+ *  	- returns a Future for the RecordMetadata that will be assigned to this record
+ *  
  *  NO Limit Messages
  *  
  *  No Key
@@ -70,28 +72,29 @@ public class AppProducerAsyncWithFuture {
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
 	            // Send data asynchronous + Future
+	            //	 * When called it adds the record to a buffer of pending record sends and immediately returns
 	            //   * The destination will accept the request and "commits" to Future answer
 	            //	 * The producer is responsible for checking the Future
 	            //		* Blocking : The producer waits until the consumer responds with the Future answer
 	            //		
 	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
-	            Future<RecordMetadata> future = kafkaProducer.send(record);
+	            Future<RecordMetadata> outFutureRecordMetadata = kafkaProducer.send(record);
 	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
 	            
-	            if (future.isCancelled()) {
-	            	LOG.info("[Future] Unable to send message=[{}] due to : {}", future.get().toString());
+	            if (outFutureRecordMetadata.isCancelled()) {
+	            	LOG.info("[Future] Unable to send message=[{}] due to : {}", outFutureRecordMetadata.get().toString());
 	            }
 	            
-	            if (future.isDone()) {
-	            	LOG.info("[Future] Sent message=[{}] with offset=[{}]", future.get().toString(), future.get().offset());
+	            if (outFutureRecordMetadata.isDone()) {
+	            	LOG.info("[Future] Sent message=[{}] with offset=[{}]", outFutureRecordMetadata.get().toString(), outFutureRecordMetadata.get().offset());
 	            }
 	            
 	            // Get RecordMetadata
-	            RecordMetadata metadata = future.get();
+	            RecordMetadata metadata = outFutureRecordMetadata.get();
 	            LOG.info("[Future] Received metadata \n" +
 	                        "\tTopic: {} \n" +
 	                        "\tPartition: {} \n" +

@@ -1,22 +1,21 @@
-package com.acme.kafka.producer.async.callback.partitioner;
+package com.acme.kafka.producer.partitioner;
 
 import java.util.Date;
 import java.util.Properties;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.callback.ProducerCallback;
 import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
-import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
 import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
-import com.acme.architecture.kafka.common.partitioner.CustomPartitioner;
+import com.acme.architecture.kafka.common.partitioner.CitiesPartitioner;
+import com.acme.architecture.kafka.common.partitioner.constant.CitiesPartitionerConstant;
+import com.acme.architecture.kafka.common.partitioner.util.CitiesPartitionerUtil;
 import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
 import com.acme.architecture.kafka.common.util.KafkaPropertiesUtil;
 import com.acme.kafka.constant.DemoConstant;
@@ -40,25 +39,9 @@ import com.acme.kafka.constant.DemoConstant;
  * 
  */
 
-public class AppProducerAsyncPartitionerWithCallbackAdhoc {
+public class AppProducerAsyncCallbackWithCitiesPartitioner {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncPartitionerWithCallbackAdhoc.class);
-	
-	private static final String PARTITION_0_ID = "partitions.0";
-	private static final String PARTITION_1_ID = "partitions.1";
-	private static final String PARTITION_2_ID = "partitions.2";
-	
-	private static final String PARTITION_0_VALUE = "Madrid";
-	private static final String PARTITION_1_VALUE = "Barcelona";
-	private static final String PARTITION_2_VALUE = "Sevilla";
-	
-	public static String getRandomPartition() {
-		String value[] = { PARTITION_0_VALUE, PARTITION_1_VALUE, PARTITION_2_VALUE };
-		
-		int valueRandom = new Random().nextInt(value.length);
-		
-		return value[valueRandom];
-	}
+	private static final Logger LOG = LoggerFactory.getLogger(AppProducerAsyncCallbackWithCitiesPartitioner.class);
 	
     public static void main(String[] args) throws InterruptedException {
     	
@@ -67,10 +50,12 @@ public class AppProducerAsyncPartitionerWithCallbackAdhoc {
     	// Create producer properties
         Properties kafkaProducerProperties = KafkaProducerConfig.producerConfigsStringKeyStringValue(GlobalProducerKafkaConstant.DEFAULT_PRODUCER_CLIENT_ID, GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS);
         
-        kafkaProducerProperties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class.getCanonicalName());
-        kafkaProducerProperties.put(PARTITION_0_ID, PARTITION_0_VALUE);
-        kafkaProducerProperties.put(PARTITION_1_ID, PARTITION_1_VALUE);
-        kafkaProducerProperties.put(PARTITION_2_ID, PARTITION_2_VALUE);
+        // Option define each partition
+        kafkaProducerProperties.put(CitiesPartitionerConstant.PARTITION_0_ID, CitiesPartitionerConstant.PARTITION_0_VALUE_MADRID);
+        kafkaProducerProperties.put(CitiesPartitionerConstant.PARTITION_1_ID, CitiesPartitionerConstant.PARTITION_1_VALUE_BARCELONA);
+        kafkaProducerProperties.put(CitiesPartitionerConstant.PARTITION_2_ID, CitiesPartitionerConstant.PARTITION_2_VALUE_SEVILLA);
+        
+        kafkaProducerProperties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CitiesPartitioner.class.getCanonicalName());
 
         LOG.info("*** Custom Properties ***");
         KafkaPropertiesUtil.printProperties(kafkaProducerProperties, LOG);
@@ -93,29 +78,14 @@ public class AppProducerAsyncPartitionerWithCallbackAdhoc {
 	        	String message = String.format(DemoConstant.MESSAGE_TEMPLATE, numSentMessages, new Date().toString());
 	        	
 	        	// Prepare key
-	        	String key = getRandomPartition();
+	        	String key = CitiesPartitionerUtil.getRandomCitiesPartition();
 	        	
 	        	// Create producer record
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, message);
 	            
 	            // Send data asynchronous -> Fire & Forget
-	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
-	            kafkaProducer.send(record, new Callback() {
-	            	
-	                public void onCompletion(RecordMetadata metadata, Exception exception) {
-	                	long elapsedTime = System.currentTimeMillis() - startTime;
-	     
-	                	if (exception == null) {
-	                		LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
-	                                metadata.topic(),metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
-	                    } else {
-	                    	LOG.error(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
-	                    	exception.printStackTrace();
-	                    }
-	                    
-	                }
-	                
-	            });
+	            LOG.info("Sending key='{}' message='{}' to topic='{}'", key, message, topic);
+	            kafkaProducer.send(record, new ProducerCallback(startTime, key, message));
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }

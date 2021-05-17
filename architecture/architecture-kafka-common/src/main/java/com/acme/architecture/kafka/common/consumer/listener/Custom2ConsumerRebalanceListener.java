@@ -1,4 +1,4 @@
-package com.acme.architecture.kafka.common.consumer.listener;
+         package com.acme.architecture.kafka.common.consumer.listener;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,6 +12,8 @@ import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.acme.architecture.kafka.common.consumer.enumeration.SeekToTypeEnumeration;
+
 public class Custom2ConsumerRebalanceListener implements ConsumerRebalanceListener {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(Custom2ConsumerRebalanceListener.class);
@@ -21,6 +23,8 @@ public class Custom2ConsumerRebalanceListener implements ConsumerRebalanceListen
 	private long startingOffset;
 	
 	private KafkaConsumer<String, String> kafkaConsumer;
+	
+	private SeekToTypeEnumeration seekTo;
 	
 	public Custom2ConsumerRebalanceListener(Map<TopicPartition, OffsetAndMetadata> processedOffsets, final long startingOffset, KafkaConsumer<String, String> kafkaConsumer) {
 		super();
@@ -32,7 +36,7 @@ public class Custom2ConsumerRebalanceListener implements ConsumerRebalanceListen
 	@Override
 	public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
 		LOG.info("[CustomConsumerRebalanceListener] New partition assigned partition=[{}]", partitions);
-		LOG.info("\t [*] %s topic-partitions are revoked from this consumer\n", Arrays.toString(partitions.toArray()));
+		LOG.info("\t [*] {} topic-partitions are revoked from this consumer\n", Arrays.toString(partitions.toArray()));
 		
 	}
 
@@ -40,30 +44,43 @@ public class Custom2ConsumerRebalanceListener implements ConsumerRebalanceListen
 	public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
 		LOG.info("[CustomConsumerRebalanceListener] Lost partitions in rebalance.  partition=[{}]", partitions);
 		LOG.info("\t [*] Committing processed offsets processedOffsets=[{}]", processedOffsets);
-		LOG.info("\t [*] %s topic-partitions are assigned to this consumer\n", Arrays.toString(partitions.toArray()));
+		LOG.info("\t [*] {} topic-partitions are assigned to this consumer\n", Arrays.toString(partitions.toArray()));
 		
 		Iterator<TopicPartition> topicPartitionIterator = partitions.iterator();
 		
-		if (startingOffset == -2) {
-			LOG.info("Leaving it alone");
-		} else if (startingOffset == -1) {
-			LOG.info("Setting it to the end ");
-			kafkaConsumer.seekToEnd(partitions);
-		} else if (startingOffset == 0) {
-			LOG.info("Setting offset to begining");
-			kafkaConsumer.seekToBeginning(partitions);
-		} else {
-			LOG.info("Resetting offset to " + startingOffset);
-			while (topicPartitionIterator.hasNext()) {
-				TopicPartition topicPartition = topicPartitionIterator.next();
-				System.out.println("Current offset is " + kafkaConsumer.position(topicPartition)
-						+ " committed offset is ->" + kafkaConsumer.committed(topicPartition));
-				kafkaConsumer.seek(topicPartition, startingOffset);
+		switch (seekTo) {
+		
+	        case END: //Seek to end
+	        	LOG.info("Setting it to the end");
+	        	kafkaConsumer.seekToEnd(partitions);
+	            break;
+	        case START: //Seek to start
+	        	LOG.info("Setting offset to begining");
+	        	kafkaConsumer.seekToBeginning(partitions);
+	            break;
+	        case LOCATION: //Seek to a given location
+	        	LOG.info("Resetting offset to " + startingOffset);
+	        	
+	        	while (topicPartitionIterator.hasNext()) {
+					TopicPartition topicPartition = topicPartitionIterator.next();
+					System.out.println("Current offset is " + kafkaConsumer.position(topicPartition)
+							+ " committed offset is ->" + kafkaConsumer.committed(topicPartition));
+					kafkaConsumer.seek(topicPartition, startingOffset);
 
-			}
-
+				}
+	        	
+//	            partitions.forEach(topicPartition -> 
+//	            		kafkaConsumer.seek(topicPartition, startingOffset)
+//	            );
+	            break;
+	        case NONE:
+	        	LOG.info("Leaving it alone");
+	        	break;
+	        	
 		}
+
 		
 	}
 
+	
 }

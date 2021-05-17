@@ -6,18 +6,19 @@ import java.util.Map;
 
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
+import org.apache.kafka.common.PartitionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomPartitioner implements Partitioner {
+public class CitiesPartitioner implements Partitioner {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(CustomPartitioner.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CitiesPartitioner.class);
 
 	private Map<String, Integer> partitionMap;
 
 	@Override
 	public void configure(Map<String, ?> configs) {
-		LOG.info("[CustomPartitioner] *** configure ***");
+		LOG.info("[CitiesPartitioner] *** configure ***");
 		LOG.info("\t [*] Configure {}", configs);
 		
 		partitionMap = new HashMap<String, Integer>();
@@ -42,12 +43,12 @@ public class CustomPartitioner implements Partitioner {
 
 	@Override
 	public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
-		LOG.info("[CustomPartitioner] *** partition ***");
+		LOG.info("[CitiesPartitioner] *** partition ***");
 		
-		List partitions = cluster.availablePartitionsForTopic(topic);
-		LOG.info("\t [*] partitions =[{}]", partitions);
+		List<PartitionInfo> partitionInfoList = cluster.availablePartitionsForTopic(topic);
+		LOG.info("\t [*] partitions =[{}]", partitionInfoList);
 		
-		int numPartitions = partitions.size();
+		int numPartitions = partitionInfoList.size();
 		LOG.info("\t [*] numPartitions =[{}]", numPartitions);
 		
 		// String valueStr = (String) value;

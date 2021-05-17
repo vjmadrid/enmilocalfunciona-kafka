@@ -20,6 +20,8 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  Asynchronous
  *  
+ *  	- NO Blocking Call
+ *  
  *  NO Limit Messages
  *  
  *  No Key
