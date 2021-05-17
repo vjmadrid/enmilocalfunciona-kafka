@@ -22,13 +22,13 @@ public class KafkaConsumerPropertiesConfig {
 		Objects.requireNonNull(groupId);
 		Objects.requireNonNull(brokers);
 
-		// "bootstrap.servers" : Set servers / brokers
+		// "bootstrap.servers" : Set "initial" server / broker connections (list of broker addresses) -> host/port pairs with comma separated list
 		kafkaConsumerProperties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
-		// "client.id" : Set client id
+		// "client.id" : Set client id (uniquely identifier) -> tracking the source of requests
 		kafkaConsumerProperties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, idConsumer);
 		
-		// "group.id" : Set client id
+		// "group.id" : Set group id
 		kafkaConsumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 	}
 	

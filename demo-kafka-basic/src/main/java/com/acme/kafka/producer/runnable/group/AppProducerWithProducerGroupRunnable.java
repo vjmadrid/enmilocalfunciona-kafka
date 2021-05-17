@@ -25,20 +25,8 @@ public class AppProducerWithProducerGroupRunnable {
 	
     public static void main(String[] args) {
 
-    	// Option 1 : Execute Group
     	ProducerGroupRunnable<ProducerAsyncRunnable> producerGroup =  new ProducerGroupRunnable<>(GlobalKafkaConstant.DEFAULT_BOOTSTRAP_SERVERS, DemoConstant.TOPIC, NUM_PRODUCERS);
     	producerGroup.executeProducers();
-    	
-    	// Option 2 : Create Pool 
-//    	List<ProducerAsyncRunnable> producerAsyncRunnableList = producerGroup.getKafkaProducerList();
-//    	
-//    	// Create Thread Pool -> own thread
-//    	final ExecutorService executorService = Executors.newFixedThreadPool(producerAsyncRunnableList.size());
-//    	
-//    	// Execute each ProducerAsyncRunnable -> own thread
-//    	producerAsyncRunnableList.forEach(executorService::submit);
-    	
-    	
 
     }
 

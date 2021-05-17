@@ -25,10 +25,10 @@ public class KafkaProducerPropertiesConfig {
 		Objects.requireNonNull(idProducer);
 		Objects.requireNonNull(brokers);
 
-		// "bootstrap.servers" : Set servers / brokers
+		// "bootstrap.servers" : Set "initial" server / broker connections (list of broker addresses) -> host/port pairs with comma separated list
 		kafkaProducerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
 
-		// "client.id" : Set client id
+		// "client.id" : Set client id (uniquely identifier) -> tracking the source of requests
 		kafkaProducerProperties.put(ProducerConfig.CLIENT_ID_CONFIG, idProducer);
 	}
 	

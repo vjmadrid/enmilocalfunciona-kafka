@@ -81,7 +81,7 @@ public class AppProducerSyncWithRecordMetadata {
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
-				// Receive sent record -> RecordMetadata
+				// Receive sent record (written) -> RecordMetadata
 		        LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_RECORD_METADATA,
 		        		outMetadata.topic(),outMetadata.partition(), outMetadata.offset(), outMetadata.timestamp());            
 				

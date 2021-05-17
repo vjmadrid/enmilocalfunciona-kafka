@@ -2,12 +2,18 @@ package com.acme.kafka.consumer;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.Node;
+import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +72,34 @@ public class AppConsumerWithPartitionsAssignment {
         // Subscribe partitions
         LOG.info("Preparing to subscribe {} partitions", Arrays.asList(partitions));
         kafkaConsumer.assign(Arrays.asList(partitions));
+        
+//        Set<TopicPartition> partitionsSet = new HashSet<>();
+//        partitionsSet.add(new TopicPartition(topic, 2));
+//        partitionsSet.add(new TopicPartition(topic, 4));
+//        partitionsSet.add(new TopicPartition(topic, 6));
+//        
+//        LOG.info("Preparing to subscribe {} partitions", partitionsSet);
+//        kafkaConsumer.assign(partitionsSet);
+        
+        LOG.info("Preparing {} topics", kafkaConsumer.listTopics().entrySet());
+        for(Map.Entry<String, List<PartitionInfo>> entry : kafkaConsumer.listTopics().entrySet()){
+        	LOG.info(" - Topic [{}]", entry.getKey());
+        	
+            for(PartitionInfo partition : entry.getValue()) {
+                Set<Integer> replicas = new HashSet<>();
+                Set<Integer> inSync = new HashSet<>();
+
+                for(Node node : partition.replicas()) { 
+                	replicas.add(node.id());
+                }
+                for(Node node : partition.inSyncReplicas()) {
+                	inSync.add(node.id());
+                }
+
+                LOG.info(" - Partition: {}  Leader: {}  Replicas: {}  InSync: {}",
+                        partition.partition(), partition.leader().id(), replicas, inSync);
+            }
+        }
         
         // Prepare send execution time
         long startTime = System.currentTimeMillis();

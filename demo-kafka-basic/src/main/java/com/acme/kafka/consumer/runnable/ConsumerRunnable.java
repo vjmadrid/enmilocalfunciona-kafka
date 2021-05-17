@@ -3,6 +3,7 @@ package com.acme.kafka.consumer.runnable;
 import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -20,12 +21,16 @@ import lombok.Data;
 public class ConsumerRunnable implements Runnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ConsumerRunnable.class);
+	
+	private final AtomicBoolean closed = new AtomicBoolean(false);
 
 	private KafkaConsumer<String, String> kafkaConsumer;
 	
 	private String topic;
 	
 	private CountDownLatch countDownLatch;
+	
+	private String threadId;
 
 	@Override
 	public void run() {
@@ -34,7 +39,7 @@ public class ConsumerRunnable implements Runnable {
 		LOG.info("Preparing to receive menssages");
 		try {
 			
-			while (true) {
+			while (!closed.get()) {
 				// Create consumer records
 				ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(2000));
 	            LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORDS, consumerRecords.count(), consumerRecords.partitions().size());
@@ -50,6 +55,7 @@ public class ConsumerRunnable implements Runnable {
 			}
 		} catch (WakeupException e) {
 			LOG.info("Received shutdown signal");
+			if (!closed.get()) throw e;
 		} catch (InterruptedException e) {
 			LOG.error("Received interruption signal : {}",e);
 		} finally {
@@ -64,6 +70,7 @@ public class ConsumerRunnable implements Runnable {
 	public void shutdown() {
 		LOG.info("[ConsumerRunnable] *** Shutdown ***");
 		// interrupt consumer.poll() and throw WakeUpException
+		closed.set(true);
 		kafkaConsumer.wakeup();
 	}
 
