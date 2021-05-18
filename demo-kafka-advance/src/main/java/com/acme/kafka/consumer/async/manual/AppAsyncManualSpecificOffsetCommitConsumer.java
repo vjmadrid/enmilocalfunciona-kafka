@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer.async;
+package com.acme.kafka.consumer.async.manual;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -36,9 +36,9 @@ import com.acme.kafka.constant.DemoConstant;
  * 
  */
 
-public class AppAsyncSpecificOffsetCommitConsumer {
+public class AppAsyncManualSpecificOffsetCommitConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncSpecificOffsetCommitConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncManualSpecificOffsetCommitConsumer.class);
     
     public static void main(String[] args) throws InterruptedException {
     	

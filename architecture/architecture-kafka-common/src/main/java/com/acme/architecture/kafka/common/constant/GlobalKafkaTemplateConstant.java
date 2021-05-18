@@ -38,7 +38,16 @@ public final class GlobalKafkaTemplateConstant {
             "\tTimestamp: {} \n" +
             "\tElapsed Time: {} seconds";
     
-    public static final String TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR = "[Callback] Error while producing message exception={}";
+    public static final String TEMPLATE_STRING_PRODUCER_CALLBACK_RECEIVED_METADA = "[Callback] Received metadata \n" +
+            "\tTopic: %s \n" +
+            "\tPartition: %s \n" +
+            "\tOffset: %s \n" +
+            "\tTimestamp: %s \n" +
+            "\tElapsed Time: %s seconds";
+    
+    public static final String TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR = "[Callback] Error while producing message metadata={} exception={}";
+    
+    public static final String TEMPLATE_STRING_PRODUCER_CALLBACK_ERROR = "[Callback] Error while producing message metadata=%s exception=%s";
 
     public static final String TEMPLATE_LOG_RECORD_METADATA = "[*] Received metadata \n" +
             "\tTopic: {} \n" +

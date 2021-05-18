@@ -2,6 +2,7 @@ package com.acme.kafka.producer.async;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -19,6 +20,9 @@ import com.acme.kafka.constant.DemoConstant;
  * 	Sends a set of messages defined as "String" and with a delay between them (2 seconds)
  *  
  *  Asynchronous
+ *  
+ *  	- NO Blocking Call
+ *  	- Without callback
  *  
  *  Limit Messages : 10
  *  
@@ -55,6 +59,8 @@ public class AppProducerAsyncWithLimit {
         // Prepare send execution time
         long startTime = System.currentTimeMillis();
         
+        CountDownLatch countDownLatch = new CountDownLatch(DemoConstant.NUM_MESSAGES);
+        
         LOG.info("Preparing to send {} menssages", DemoConstant.NUM_MESSAGES);
         try {
         	
@@ -74,6 +80,8 @@ public class AppProducerAsyncWithLimit {
 	            long elapsedTime = System.currentTimeMillis() - startTime;
 	            LOG.info("\t * elapsedTime='{}' seconds ", (elapsedTime / 1000));
 	            
+	            countDownLatch.countDown();
+	            
 	            // Prepare counter num sent messages
 	            numSentMessages++;
 	            
@@ -85,6 +93,8 @@ public class AppProducerAsyncWithLimit {
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	            
 	        }
+	        
+	        countDownLatch.await(30, TimeUnit.SECONDS);
 			
 		} finally {
 			// Flush data

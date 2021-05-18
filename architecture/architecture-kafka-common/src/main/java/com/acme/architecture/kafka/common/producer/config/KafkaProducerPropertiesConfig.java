@@ -68,9 +68,9 @@ public class KafkaProducerPropertiesConfig {
 		// 	Note :
 		//		Configure in-sync replicas : min.insync.replicas in broker configuration and/or topic configuration
 		//
-		// 	- Default "all" : The leader to only give successful ack after all followers ack the send was written to their log
-		//	- Value "1" : The leader give successful ack after write their log -> No wait for the followers (replicas)
-		//  - Value "0" : 
+		// 	- Default "all" (all in-sync replicas) : The leader to only give successful ack after all followers ack the send was written to their log
+		//	- Value "1" (only wait for leader) : The leader give successful ack after write their log -> No wait for the followers (replicas)
+		//  - Value "0" (no wait) : 
 		kafkaProducerProperties.put(ProducerConfig.ACKS_CONFIG, "all");
 		
 		// "buffer.memory" : total bytes of memory the producer can use to buffer records waiting to be sent to the Broker

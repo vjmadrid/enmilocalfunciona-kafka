@@ -25,6 +25,8 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  	- Blocking Call
  *  	- Send message synchronously using get() call followed by send()
+ *  	- On invoking get() on this future will block until the associated request completes
+ *  	- Return the metadata for the record or throw any exception that occurred while sending the record
  *  
  *  NO Limit Messages
  *  
@@ -73,7 +75,7 @@ public class AppProducerSyncWithRecordMetadata {
 	            ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 	            
 	            // Send data synchronous -> blocking call
-	            // 	* The send method returns a Java Future
+	            // 	* The send method returns a RecordMetadata - Future
 	            LOG.info("[*] Sending message='{}' to topic='{}'", message, topic);
 				RecordMetadata outMetadata = kafkaProducer.send(record).get();
 	            

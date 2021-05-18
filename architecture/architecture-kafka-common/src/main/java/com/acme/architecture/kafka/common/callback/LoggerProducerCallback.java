@@ -7,15 +7,15 @@ import org.slf4j.LoggerFactory;
 
 import com.acme.architecture.kafka.common.constant.GlobalKafkaTemplateConstant;
 
-public class ProducerCallback implements Callback {
+public class LoggerProducerCallback implements Callback {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(ProducerCallback.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LoggerProducerCallback.class);
 	
 	private long startTime;
     private String key;
     private String message;
     
-    public ProducerCallback(long startTime, String key, String message) {
+    public LoggerProducerCallback(long startTime, String key, String message) {
         this.startTime = startTime;
         this.key = key;
         this.message = message;
@@ -29,10 +29,13 @@ public class ProducerCallback implements Callback {
 		LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_DATA, this.key, this.message);
 		
 		if (exception == null) {
-        	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_RECEIVED_METADA,
-                    metadata.topic(), metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
+			String message = String.format(GlobalKafkaTemplateConstant.TEMPLATE_STRING_PRODUCER_CALLBACK_RECEIVED_METADA, metadata.topic(), metadata.partition(), metadata.offset(), metadata.timestamp(), (elapsedTime / 1000));
+			
+        	LOG.info(message);
         } else {
-        	LOG.error(GlobalKafkaTemplateConstant.TEMPLATE_LOG_PRODUCER_CALLBACK_ERROR, exception);
+        	String errorMessage = String.format(GlobalKafkaTemplateConstant.TEMPLATE_STRING_PRODUCER_CALLBACK_ERROR, metadata, exception);
+  
+        	LOG.error(errorMessage);
         	exception.printStackTrace();
         }
 		

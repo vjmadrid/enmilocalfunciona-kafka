@@ -23,9 +23,10 @@ import com.acme.kafka.constant.DemoConstant;
  *  
  *  Asynchronous
  *  
- *  	- NO Blocking Call
+ *  	- NO Blocking Call -> Send many Records (Fast)
  *  	- Use callback mechanism -> Callback interface for asynchronous operations
  *  	- Callback interface interface allows code to execute when the request is complete
+ *  	- Execute in a background I/O Thread
  *  	- onCompletion method is called when the operation send is complete
  *  		with value = RecordMetadata
  *  		without value = Exception

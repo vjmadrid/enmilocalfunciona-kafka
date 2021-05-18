@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer.sync;
+package com.acme.kafka.consumer.async.manual;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -21,10 +21,8 @@ import com.acme.kafka.constant.DemoConstant;
 
 /**
  * 	Receives a set of messages defined as "String" performing "poll" every certain time (2 seconds)
- *  
+ * 
  * 	No message limit
- *  
- *  ENABLE_AUTO_COMMIT_CONFIG = False
  *  
  *  Different producers can be used
  *   - Java producer with appropriate configuration
@@ -32,9 +30,9 @@ import com.acme.kafka.constant.DemoConstant;
  * 
  */
 
-public class AppSyncOffsetCommitConsumer {
+public class AppAsyncManualWithSyncOffsetCommitConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppSyncOffsetCommitConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncManualWithSyncOffsetCommitConsumer.class);
     
     public static void main(String[] args) throws InterruptedException {
     	
@@ -74,20 +72,18 @@ public class AppSyncOffsetCommitConsumer {
 	            for (ConsumerRecord<String, String> record : consumerRecords){          	
 	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD , 
 	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
-	            	
-	            	// When ENABLE_AUTO_COMMIT_CONFIG
-		            // 	* false : use commit
-		            //  * true : No use commit
-		            
-		            LOG.info("Manual commit offset synchronous -> Count {}", consumerRecords.count());
-	                try {
-	                	// Blocking call -> It will return only after offset is committed
-	                	kafkaConsumer.commitSync();
-	                } catch (CommitFailedException e) {
-	                	LOG.error("Manual commit offset synchronous failed" + e);
-	                }
-	                
 	            }
+	            
+	            // When ENABLE_AUTO_COMMIT_CONFIG
+	            // 	* false : use commit
+	            //  * true : No use commit
+	            
+	            LOG.info("Manual commit offset asynchronous -> Count {}", consumerRecords.count());
+                try {
+                	kafkaConsumer.commitAsync();
+                } catch (CommitFailedException e) {
+                	LOG.error("Manual Commit Offset Asynchronous failed " + e);
+                }
 	            
 	            // Define send execution time
 	            long elapsedTime = System.currentTimeMillis() - startTime;
@@ -98,10 +94,16 @@ public class AppSyncOffsetCommitConsumer {
 	        }
         }
         finally {
-        	// Close consumer
-        	kafkaConsumer.close();
+        	try {
+        		LOG.info("Manual commit offset synchronous");
+        		kafkaConsumer.commitSync();
+            } finally {
+            	// Close consumer
+            	kafkaConsumer.close();
+            }
         }
         
     }
     
+
 }

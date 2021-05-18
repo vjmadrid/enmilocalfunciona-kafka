@@ -81,19 +81,30 @@ public class AppConsumer {
 	            // * Option 1 : With "for"
 	            for (ConsumerRecord<String, String> record : consumerRecords){
 	            	
-	            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
-	                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+	            	if (consumerRecords.isEmpty()) {
+	                    LOG.warn("No messages received");
+	                    break;
+	                }
 	            	
-	            	// Register data
-	            	Map<String, Object> data = new HashMap<>();
-	            	data.put("key", record.key());
-	            	data.put("value", record.value());
-					data.put("partition", record.partition());
-					data.put("offset", record.offset());
-					
-					// Define send execution time
-	            	long latency = (long) (System.nanoTime() - Long.parseLong(record.value())); 
-	            	LOG.info("\t * latency='{}' ", latency);
+	            	if (consumerRecords.count() > 0) {
+	            		LOG.info("Poll records: " + consumerRecords.count());
+	            	
+		            	LOG.info(GlobalKafkaTemplateConstant.TEMPLATE_LOG_CONSUMER_RECORD, 
+		                        record.key(), record.value(), record.topic(), record.partition(), record.offset(), record.timestamp());
+		            	
+		            	// Register data
+		            	Map<String, Object> data = new HashMap<>();
+		            	data.put("key", record.key());
+		            	data.put("value", record.value());
+						data.put("partition", record.partition());
+						data.put("offset", record.offset());
+						
+						// Define send execution time
+		            	long latency = (long) (System.nanoTime() - Long.parseLong(record.value())); 
+		            	LOG.info("\t * latency='{}' ", latency);
+		            	
+	            	}
+	            	
 	            }
 	            
 	            // * Option 2 : With "forEach"

@@ -1,4 +1,4 @@
-package com.acme.kafka.consumer.async;
+package com.acme.kafka.consumer.async.manual;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -32,9 +32,9 @@ import com.acme.kafka.constant.DemoConstant;
  * 
  */
 
-public class AppAsyncOffsetCommitConsumer {
+public class AppAsyncManualOffsetCommitConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncOffsetCommitConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppAsyncManualOffsetCommitConsumer.class);
     
     public static void main(String[] args) throws InterruptedException {
     	
@@ -81,7 +81,11 @@ public class AppAsyncOffsetCommitConsumer {
 		            
 		            LOG.info("Manual commit offset asynchronous -> Count {}", consumerRecords.count());
 	                try {
+	                	// Opción 1
 	                	kafkaConsumer.commitAsync();
+	                	
+	                	// Opcion 2
+	                	kafkaConsumer.commitAsync((map, e) -> LOG.info("Committed latest offsets: {}", map));
 	                } catch (CommitFailedException e) {
 	                	LOG.error("Manual Commit Offset Asynchronous failed " + e);
 	                }

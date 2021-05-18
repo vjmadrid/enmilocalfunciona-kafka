@@ -10,7 +10,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.architecture.kafka.common.callback.ProducerCallback;
+import com.acme.architecture.kafka.common.callback.LoggerProducerCallback;
 import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
 import com.acme.architecture.kafka.common.partitioner.CitiesPartitioner;
@@ -85,7 +85,7 @@ public class AppProducerAsyncCallbackWithCitiesPartitioner {
 	            
 	            // Send data asynchronous -> Fire & Forget
 	            LOG.info("Sending key='{}' message='{}' to topic='{}'", key, message, topic);
-	            kafkaProducer.send(record, new ProducerCallback(startTime, key, message));
+	            kafkaProducer.send(record, new LoggerProducerCallback(startTime, key, message));
 	            
 	            TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }

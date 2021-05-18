@@ -10,7 +10,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.acme.architecture.kafka.common.callback.ProducerCallback;
+import com.acme.architecture.kafka.common.callback.LoggerProducerCallback;
 import com.acme.architecture.kafka.common.constant.GlobalKafkaConstant;
 import com.acme.architecture.kafka.common.constant.GlobalProducerKafkaConstant;
 import com.acme.architecture.kafka.common.producer.config.KafkaProducerConfig;
@@ -72,7 +72,7 @@ public class AppProducerSyncWithCallbackClass {
 	            
 	            // Send data synchronous
 	            LOG.info("Sending message='{}' to topic='{}'", message, topic);
-	            kafkaProducer.send(record, new ProducerCallback(startTime, null, message)).get();
+	            kafkaProducer.send(record, new LoggerProducerCallback(startTime, null, message)).get();
 	            
             	TimeUnit.SECONDS.sleep(DemoConstant.NUM_SECONDS_DELAY_MESSAGE);
 	        }
