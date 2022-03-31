@@ -23,7 +23,7 @@
 		<!-- *** Architecture Libraries *** -->
 
 		<!-- Dependency Versions -->
-		<spring-boot-starter-parent.version>2.3.4.RELEASE</spring-boot-starter-parent.version>
+		<spring-boot-starter-parent.version>2.5.12</spring-boot-starter-parent.version>
 		<spring.version>5.2.9.RELEASE</spring.version>
 		<spring-kafka.version>2.5.6.RELEASE</spring-kafka.version>
 		
